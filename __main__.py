@@ -1,5 +1,5 @@
 import pygame
-
+import Character
 
 class App:
     def __init__(self):
@@ -7,19 +7,22 @@ class App:
         self._display_surf = None
         pygame.init()
         self.ScreenInfo = pygame.display.Info()
-        self.screenSize = self.screenWidth, self.screenHeight = self.ScreenInfo.current_w - 400, self.ScreenInfo.current_h - 200
-        self.characterX, self.characterY, self.characterWidth, self.characterHeight = 50, 50, 40, 60
-        self.characterSpeed = 2
+        self.screenSize = self.screenWidth, self.screenHeight = self.ScreenInfo.current_w - 500, self.ScreenInfo.current_h - 250
+        self.hero = Character.Player()
+
         self.thunderSounds = []
         self.thunderCounter = 0
+        self.background = pygame.image.load("./resources/images/background.png")
+        self.background = pygame.transform.scale(self.background, self.screenSize)
+
 
     def sounds_init(self):
         pygame.mixer.music.load("./resources/sound/music.mp3")
         pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(-1)
-        rainSound = pygame.mixer.Sound("./resources/sound/rain_ambience.wav")
-        rainSound.set_volume(0.8)
-        rainSound.play(-1)
+        ambience = pygame.mixer.Sound("./resources/sound/rain_ambience.wav")
+        ambience.set_volume(0.8)
+        ambience.play(-1)
 
         thunder1 = pygame.mixer.Sound("./resources/sound/thunder1.wav")
         thunder2 = pygame.mixer.Sound("./resources/sound/thunder2.wav")
@@ -35,13 +38,11 @@ class App:
 
 
     def on_init(self):
-        self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF )  #| pygame.FULLSCREEN)
-        self.sounds_init()
+        self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF )# | pygame.FULLSCREEN)
+        #self.sounds_init()
+
         pygame.display.set_caption("Trashing and Rushing")
         pygame.time.delay(100)
-
-
-
         self._running = True
 
     def on_event(self, event):
@@ -50,25 +51,25 @@ class App:
 
     def on_loop(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and self.characterX > 0:
-            self.characterX -= self.characterSpeed
+        if keys[pygame.K_LEFT] and self.hero.x > 0:
+            self.hero.move_ip(-self.hero.characterSpeed, 0)
 
-        if keys[pygame.K_RIGHT] and self.characterX < self.screenWidth - self.characterWidth:
-            self.characterX += self.characterSpeed
+        if keys[pygame.K_RIGHT] and self.hero.x < self.screenWidth - self.hero.width:
+            self.hero.move_ip(+self.hero.characterSpeed, 0)
 
-        if keys[pygame.K_UP] and self.characterY > 0:
-            self.characterY -= self.characterSpeed
-            self.thunderstorm()
+        if keys[pygame.K_UP] and self.hero.y > 0:
+            self.hero.move_ip(0, -self.hero.characterSpeed)
+            #self.thunderstorm()
 
-        if keys[pygame.K_DOWN] and self.characterY < self.screenHeight - self.characterHeight:
-            self.characterY += self.characterSpeed
+        if keys[pygame.K_DOWN] and self.hero.y < self.screenHeight - self.hero.height:
+            self.hero.move_ip(0, +self.hero.characterSpeed)
 
-        characterRect = self.characterX, self.characterY, self.characterWidth, self.characterHeight
-        pygame.draw.rect(self._display_surf, (255, 0, 0), characterRect)
-        pygame.display.update()
+
 
     def on_render(self):
-        pass
+        self._display_surf.blit(self.background, [0, 0])
+        pygame.draw.rect(self._display_surf, (255, 0, 0), self.hero)
+        pygame.display.update()
 
     def on_cleanup(self):
         pass

@@ -2,3 +2,4 @@
 venv/
 resources/
 ToDo.*
+__pycache__/
