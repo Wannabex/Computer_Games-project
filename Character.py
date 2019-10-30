@@ -1,15 +1,37 @@
 import pygame
 
-walkRight = [pygame.image.load("./resources/character/L1.png"), pygame.image.load("./resources/character/L2.png"), pygame.image.load("./resources/character/L3.png"),
-             pygame.image.load("./resources/character/L4.png"), pygame.image.load("./resources/character/L5.png"), pygame.image.load("./resources/character/L6.png"),
-             pygame.image.load("./resources/character/L7.png"), pygame.image.load("./resources/character/L8.png"), pygame.image.load("./resources/character/L9.png")]
-walkLeft = [pygame.image.load("./resources/character/R1.png"), pygame.image.load("./resources/character/R2.png"), pygame.image.load("./resources/character/R3.png"),
-            pygame.image.load("./resources/character/R4.png"), pygame.image.load("./resources/character/R5.png"), pygame.image.load("./resources/character/R6.png"),
-            pygame.image.load("./resources/character/R7.png"), pygame.image.load("./resources/character/R8.png"), pygame.image.load("./resources/character/R9.png")]
-stay = pygame.image.load("./resources/character/standing.png")
+
+walkLeft = ["./resources/character/L1.png", "./resources/character/L2.png", "./resources/character/L3.png",
+            "./resources/character/L4.png", "./resources/character/L5.png", "./resources/character/L6.png",
+            "./resources/character/L7.png", "./resources/character/L8.png", "./resources/character/L9.png"]
+
+walkRight = ["./resources/character/R1.png", "./resources/character/R2.png", "./resources/character/R3.png",
+             "./resources/character/R4.png", "./resources/character/R5.png", "./resources/character/R6.png",
+             "./resources/character/R7.png", "./resources/character/R8.png", "./resources/character/R9.png"]
+stay = "./resources/character/standing.png"
+
 
 class Player(pygame.Rect):
     def __init__(self):
-        characterX, characterY, characterWidth, characterHeight = 0, 0, 34, 34
-        pygame.Rect.__init__(self, characterX, characterY, characterWidth, characterHeight)
+        self.positionX, self.positionY, self.characterWidth, self.characterHeight = 0, 0, 64, 64
+        self.position = self.positionX, self.positionY
+        pygame.Rect.__init__(self, (self.positionX, self.positionY, self.characterWidth, self.characterHeight))
+        self.playerImage = pygame.image.load(stay)
+
         self.characterSpeed = 9
+        self.goingLeft = False
+        self.goingRight = False
+        self.walkCount = 0
+
+    def animation(self):
+        if self.goingLeft:
+            self.playerImage = pygame.image.load(walkLeft[self.walkCount//3])
+            self.walkCount += 1
+        elif self.goingRight:
+            self.playerImage = pygame.image.load(walkRight[self.walkCount // 3])
+            self.walkCount += 1
+        else:
+            self.playerImage = pygame.image.load(stay)
+        self.walkCount %= 27
+
+

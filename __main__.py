@@ -6,6 +6,8 @@ class App:
         self._running = True
         self._display_surf = None
         pygame.init()
+
+        self. clock = pygame.time.Clock()
         self.ScreenInfo = pygame.display.Info()
         self.screenSize = self.screenWidth, self.screenHeight = self.ScreenInfo.current_w - 500, self.ScreenInfo.current_h - 250
         self.hero = Character.Player()
@@ -39,11 +41,11 @@ class App:
 
     def on_init(self):
         self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF )# | pygame.FULLSCREEN)
-        #self.sounds_init()
-
         pygame.display.set_caption("Trashing and Rushing")
-        pygame.time.delay(100)
+        #self.sounds_init()
+        self.clock.tick(27)
         self._running = True
+
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -53,22 +55,29 @@ class App:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and self.hero.x > 0:
             self.hero.move_ip(-self.hero.characterSpeed, 0)
-
+            self.hero.goingLeft = True
+            self.hero.goingRight = False
         if keys[pygame.K_RIGHT] and self.hero.x < self.screenWidth - self.hero.width:
             self.hero.move_ip(+self.hero.characterSpeed, 0)
-
+            self.hero.goingLeft = False
+            self.hero.goingRight = True
         if keys[pygame.K_UP] and self.hero.y > 0:
             self.hero.move_ip(0, -self.hero.characterSpeed)
+            self.hero.goingLeft = False
+            self.hero.goingRight = False
             #self.thunderstorm()
-
         if keys[pygame.K_DOWN] and self.hero.y < self.screenHeight - self.hero.height:
             self.hero.move_ip(0, +self.hero.characterSpeed)
-
+            self.hero.positionY += self.hero.characterSpeed
+            self.hero.goingLeft = False
+            self.hero.goingRight = False
+        self.hero.animation()
 
 
     def on_render(self):
         self._display_surf.blit(self.background, [0, 0])
-        pygame.draw.rect(self._display_surf, (255, 0, 0), self.hero)
+        self._display_surf.blit(self.hero.playerImage, self.hero.position)
+        #pygame.draw.rect(self._display_surf, (255, 0, 0), self.hero)
         pygame.display.update()
 
     def on_cleanup(self):
