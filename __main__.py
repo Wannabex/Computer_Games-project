@@ -1,6 +1,7 @@
 import pygame
 import Character
 
+
 class App:
     def __init__(self):
         self._running = True
@@ -53,14 +54,6 @@ class App:
 
     def on_loop(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and self.hero.x > 0:
-            self.hero.move_ip(-self.hero.characterSpeed, 0)
-            self.hero.goingLeft = True
-            self.hero.goingRight = False
-        if keys[pygame.K_RIGHT] and self.hero.x < self.screenWidth - self.hero.width:
-            self.hero.move_ip(+self.hero.characterSpeed, 0)
-            self.hero.goingLeft = False
-            self.hero.goingRight = True
         if keys[pygame.K_UP] and self.hero.y > 0:
             self.hero.move_ip(0, -self.hero.characterSpeed)
             self.hero.goingLeft = False
@@ -68,15 +61,25 @@ class App:
             #self.thunderstorm()
         if keys[pygame.K_DOWN] and self.hero.y < self.screenHeight - self.hero.height:
             self.hero.move_ip(0, +self.hero.characterSpeed)
-            self.hero.positionY += self.hero.characterSpeed
             self.hero.goingLeft = False
             self.hero.goingRight = False
-        self.hero.animation()
-
+        if keys[pygame.K_LEFT] and self.hero.x > 0:
+            self.hero.move_ip(-self.hero.characterSpeed, 0)
+            self.hero.goingLeft = True
+            self.hero.goingRight = False
+        elif keys[pygame.K_RIGHT] and self.hero.x < self.screenWidth - self.hero.width:
+            self.hero.move_ip(+self.hero.characterSpeed, 0)
+            self.hero.goingLeft = False
+            self.hero.goingRight = True
+        else:
+            self.hero.goingLeft = False
+            self.hero.goingRight = False
+            self.hero.walkCount = 0
 
     def on_render(self):
         self._display_surf.blit(self.background, [0, 0])
-        self._display_surf.blit(self.hero.playerImage, self.hero.position)
+        self.hero.animation()
+        self._display_surf.blit(self.hero.playerImage, self.hero)
         #pygame.draw.rect(self._display_surf, (255, 0, 0), self.hero)
         pygame.display.update()
 

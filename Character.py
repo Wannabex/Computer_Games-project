@@ -13,12 +13,11 @@ stay = "./resources/character/standing.png"
 
 class Player(pygame.Rect):
     def __init__(self):
-        self.positionX, self.positionY, self.characterWidth, self.characterHeight = 0, 0, 64, 64
-        self.position = self.positionX, self.positionY
-        pygame.Rect.__init__(self, (self.positionX, self.positionY, self.characterWidth, self.characterHeight))
+        positionX, positionY, characterWidth, characterHeight = 0, 0, 64, 64
+        pygame.Rect.__init__(self, (positionX, positionY, characterWidth, characterHeight))
         self.playerImage = pygame.image.load(stay)
 
-        self.characterSpeed = 9
+        self.characterSpeed = 5
         self.goingLeft = False
         self.goingRight = False
         self.walkCount = 0
