@@ -1,23 +1,25 @@
 import pygame
 import Character
+import Rain
 
 
 class App:
     def __init__(self):
+        pygame.init()
         self._running = True
         self._display_surf = None
-        pygame.init()
-
-        self. clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
         self.ScreenInfo = pygame.display.Info()
-        self.screenSize = self.screenWidth, self.screenHeight = self.ScreenInfo.current_w - 500, self.ScreenInfo.current_h - 250
+        self.screenSize = self.screenWidth, self.screenHeight = self.ScreenInfo.current_w - 400, self.ScreenInfo.current_h - 250
         self.hero = Character.Player()
-
-        self.thunderSounds = []
-        self.thunderCounter = 0
         self.background = pygame.image.load("./resources/images/background.png")
         self.background = pygame.transform.scale(self.background, self.screenSize)
-
+        self.houseLeftWallX = 200
+        self.houseRightWallX = 700
+        self.houseRoofY = 150
+        self.thunderSounds = []
+        self.thunderCounter = 0
+        self.weather = []
 
     def sounds_init(self):
         pygame.mixer.music.load("./resources/sound/music.mp3")
@@ -43,10 +45,13 @@ class App:
     def on_init(self):
         self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF )# | pygame.FULLSCREEN)
         pygame.display.set_caption("Trashing and Rushing")
-        #self.sounds_init()
+        self.sounds_init()
         self.clock.tick(27)
         self._running = True
-
+        for i in range (1, self.houseLeftWallX//Rain.SIZE):
+            self.weather.append(Rain.Column(i * Rain.SIZE, self._display_surf))
+        for i in range (self.houseRightWallX//Rain.SIZE, self.screenWidth//Rain.SIZE):
+            self.weather.append(Rain.Column(i * Rain.SIZE, self._display_surf))
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -58,7 +63,7 @@ class App:
             self.hero.move_ip(0, -self.hero.characterSpeed)
             self.hero.goingLeft = False
             self.hero.goingRight = False
-            #self.thunderstorm()
+            self.thunderstorm()
         if keys[pygame.K_DOWN] and self.hero.y < self.screenHeight - self.hero.height:
             self.hero.move_ip(0, +self.hero.characterSpeed)
             self.hero.goingLeft = False
@@ -78,9 +83,10 @@ class App:
 
     def on_render(self):
         self._display_surf.blit(self.background, [0, 0])
+        for column in self.weather:
+            column.update()
         self.hero.animation()
         self._display_surf.blit(self.hero.playerImage, self.hero)
-        #pygame.draw.rect(self._display_surf, (255, 0, 0), self.hero)
         pygame.display.update()
 
     def on_cleanup(self):

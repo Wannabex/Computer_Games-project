@@ -1,53 +1,43 @@
 import pygame
 import random
 
-WHITE = (0, 0, 0)
-COLOURS = (9, 23, 128), (11, 34, 181), (6, 30, 189), (3, 26, 173), (25, 41, 145), (33, 46, 133), (18, 30, 110)
-DROPSIZE = 10
-
-row_height =  0.6 * DROPSIZE
-row_width = DROPSIZE
+COLORS = [(9, 23, 128), (11, 34, 181), (6, 30, 189), (3, 26, 173), (25, 41, 145), (33, 46, 133), (18, 30, 110)]
+SIZE = 6
 
 class Column():
-    def __init__(self, x, screen, screenInfo):
-
+    def __init__(self, x, screen):
         self.x = x
+        self.spawnCounter = 0
+        self.spawnRate = random.randint(10, 70)
         self.screen = screen
-        self.windowX = screenInfo.current_w - 400
-        self.windowY =  screenInfo.current_h - 200
-        self.clear_and_restart(1000)
-
-    def clear_and_restart(self, start_pos = 250):
-        pygame.draw.rect(self.screen, WHITE, (self.x  - row_width//2, 0, row_width, Y))
         self.list = []
-        self.y = random.randint(0, start_pos // row_height) * row_height
-        self.fadeAge = random.randint(20, 40)
-        self.fadeSpeed = random.randint(9, 15)
-
-    def add_droplet(self):
-        if 0 < self.y < self.windowY:
-            self.list.append()
-
-    def move(self):
-        self.y += row_height
-        self.add_droplet()
 
     def update(self):
-        for
+        self.spawnCounter += 1
+        if self.spawnCounter == self.spawnRate:
+            self.list.append(Droplet(self))
+            self.spawnRate = random.randint(10, 70)
+            self.spawnCounter = 0
+        for droplet in self.list:
+            droplet.update()
 
 
 class Droplet():
     def __init__(self, column):
+        self.screen = column.screen
         self.x = column.x
-        self.y = column.y
-        self.colour = random.choice(COLOURS)
-        self.age = 0
-        self.fadeAge = column.fadeAge + random.randint(-10, 10)
-        self.fadeSpeed = column.fadeSpeed + random.randint(-5, 5)
+        self.y = 0
+        self.size = random.randint(1, 4)
+        self.color = random.choice(COLORS)
+        self.age = random.randint(200, 1000)
+        self.speed = random.randint(9, 16)
+        self.font = pygame.font.Font(None, SIZE)
 
     def update(self):
-        self.draw()
-        self.age += 1
+        self.y += self.speed
+        if not self.y >= self.age:
+            pygame.draw.line(self.screen, self.color, (self.x, self.y), (self.x, self.y + self.size), self.size // 2)
+        else:
+            del self
 
-    def draw(self):
-        self.surf = font.render
+
