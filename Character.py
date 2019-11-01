@@ -13,10 +13,8 @@ class Player(pygame.Rect):
     stay = "./resources/character/standing.png"
 
     def __init__(self, positionX, positionY):
-        positionX, positionY, characterWidth, characterHeight = positionX, positionY, 64, 64
-        pygame.Rect.__init__(self, (positionX, positionY, characterWidth, characterHeight))
+        pygame.Rect.__init__(self, (positionX, positionY, 64, 64))
         self.playerImage = pygame.image.load(self.stay)
-
         self.characterSpeed = 5
         self.goingLeft = False
         self.goingRight = False
