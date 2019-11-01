@@ -12,8 +12,8 @@ class Player(pygame.Rect):
                  "./resources/character/R7.png", "./resources/character/R8.png", "./resources/character/R9.png"]
     stay = "./resources/character/standing.png"
 
-    def __init__(self):
-        positionX, positionY, characterWidth, characterHeight = 0, 0, 64, 64
+    def __init__(self, positionX, positionY):
+        positionX, positionY, characterWidth, characterHeight = positionX, positionY, 64, 64
         pygame.Rect.__init__(self, (positionX, positionY, characterWidth, characterHeight))
         self.playerImage = pygame.image.load(self.stay)
 

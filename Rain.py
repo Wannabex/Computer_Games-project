@@ -5,31 +5,32 @@ COLORS = [(9, 23, 128), (11, 34, 181), (6, 30, 189), (3, 26, 173), (25, 41, 145)
 SIZE = 6
 
 class Column():
-    def __init__(self, x, screen):
+    def __init__(self, x, screen, maxAge):
         self.x = x
+        self.maxAge = maxAge
         self.spawnCounter = 0
-        self.spawnRate = random.randint(10, 70)
+        self.spawnRate = random.randint(10, 50)
         self.screen = screen
         self.list = []
 
     def update(self):
         self.spawnCounter += 1
         if self.spawnCounter == self.spawnRate:
-            self.list.append(Droplet(self))
-            self.spawnRate = random.randint(10, 70)
+            self.list.append(Droplet(self, self.maxAge))
+            self.spawnRate = random.randint(10, 50)
             self.spawnCounter = 0
         for droplet in self.list:
             droplet.update()
 
 
 class Droplet():
-    def __init__(self, column):
+    def __init__(self, column, maxAge):
         self.screen = column.screen
         self.x = column.x
         self.y = 0
         self.size = random.randint(1, 4)
         self.color = random.choice(COLORS)
-        self.age = random.randint(200, 1000)
+        self.age = random.randint(30, maxAge)
         self.speed = random.randint(9, 16)
         self.font = pygame.font.Font(None, SIZE)
 
