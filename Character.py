@@ -12,8 +12,9 @@ class Player(pygame.Rect):
                  "./resources/character/R7.png", "./resources/character/R8.png", "./resources/character/R9.png"]
     stay = "./resources/character/standing.png"
 
-    def __init__(self, positionX, positionY):
+    def __init__(self, screen, positionX, positionY):
         pygame.Rect.__init__(self, (positionX, positionY, 64, 64))
+        self.screen = screen
         self.playerImage = pygame.image.load(self.stay)
         self.characterSpeed = 5
         self.goingLeft = False
@@ -92,4 +93,6 @@ class Player(pygame.Rect):
             self.goingRight = False
             self.walkCount = 0
 
+    def update(self):
+        self.screen.blit(self.playerImage, self)
 

@@ -12,15 +12,9 @@ class App:
         self.screenSize = self.screenWidth, self.screenHeight = self.screenInfo.current_w - 400, self.screenInfo.current_h - 250
         self.background = pygame.image.load("./resources/images/background.png")
         self.background = pygame.transform.scale(self.background, self.screenSize)
-
-        self.houseLeftWallX = 100
-        self.houseRightWallX = 850
-        self.houseRoofY = 100
-        self.houseFloorY = self.screenHeight - 74
         self.thunderSounds = []
         self.thunderCounter = 0
         self.weather = []
-
 
     def sounds_init(self):
         pygame.mixer.music.load("./resources/sound/music.mp3")
@@ -46,15 +40,16 @@ class App:
         self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF )# | pygame.FULLSCREEN)
         pygame.display.set_caption("Trashing and Rushing")
         self.building = Building.Building(self._display_surf, self.screenSize)
-        for columnNumber in range (1, self.houseLeftWallX // Rain.SIZE):
-            self.weather.append(Rain.Column(columnNumber * Rain.SIZE, self._display_surf, self.screenHeight - 30))
-        for columnNumber in range(self.houseLeftWallX // Rain.SIZE, self.houseRightWallX // Rain.SIZE):
-            self.weather.append(Rain.Column(columnNumber * Rain.SIZE, self._display_surf, self.houseRoofY))
-        for columnNumber in range (self.houseRightWallX // Rain.SIZE, self.screenWidth // Rain.SIZE):
-            self.weather.append(Rain.Column(columnNumber * Rain.SIZE, self._display_surf, self.screenHeight - 30))
+
+        for columnNumber in range (1, self.building.leftWallX // Rain.SIZE):
+            self.weather.append(Rain.Column(columnNumber * Rain.SIZE, self._display_surf, self.building.floorY))
+        for columnNumber in range(self.building.leftWallX // Rain.SIZE, self.building.rightWallX // Rain.SIZE):
+            self.weather.append(Rain.Column(columnNumber * Rain.SIZE, self._display_surf, self.building.leftWallX))
+        for columnNumber in range (self.building.rightWallX // Rain.SIZE, self.screenWidth // Rain.SIZE):
+            self.weather.append(Rain.Column(columnNumber * Rain.SIZE, self._display_surf, self.building.floorY))
         self.interface = Interface.Interface(self._display_surf, self.screenWidth, self.screenHeight)
-        self.hero = Character.Player(random.randint(self.houseLeftWallX, self.houseRightWallX),
-                                     random.randint(self.houseRoofY, self.houseFloorY))
+        self.hero = Character.Player(self._display_surf, random.randint(self.building.leftWallX, self.building.rightWallX),
+                                     random.randint(self.building.ceilingY, self.building.floorY))
         self.hero.setConstraints(self.building.getWalls())
         self.sounds_init()
         self.clock.tick(27)
@@ -73,6 +68,7 @@ class App:
             column.update()
         self.interface.update()
         self.hero.animation()
+        self.hero.update()
         self._display_surf.blit(self.hero.playerImage, self.hero)
         pygame.display.update()
 

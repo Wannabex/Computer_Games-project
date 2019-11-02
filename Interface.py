@@ -4,11 +4,11 @@ import pygame
 class Interface(object):
     def __init__(self, screen, screenX, screenY):
         self.score = InterfacePart(screen, 3, 3, "Score: ", "0")
-        self.time = InterfacePart(screen, screenX - 115, 3, "Time: ", "22:00")
-        self.equipment1 = InterfacePart(screen, screenX - 630, screenY - 26, "Weapon: ", "Hands")
-        self.equipment2 = InterfacePart(screen, screenX - 450, screenY - 26, "Usable: ", "Bread")
+        self.time = InterfacePart(screen, screenX - 110, 3, "Time: ", "22:00")
+        self.equipment1 = InterfacePart(screen, screenX//2 - 100, screenY - 26, "Weapon: ", "Hands")
+        self.equipment2 = InterfacePart(screen, screenX//2 + 100, screenY - 26, "Usable: ", "Bread")
         self.health = InterfacePart(screen, 3, screenY - 26, "Health: ", "50/100", (204, 0, 0))
-        self.mentality = InterfacePart(screen, screenX - 170, screenY - 26, "Mentality: ", "30/100", (0, 0, 102))
+        self.mentality = InterfacePart(screen, screenX - 160, screenY - 26, "Mentality: ", "30/100", (0, 0, 102))
 
     def update(self):
         self.score.update()
