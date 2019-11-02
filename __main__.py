@@ -62,13 +62,13 @@ class App:
     def on_loop(self):
         self.hero.control()
 
+
     def on_render(self):
         self._display_surf.blit(self.background, [0, 0])
         for column in self.weather:
             column.update()
         self.building.update()
         self.interface.update()
-        self.hero.animation()
         self.hero.update()
         self._display_surf.blit(self.hero.playerImage, self.hero)
         pygame.display.update()

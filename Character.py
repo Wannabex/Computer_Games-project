@@ -1,6 +1,7 @@
 import pygame
 import random
 
+
 MOUSE_BUTTON_LEFT = 0
 MOUSE_BUTTON_MIDDLE = 1
 MOUSE_BUTTON_RIGHT = 2
@@ -11,8 +12,8 @@ MOUSE_POS_Y = 1
 CHARACTER_HEIGHT = 64
 CHARACTER_WIDTH = 64
 
-class Player(pygame.Rect):
 
+class Player(pygame.Rect):
     walkLeft = ["./resources/character/L1.png", "./resources/character/L2.png", "./resources/character/L3.png",
                 "./resources/character/L4.png", "./resources/character/L5.png", "./resources/character/L6.png",
                 "./resources/character/L7.png", "./resources/character/L8.png", "./resources/character/L9.png"]
@@ -26,7 +27,7 @@ class Player(pygame.Rect):
         pygame.Rect.__init__(self, (positionX, positionY, CHARACTER_WIDTH, CHARACTER_HEIGHT))
         self.screen = screen
         self.playerImage = pygame.image.load(self.stay)
-        self.characterSpeed = 5
+        self.speed = 5
         self.goingLeft = False
         self.goingRight = False
         self.moving = False
@@ -38,7 +39,11 @@ class Player(pygame.Rect):
         self.experience = 0
 
     def update(self):
+        self.animation()
+        if self.moving:
+            self.moveToDestination()
         self.screen.blit(self.playerImage, self)
+
 
     def animation(self):
         if self.goingLeft:
@@ -61,35 +66,60 @@ class Player(pygame.Rect):
         #print(type(mouseClick)) tuple
 
         if mouseClick[MOUSE_BUTTON_LEFT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX:
-            print("JESTEM TUTAJ")
+            if self.x < mouse[MOUSE_POS_X]:
+                self.setPath(mouse[MOUSE_POS_X] - self.width // 2)
+            elif self.x > mouse[MOUSE_POS_X]:
+                self.setPath(mouse[MOUSE_POS_X] - self.width // 2)
 
-        if keys[pygame.K_UP] and self.y > self.upY:
-            self.move_ip(0, -self.characterSpeed)
-            self.goingLeft = False
-            self.goingRight = False
-        if keys[pygame.K_DOWN] and self.y < self.downY:
-            self.move_ip(0, +self.characterSpeed)
-            self.goingLeft = False
-            self.goingRight = False
-        if keys[pygame.K_LEFT] and self.x > self.leftWallX:
-            self.move_ip(-self.characterSpeed, 0)
-            self.goingLeft = True
-            self.goingRight = False
-        elif keys[pygame.K_RIGHT] and self.x < self.rightWallX - self.width:
-            self.move_ip(+self.characterSpeed, 0)
+
+
+        # if keys[pygame.K_UP] and self.y > self.upY:
+        #     self.move_ip(0, -self.speed)
+        #     self.goingLeft = False
+        #     self.goingRight = False
+        # if keys[pygame.K_DOWN] and self.y < self.downY:
+        #     self.move_ip(0, +self.speed)
+        #     self.goingLeft = False
+        #     self.goingRight = False
+        # if keys[pygame.K_LEFT] and self.x > self.leftWallX:
+        #     self.move_ip(-self.speed, 0)
+        #     self.goingLeft = True
+        #     self.goingRight = False
+        # elif keys[pygame.K_RIGHT] and self.x < self.rightWallX - self.width:
+        #     self.move_ip(+self.speed, 0)
+        #     self.goingLeft = False
+        #     self.goingRight = True
+        # else:
+        #     self.goingLeft = False
+        #     self.goingRight = False
+        #     self.walkCount = 0
+
+    def moveToDestination(self):
+        if self.x < self.destination:
+            if self.destination - self.x < self.speed:
+                self.move_ip((self.destination - self.x), 0)
+            else:
+                self.move_ip(+self.speed, 0)
             self.goingLeft = False
             self.goingRight = True
-        else:
+        elif self.x > self.destination:
+            if self.x - self.destination < self.speed:
+                self.move_ip((self.destination - self.x), 0)
+            else:
+                self.move_ip(-self.speed, 0)
+            self.goingLeft = True
+            self.goingRight = False
+        if self.x == self.destination:
+            self.moving = False
             self.goingLeft = False
             self.goingRight = False
             self.walkCount = 0
 
-    def moveToDestination(self, destination):
-        pass
-
     def setConstraints(self, constraints):
         self.constraints = self.leftWallX, self.rightWallX, self.downY, self.upY = constraints
-        self.downY =  self.downY - self.height - 3
+        self.leftWallX += self.width // 2
+        self.rightWallX -= self.width // 2
+
 
     def setPath(self, destination):
         self.destination = destination
