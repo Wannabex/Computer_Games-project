@@ -49,7 +49,7 @@ class App:
             self.weather.append(Rain.Column(columnNumber * Rain.SIZE, self._display_surf, self.building.floorY))
         self.interface = Interface.Interface(self._display_surf, self.screenWidth, self.screenHeight)
         self.hero = Character.Player(self._display_surf, random.randint(self.building.leftWallX, self.building.rightWallX),
-                                     random.randint(self.building.ceilingY, self.building.floorY))
+                                     random.randint(self.building.ceilingY, self.building.floorY - Character.CHARACTER_HEIGHT - 3))
         self.hero.setConstraints(self.building.getWalls())
         self.sounds_init()
         self.clock.tick(27)
@@ -66,6 +66,7 @@ class App:
         self._display_surf.blit(self.background, [0, 0])
         for column in self.weather:
             column.update()
+        self.building.update()
         self.interface.update()
         self.hero.animation()
         self.hero.update()

@@ -5,12 +5,12 @@ class Interface(object):
     def __init__(self, screen, screenX, screenY):
         self.score = InterfacePart(screen, 3, 3, "Score: ", "0")
         self.time = InterfacePart(screen, screenX - 110, 3, "Time: ", "22:00")
-        self.equipment1 = InterfacePart(screen, screenX//2 - 100, screenY - 26, "Weapon: ", "Hands")
-        self.equipment2 = InterfacePart(screen, screenX//2 + 100, screenY - 26, "Usable: ", "Bread")
+        self.equipment1 = InterfacePart(screen, screenX//2 - 150, screenY - 26, "Weapon: ", "Hands")
+        self.equipment2 = InterfacePart(screen, screenX//2 + 50, screenY - 26, "Usable: ", "Bread")
         self.health = InterfacePart(screen, 3, screenY - 26, "Health: ", "50/100", (204, 0, 0))
-        self.healthBar = StatusIndicator(screen, 3, screenY - 30, 130, 50, (204, 0, 0))
-        self.mentality = InterfacePart(screen, screenX - 160, screenY - 26, "Mentality: ", "30/100", (0, 0, 102))
-        self.mentalityBar = StatusIndicator(screen, screenX - 160, screenY - 34, 155, 30, (0, 0, 102))
+        self.healthBar = StatusIndicator(screen, 3, screenY - 30, 128, 50, (204, 0, 0))
+        self.mentality = InterfacePart(screen, screenX - 160, screenY - 26, "Mentality: ", "30/100", (0, 153, 255))
+        self.mentalityBar = StatusIndicator(screen, screenX - 160, screenY - 34, 153, 30, (0, 153, 255))
 
     def update(self):
         self.score.update()
@@ -45,7 +45,6 @@ class StatusIndicator(pygame.Rect):
         self.screen = screen
         self.maxValue = 100
         self.ratio = barWidth / self.maxValue
-        print(self.ratio)
         self.value = value
         self.width = self.value * self.ratio
         self.color = color

@@ -1,5 +1,15 @@
 import pygame
+import random
 
+MOUSE_BUTTON_LEFT = 0
+MOUSE_BUTTON_MIDDLE = 1
+MOUSE_BUTTON_RIGHT = 2
+
+MOUSE_POS_X = 0
+MOUSE_POS_Y = 1
+
+CHARACTER_HEIGHT = 64
+CHARACTER_WIDTH = 64
 
 class Player(pygame.Rect):
 
@@ -13,21 +23,80 @@ class Player(pygame.Rect):
     stay = "./resources/character/standing.png"
 
     def __init__(self, screen, positionX, positionY):
-        pygame.Rect.__init__(self, (positionX, positionY, 64, 64))
+        pygame.Rect.__init__(self, (positionX, positionY, CHARACTER_WIDTH, CHARACTER_HEIGHT))
         self.screen = screen
         self.playerImage = pygame.image.load(self.stay)
         self.characterSpeed = 5
         self.goingLeft = False
         self.goingRight = False
+        self.moving = False
         self.walkCount = 0
-        self.health = 50
-        self.mentality = 30
+        self.health = random.randint(30, 70)
+        self.mentality = 30 + 70 - self.health
         self.weapon = "Hands"
         self.usable = "Bread"
         self.experience = 0
 
+    def update(self):
+        self.screen.blit(self.playerImage, self)
+
+    def animation(self):
+        if self.goingLeft:
+            self.playerImage = pygame.image.load(self.walkLeft[self.walkCount//3])
+            self.walkCount += 1
+        elif self.goingRight:
+            self.playerImage = pygame.image.load(self.walkRight[self.walkCount // 3])
+            self.walkCount += 1
+        else:
+            self.playerImage = pygame.image.load(self.stay)
+        self.walkCount %= 27
+
+    def control(self):
+        keys = pygame.key.get_pressed()
+        mouse = pygame.mouse.get_pos()
+        #print(mouse)
+        #print(type(mouse)) tuple
+        mouseClick = pygame.mouse.get_pressed()
+        #print(mouseClick)
+        #print(type(mouseClick)) tuple
+
+        if mouseClick[MOUSE_BUTTON_LEFT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX:
+            print("JESTEM TUTAJ")
+
+        if keys[pygame.K_UP] and self.y > self.upY:
+            self.move_ip(0, -self.characterSpeed)
+            self.goingLeft = False
+            self.goingRight = False
+        if keys[pygame.K_DOWN] and self.y < self.downY:
+            self.move_ip(0, +self.characterSpeed)
+            self.goingLeft = False
+            self.goingRight = False
+        if keys[pygame.K_LEFT] and self.x > self.leftWallX:
+            self.move_ip(-self.characterSpeed, 0)
+            self.goingLeft = True
+            self.goingRight = False
+        elif keys[pygame.K_RIGHT] and self.x < self.rightWallX - self.width:
+            self.move_ip(+self.characterSpeed, 0)
+            self.goingLeft = False
+            self.goingRight = True
+        else:
+            self.goingLeft = False
+            self.goingRight = False
+            self.walkCount = 0
+
+    def moveToDestination(self, destination):
+        pass
+
     def setConstraints(self, constraints):
-        self.constraints = self.leftX, self.rightX, self.downY, self.upY = constraints
+        self.constraints = self.leftWallX, self.rightWallX, self.downY, self.upY = constraints
+        self.downY =  self.downY - self.height - 3
+
+    def setPath(self, destination):
+        self.destination = destination
+        self.moving = True
+
+    def getPath(self):
+        return self.destination
 
     def setHealth(self, health):
         self.health = health
@@ -58,41 +127,4 @@ class Player(pygame.Rect):
 
     def getExperience(self):
         return self.experience
-
-    def animation(self):
-        if self.goingLeft:
-            self.playerImage = pygame.image.load(self.walkLeft[self.walkCount//3])
-            self.walkCount += 1
-        elif self.goingRight:
-            self.playerImage = pygame.image.load(self.walkRight[self.walkCount // 3])
-            self.walkCount += 1
-        else:
-            self.playerImage = pygame.image.load(self.stay)
-        self.walkCount %= 27
-
-    def control(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP] and self.y > self.upY:
-            self.move_ip(0, -self.characterSpeed)
-            self.goingLeft = False
-            self.goingRight = False
-        if keys[pygame.K_DOWN] and self.y < self.downY:
-            self.move_ip(0, +self.characterSpeed)
-            self.goingLeft = False
-            self.goingRight = False
-        if keys[pygame.K_LEFT] and self.x > self.leftX:
-            self.move_ip(-self.characterSpeed, 0)
-            self.goingLeft = True
-            self.goingRight = False
-        elif keys[pygame.K_RIGHT] and self.x < self.rightX - self.width:
-            self.move_ip(+self.characterSpeed, 0)
-            self.goingLeft = False
-            self.goingRight = True
-        else:
-            self.goingLeft = False
-            self.goingRight = False
-            self.walkCount = 0
-
-    def update(self):
-        self.screen.blit(self.playerImage, self)
 
