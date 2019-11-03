@@ -43,9 +43,9 @@ class Droplet(object):
 
 
 class Sky(object):
-    thunders = ["./resources/images/thunder1.png", "./resources/images/thunder2.png", "./resources/images/thunder3.png",
-              "./resources/images/thunder4.png"]
-    monsters = ["./resources/images/monster1.png", "./resources/images/monster2.png", "./resources/images/monster3.png"]
+    thunders = [pygame.image.load("./resources/images/thunder1.png"), pygame.image.load("./resources/images/thunder2.png"), pygame.image.load("./resources/images/thunder3.png"),
+              pygame.image.load("./resources/images/thunder4.png")]
+    monsters = [pygame.image.load("./resources/images/monster1.png"), pygame.image.load("./resources/images/monster2.png"), pygame.image.load("./resources/images/monster3.png")]
 
     def __init__(self, screen, screenWidth, screenHeight, leftWallX, rightWallX, ceilingY):
         self.screen = screen
@@ -86,7 +86,7 @@ class SomethingInTheSky(pygame.Rect):
                     self.x = random.randint(self.rightWallX, self.skyWidth - 50)
                     self.y = random.randint(-50, self.skyHeight)
                 self.appearanceTime = random.randint(1, 3)
-                self.thunderImage = pygame.image.load(random.choice(self.images))
+                self.thunderImage = random.choice(self.images)
             if self.shownTime < self.appearanceTime:
                 self.update()
                 self.shownTime += 1

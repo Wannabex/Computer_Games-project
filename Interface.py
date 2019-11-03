@@ -77,3 +77,8 @@ class StatusIndicator(pygame.Rect):
 
     def getValue(self):
         return self.value
+
+
+class ActionWheel(pygame.Rect):
+    def __init__(self):
+        pass
