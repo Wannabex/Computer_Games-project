@@ -61,6 +61,17 @@ class App:
 
     def on_loop(self):
         self.hero.control()
+        if self.hero.statusChanged:
+            self.interface.updateStatus(self.hero.getExperience(), "22:01", self.hero.getWeapon(),
+                                        self.hero.getConsumable(), self.hero.getHealth(), self.hero.getMentality())
+            self.hero.statusChanged = False
+        # keys = pygame.key.get_pressed()
+        # if keys[pygame.K_UP]:
+        #     self.hero.setExperience(random.randint(10, 24214))
+        # if keys[pygame.K_DOWN]:
+        #     self.hero.setHealth(random.randint(1, 100))
+
+
 
 
     def on_render(self):

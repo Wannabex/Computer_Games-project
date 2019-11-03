@@ -35,8 +35,9 @@ class Player(pygame.Rect):
         self.health = random.randint(30, 70)
         self.mentality = 30 + 70 - self.health
         self.weapon = "Hands"
-        self.usable = "Bread"
+        self.consumable = "Bread"
         self.experience = 0
+        self.statusChanged = False
 
     def update(self):
         self.animation()
@@ -57,16 +58,12 @@ class Player(pygame.Rect):
         self.walkCount %= 27
 
     def control(self):
-
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
         if mouseClick[MOUSE_BUTTON_LEFT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX + self.width // 2:
             destination = mouse[MOUSE_POS_X] - self.width // 2
-            print(mouse[MOUSE_POS_X])
             if self.leftWallX - self.width // 2 <= destination <= self.leftWallX:
                 destination = destination + self.width // 2
-                print("robie to")
-                print(str(self.leftWallX) + "<<wall dest>>" + str(destination))
             elif self.rightWallX - self.width // 2 <= destination <= self.rightWallX:
                 destination = destination - self.width // 2
 
@@ -132,30 +129,35 @@ class Player(pygame.Rect):
 
     def setHealth(self, health):
         self.health = health
+        self.statusChanged = True
 
     def getHealth(self):
         return self.health
 
     def setMentality(self, mentality):
         self.mentality = mentality
+        self.statusChanged = True
 
     def getMentality(self):
         return self.mentality
 
     def setWeapon(self, weapon):
         self.weapon = weapon
+        self.statusChanged = True
 
     def getWeapon(self):
         return self.weapon
 
-    def setUsable(self, usable):
-        self.usable = usable
+    def setConsumable(self, consumable):
+        self.consumable = consumable
+        self.statusChanged = True
 
-    def getUsable(self):
-        return self.usable
+    def getConsumable(self):
+        return self.consumable
 
     def setExperience(self, experience):
         self.experience = experience
+        self.statusChanged = True
 
     def getExperience(self):
         return self.experience

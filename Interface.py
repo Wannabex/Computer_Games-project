@@ -5,8 +5,8 @@ class Interface(object):
     def __init__(self, screen, screenX, screenY):
         self.score = InterfacePart(screen, 3, 3, "Score: ", "0")
         self.time = InterfacePart(screen, screenX - 110, 3, "Time: ", "22:00")
-        self.equipment1 = InterfacePart(screen, screenX//2 - 150, screenY - 26, "Weapon: ", "Hands")
-        self.equipment2 = InterfacePart(screen, screenX//2 + 50, screenY - 26, "Usable: ", "Bread")
+        self.equipment1 = InterfacePart(screen, screenX//2 - 175, screenY - 26, "Weapon: ", "Hands")
+        self.equipment2 = InterfacePart(screen, screenX//2 + 75, screenY - 26, "Consumable: ", "Bread")
         self.health = InterfacePart(screen, 3, screenY - 26, "Health: ", "50/100", (204, 0, 0))
         self.healthBar = StatusIndicator(screen, 3, screenY - 30, 128, 50, (204, 0, 0))
         self.mentality = InterfacePart(screen, screenX - 160, screenY - 26, "Mentality: ", "30/100", (0, 153, 255))
@@ -21,6 +21,22 @@ class Interface(object):
         self.healthBar.update()
         self.mentality.update()
         self.mentalityBar.update()
+
+    def updateStatus(self, newScore, newTime, newEquipment1, newEquipment2 , newHealth, newMentality):
+        if newScore != self.score.information:
+            self.score.setInformation(str(newScore))
+        if newTime != self.time.information:
+            self.time.setInformation(str(newTime))
+        if newEquipment1 != self.equipment1.information:
+            self.equipment1.setInformation(str(newEquipment1))
+        if newEquipment2 != self.equipment2.information:
+            self.equipment2.setInformation(str(newEquipment2))
+        if newHealth != self.health.information:
+            self.health.setInformation(str(newHealth))
+            self.healthBar.setValue(int(newHealth))
+        if newMentality != -1:
+            self.mentality.setInformation(str(newMentality))
+            self.mentalityBar.setValue(int(newMentality))
 
 class InterfacePart(pygame.Rect):
     def __init__(self, screen, positionX, positionY, indicator, information, color = (255, 255, 255)):
