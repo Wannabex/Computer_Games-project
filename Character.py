@@ -45,7 +45,6 @@ class Player(pygame.Rect):
             self.moveToDestination()
         self.screen.blit(self.playerImage, self)
 
-
     def animation(self):
         if self.goingLeft:
             self.playerImage = self.walkLeft[self.walkCount//3]

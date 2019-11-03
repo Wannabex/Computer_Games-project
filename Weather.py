@@ -43,9 +43,9 @@ class Droplet(object):
 
 
 class Sky(object):
-    thunders = [pygame.image.load("./resources/images/thunder1.png"), pygame.image.load("./resources/images/thunder2.png"), pygame.image.load("./resources/images/thunder3.png"),
-              pygame.image.load("./resources/images/thunder4.png")]
-    monsters = [pygame.image.load("./resources/images/monster1.png"), pygame.image.load("./resources/images/monster2.png"), pygame.image.load("./resources/images/monster3.png")]
+    thunders = [pygame.image.load("./resources/images/environment/thunder1.png"), pygame.image.load("./resources/images/environment/thunder2.png"), pygame.image.load("./resources/images/environment/thunder3.png"),
+              pygame.image.load("./resources/images/environment/thunder4.png")]
+    monsters = [pygame.image.load("./resources/images/environment/monster1.png"), pygame.image.load("./resources/images/environment/monster2.png"), pygame.image.load("./resources/images/environment/monster3.png")]
 
     def __init__(self, screen, screenWidth, screenHeight, leftWallX, rightWallX, ceilingY):
         self.screen = screen
