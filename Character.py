@@ -57,22 +57,25 @@ class Player(pygame.Rect):
         self.walkCount %= 27
 
     def control(self):
-        keys = pygame.key.get_pressed()
+
         mouse = pygame.mouse.get_pos()
-        #print(mouse)
-        #print(type(mouse)) tuple
         mouseClick = pygame.mouse.get_pressed()
-        #print(mouseClick)
-        #print(type(mouseClick)) tuple
+        if mouseClick[MOUSE_BUTTON_LEFT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX + self.width // 2:
+            destination = mouse[MOUSE_POS_X] - self.width // 2
+            print(mouse[MOUSE_POS_X])
+            if self.leftWallX - self.width // 2 <= destination <= self.leftWallX:
+                destination = destination + self.width // 2
+                print("robie to")
+                print(str(self.leftWallX) + "<<wall dest>>" + str(destination))
+            elif self.rightWallX - self.width // 2 <= destination <= self.rightWallX:
+                destination = destination - self.width // 2
 
-        if mouseClick[MOUSE_BUTTON_LEFT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX:
             if self.x < mouse[MOUSE_POS_X]:
-                self.setPath(mouse[MOUSE_POS_X] - self.width // 2)
+                self.setPath(destination)
             elif self.x > mouse[MOUSE_POS_X]:
-                self.setPath(mouse[MOUSE_POS_X] - self.width // 2)
+                self.setPath(destination)
 
-
-
+        #keys = pygame.key.get_pressed()
         # if keys[pygame.K_UP] and self.y > self.upY:
         #     self.move_ip(0, -self.speed)
         #     self.goingLeft = False
@@ -117,9 +120,8 @@ class Player(pygame.Rect):
 
     def setConstraints(self, constraints):
         self.constraints = self.leftWallX, self.rightWallX, self.downY, self.upY = constraints
-        self.leftWallX += self.width // 2
+        # self.leftWallX += self.width // 2
         self.rightWallX -= self.width // 2
-
 
     def setPath(self, destination):
         self.destination = destination
