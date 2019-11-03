@@ -1,5 +1,5 @@
 import pygame, random
-import Character, Rain, Interface, Building
+import Character, Rain, Interface, Building, Sound
 
 
 class App:
@@ -16,26 +16,6 @@ class App:
         self.thunderCounter = 0
         self.weather = []
 
-    def sounds_init(self):
-        pygame.mixer.music.load("./resources/sound/music.mp3")
-        pygame.mixer.music.set_volume(0.2)
-        pygame.mixer.music.play(-1)
-        ambience = pygame.mixer.Sound("./resources/sound/rain_ambience.wav")
-        ambience.set_volume(0.8)
-        ambience.play(-1)
-
-        thunder1 = pygame.mixer.Sound("./resources/sound/thunder1.wav")
-        thunder2 = pygame.mixer.Sound("./resources/sound/thunder2.wav")
-        thunder3 = pygame.mixer.Sound("./resources/sound/thunder3.wav")
-        self.thunderSounds.append(thunder1)
-        self.thunderSounds.append(thunder2)
-        self.thunderSounds.append(thunder3)
-
-    def thunderstorm(self):
-        self.thunderSounds[self.thunderCounter].play()
-        self.thunderCounter += 1
-        self.thunderCounter ^= 3
-
     def on_init(self):
         self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF )# | pygame.FULLSCREEN)
         pygame.display.set_caption("Trashing and Rushing")
@@ -51,7 +31,7 @@ class App:
         self.hero = Character.Player(self._display_surf, random.randint(self.building.leftWallX, self.building.rightWallX),
                                      random.randint(self.building.ceilingY, self.building.floorY - Character.CHARACTER_HEIGHT - 3))
         self.hero.setConstraints(self.building.getWalls())
-        self.sounds_init()
+        self.sounds = Sound.Sound()
         self.clock.tick(27)
         self._running = True
 
@@ -70,9 +50,6 @@ class App:
         #     self.hero.setExperience(random.randint(10, 24214))
         # if keys[pygame.K_DOWN]:
         #     self.hero.setHealth(random.randint(1, 100))
-
-
-
 
     def on_render(self):
         self._display_surf.blit(self.background, [0, 0])
