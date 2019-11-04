@@ -2,7 +2,6 @@ import pygame
 import random
 
 
-
 class Trash(pygame.Rect):
     def __init__(self, screen, positionX, positionY, width, height, sprite):
         pygame.Rect.__init__(self, (positionX, positionY, width, height))

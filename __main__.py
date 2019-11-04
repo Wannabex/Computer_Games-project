@@ -1,5 +1,5 @@
 import pygame, random
-import Character, Weather, Interface, Building, Sound, Trash
+import Character, Weather, Interface, Building, Sound, Trash, Equipment
 
 
 class App:
@@ -41,6 +41,16 @@ class App:
         self.skeleton = Trash.Skeleton(self._display_surf,
                                        random.randint(self.building.leftWallX, self.building.rightWallX - Trash.Skeleton.SKELETON_WIDTH),
                                        random.randint(self.building.ceilingY, self.building.floorY - Trash.Skeleton.SKELETON_HEIGHT - 3))
+        self.sword = Equipment.Sword(self._display_surf,
+                                       random.randint(self.building.leftWallX, self.building.rightWallX - Equipment.ICON_WIDTH),
+                                       random.randint(self.building.ceilingY, self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.whip = Equipment.Whip(self._display_surf,
+                                     random.randint(self.building.leftWallX, self.building.rightWallX - Equipment.ICON_WIDTH),
+                                     random.randint(self.building.ceilingY, self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.shield = Equipment.Shield(self._display_surf,
+                                     random.randint(self.building.leftWallX, self.building.rightWallX - Equipment.ICON_WIDTH),
+                                     random.randint(self.building.ceilingY, self.building.floorY - Equipment.ICON_WIDTH - 3))
+
         self.hero.setConstraints(self.building.getWalls())
         self.sounds = Sound.Sound()
         self.clock.tick(27)
@@ -76,6 +86,9 @@ class App:
         self.cultist.update()
         self.angel.update()
         self.skeleton.update()
+        self.whip.update()
+        self.shield.update()
+        self.sword.update()
         self.hero.update()
         self._display_surf.blit(self.hero.playerImage, self.hero)
         pygame.display.update()
