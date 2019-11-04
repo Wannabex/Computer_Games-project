@@ -5,10 +5,9 @@ ENEMY_WIDTH = 60
 ENEMY_HEIGHT = 60
 
 class Trash(pygame.Rect):
-    cultist = [pygame.image.load("./resources/characters/cultist/S1.png"), pygame.image.load("./resources/characters/cultist/S2.png"), pygame.image.load("./resources/characters/cultist/S3.png"),
-               pygame.image.load("./resources/characters/cultist/S4.png"), pygame.image.load("./resources/characters/cultist/S5.png"), pygame.image.load("./resources/characters/cultist/S6.png"),
-               pygame.image.load("./resources/characters/cultist/S7.png"), pygame.image.load("./resources/characters/cultist/S8.png"), pygame.image.load("./resources/characters/cultist/S9.png"),
-               pygame.image.load("./resources/characters/cultist/S10.png"), pygame.image.load("./resources/characters/cultist/S11.png"), pygame.image.load("./resources/characters/cultist/S12.png")]
+    cultist = [ pygame.image.load("./resources/characters/cultist/S2.png"),
+             pygame.image.load("./resources/characters/cultist/S5.png"),
+                pygame.image.load("./resources/characters/cultist/S8.png"),  pygame.image.load("./resources/characters/cultist/S11.png")]
 
 
     def __init__(self, screen, positionX, positionY):
@@ -25,5 +24,5 @@ class Trash(pygame.Rect):
     def animation(self):
         self.characterImage = self.cultist[self.animationCount // 3]
         self.animationCount += 1
-        self.animationCount %= 27
+        self.animationCount %= 12
 
