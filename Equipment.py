@@ -3,7 +3,7 @@ import pygame
 
 class Weapon(pygame.Rect):
     def __init__(self):
-        pass
+        pygame.Rect.__init__(self, ())
 
     def update(self):
         pass
@@ -39,7 +39,7 @@ class Shield(Weapon):
 
 class Consumable(pygame.Rect):
     def __init__(self):
-        pass
+        pygame.Rect.__init__(self, ())
 
     def update(self):
         pass

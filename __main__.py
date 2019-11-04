@@ -28,10 +28,19 @@ class App:
             self.weather.append(Weather.Column(columnNumber * Weather.SIZE, self._display_surf, self.building.floorY))
         self.sky = Weather.Sky(self._display_surf, self.screenWidth, self.screenHeight, self.building.leftWallX, self.building.rightWallX, self.building.ceilingY)
         self.interface = Interface.Interface(self._display_surf, self.screenWidth, self.screenHeight)
-        self.hero = Character.Player(self._display_surf, random.randint(self.building.leftWallX, self.building.rightWallX),
+        self.hero = Character.Player(self._display_surf,
+                                     random.randint(self.building.leftWallX, self.building.rightWallX - Character.CHARACTER_WIDTH),
                                      random.randint(self.building.ceilingY, self.building.floorY - Character.CHARACTER_HEIGHT - 3))
-        self.cultist = Trash.Trash(self._display_surf, random.randint(self.building.leftWallX, self.building.rightWallX),
-                                   random.randint(self.building.ceilingY, self.building.floorY - Character.CHARACTER_HEIGHT - 3))
+
+        self.cultist = Trash.Cultist(self._display_surf,
+                                     random.randint(self.building.leftWallX, self.building.rightWallX - Trash.Cultist.CULTIST_WIDTH),
+                                     random.randint(self.building.ceilingY, self.building.floorY - Trash.Cultist.CULTIST_HEIGHT - 3))
+        self.angel = Trash.Angel(self._display_surf,
+                                 random.randint(self.building.leftWallX, self.building.rightWallX - Trash.Angel.ANGEL_WIDTH),
+                                 random.randint(self.building.ceilingY, self.building.floorY - Trash.Angel.ANGEL_HEIGHT - 3))
+        self.skeleton = Trash.Skeleton(self._display_surf,
+                                       random.randint(self.building.leftWallX, self.building.rightWallX - Trash.Skeleton.SKELETON_WIDTH),
+                                       random.randint(self.building.ceilingY, self.building.floorY - Trash.Skeleton.SKELETON_HEIGHT - 3))
         self.hero.setConstraints(self.building.getWalls())
         self.sounds = Sound.Sound()
         self.clock.tick(27)
@@ -65,6 +74,8 @@ class App:
         #self.building.update()
         self.interface.update()
         self.cultist.update()
+        self.angel.update()
+        self.skeleton.update()
         self.hero.update()
         self._display_surf.blit(self.hero.playerImage, self.hero)
         pygame.display.update()
