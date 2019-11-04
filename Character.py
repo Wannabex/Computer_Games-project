@@ -14,19 +14,19 @@ CHARACTER_WIDTH = 64
 
 
 class Player(pygame.Rect):
-    walkLeft = ["./resources/character/L1.png", "./resources/character/L2.png", "./resources/character/L3.png",
-                "./resources/character/L4.png", "./resources/character/L5.png", "./resources/character/L6.png",
-                "./resources/character/L7.png", "./resources/character/L8.png", "./resources/character/L9.png"]
+    walkLeft = [pygame.image.load("./resources/characters/hero/L1.png"), pygame.image.load("./resources/characters/hero/L2.png"), pygame.image.load("./resources/characters/hero/L3.png"),
+                pygame.image.load("./resources/characters/hero/L4.png"), pygame.image.load("./resources/characters/hero/L5.png"), pygame.image.load("./resources/characters/hero/L6.png"),
+                pygame.image.load("./resources/characters/hero/L7.png"), pygame.image.load("./resources/characters/hero/L8.png"), pygame.image.load("./resources/characters/hero/L9.png")]
 
-    walkRight = ["./resources/character/R1.png", "./resources/character/R2.png", "./resources/character/R3.png",
-                 "./resources/character/R4.png", "./resources/character/R5.png", "./resources/character/R6.png",
-                 "./resources/character/R7.png", "./resources/character/R8.png", "./resources/character/R9.png"]
-    stay = "./resources/character/standing.png"
+    walkRight = [pygame.image.load("./resources/characters/hero/R1.png"), pygame.image.load("./resources/characters/hero/R2.png"), pygame.image.load("./resources/characters/hero/R3.png"),
+                 pygame.image.load("./resources/characters/hero/R4.png"), pygame.image.load("./resources/characters/hero/R5.png"), pygame.image.load("./resources/characters/hero/R6.png"),
+                 pygame.image.load("./resources/characters/hero/R7.png"), pygame.image.load("./resources/characters/hero/R8.png"), pygame.image.load("./resources/characters/hero/R9.png")]
+    stay = pygame.image.load("./resources/characters/hero/standing.png")
 
     def __init__(self, screen, positionX, positionY):
         pygame.Rect.__init__(self, (positionX, positionY, CHARACTER_WIDTH, CHARACTER_HEIGHT))
         self.screen = screen
-        self.playerImage = pygame.image.load(self.stay)
+        self.playerImage = self.stay
         self.speed = 5
         self.goingLeft = False
         self.goingRight = False
@@ -45,16 +45,15 @@ class Player(pygame.Rect):
             self.moveToDestination()
         self.screen.blit(self.playerImage, self)
 
-
     def animation(self):
         if self.goingLeft:
-            self.playerImage = pygame.image.load(self.walkLeft[self.walkCount//3])
+            self.playerImage = self.walkLeft[self.walkCount//3]
             self.walkCount += 1
         elif self.goingRight:
-            self.playerImage = pygame.image.load(self.walkRight[self.walkCount // 3])
+            self.playerImage = self.walkRight[self.walkCount // 3]
             self.walkCount += 1
         else:
-            self.playerImage = pygame.image.load(self.stay)
+            self.playerImage = self.stay
         self.walkCount %= 27
 
     def control(self):

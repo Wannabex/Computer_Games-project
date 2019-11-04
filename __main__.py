@@ -1,5 +1,5 @@
 import pygame, random
-import Character, Weather, Interface, Building, Sound
+import Character, Weather, Interface, Building, Sound, Trash
 
 
 class App:
@@ -10,7 +10,7 @@ class App:
         self.clock = pygame.time.Clock()
         self.screenInfo = pygame.display.Info()
         self.screenSize = self.screenWidth, self.screenHeight = self.screenInfo.current_w - 400, self.screenInfo.current_h - 250
-        self.background = pygame.image.load("./resources/images/background.png")
+        self.background = pygame.image.load("./resources/images/environment/background.png")
         self.background = pygame.transform.scale(self.background, self.screenSize)
         self.thunderSounds = []
         self.thunderCounter = 0
@@ -30,6 +30,8 @@ class App:
         self.interface = Interface.Interface(self._display_surf, self.screenWidth, self.screenHeight)
         self.hero = Character.Player(self._display_surf, random.randint(self.building.leftWallX, self.building.rightWallX),
                                      random.randint(self.building.ceilingY, self.building.floorY - Character.CHARACTER_HEIGHT - 3))
+        self.cultist = Trash.Trash(self._display_surf, random.randint(self.building.leftWallX, self.building.rightWallX),
+                                   random.randint(self.building.ceilingY, self.building.floorY - Character.CHARACTER_HEIGHT - 3))
         self.hero.setConstraints(self.building.getWalls())
         self.sounds = Sound.Sound()
         self.clock.tick(27)
@@ -62,6 +64,7 @@ class App:
             column.update()
         #self.building.update()
         self.interface.update()
+        self.cultist.update()
         self.hero.update()
         self._display_surf.blit(self.hero.playerImage, self.hero)
         pygame.display.update()
