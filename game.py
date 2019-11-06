@@ -32,6 +32,7 @@ class Game(object):
             self.sounds.thunderstorm()
         if keys[pygame.K_RIGHT]:
             self.exitGame = True
+            self.sounds.stopSounds()
             del self
 
     def onRender(self):

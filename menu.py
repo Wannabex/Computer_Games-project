@@ -1,4 +1,5 @@
 import pygame
+import Sound
 
 MOUSE_POS_X = 0
 MOUSE_POS_Y = 1
@@ -11,12 +12,13 @@ class Menu():
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     BROWN = (153, 92, 0)
+
     def __init__(self, screen, screenWidth, screenHeight):
         self.screen = screen
         self.screenWidth = screenWidth
         self.screenHeight = screenHeight
         self.rectWidth = 335
-        self.rectHeight = 60
+        self.rectHeight = 55
         self.font = pygame.font.Font("./resources/other/gothic.ttf", 40)
         self.playInformation = self.font.render("    Play new game      ", True, self.WHITE)
         self.optionsInformation = self.font.render("          Options       ", True, self.WHITE)
@@ -35,6 +37,9 @@ class Menu():
         self.optionsActivated = False
         self.scoresActivated = False
         self.exitActivated = False
+        pygame.mixer.music.load("./resources/sound/menu.mp3")
+        pygame.mixer.music.set_volume(1)
+        pygame.mixer.music.play(-1)
 
     def update(self):
         self.draw()
@@ -48,6 +53,7 @@ class Menu():
             self.playRectColor = self.BROWN
             if mouseClick[MOUSE_BUTTON_LEFT]:
                 self.playActivated = True
+                pygame.mixer.music.stop()
         elif self.optionsRect.x <= mouse[MOUSE_POS_X] <= self.optionsRect.x + self.optionsRect.width and self.optionsRect.y <= mouse[MOUSE_POS_Y] <= self.optionsRect.y + self.optionsRect.height:
             self.optionsRectColor = self.BROWN
             if mouseClick[MOUSE_BUTTON_LEFT]:

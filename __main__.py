@@ -1,5 +1,5 @@
 import pygame
-import Game, Menu, Sound
+import Game, Menu
 
 class App:
     def __init__(self):

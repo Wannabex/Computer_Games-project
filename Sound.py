@@ -37,3 +37,7 @@ class Sound(object):
 
     def monsterRoar(self):
         self.monsterSounds[random.randint(0, 2)].play()
+
+    def stopSounds(self):
+        pygame.mixer.music.stop()
+        self.ambience.stop()
