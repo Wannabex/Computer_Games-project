@@ -1,12 +1,18 @@
 import pygame
 
+MOUSE_POS_X = 0
+MOUSE_POS_Y = 1
+
+MOUSE_BUTTON_LEFT = 0
+MOUSE_BUTTON_MIDDLE = 1
+MOUSE_BUTTON_RIGHT = 2
 
 class Interface(object):
     def __init__(self, screen, screenX, screenY):
         self.score = InterfacePart(screen, 3, 3, "Score: ", "0")
         self.time = InterfacePart(screen, screenX - 110, 3, "Time: ", "22:00")
         self.equipment1 = InterfacePart(screen, screenX//2 - 175, screenY - 26, "Weapon: ", "Hands")
-        self.equipment2 = InterfacePart(screen, screenX//2 + 75, screenY - 26, "Consumable: ", "Bread")
+        self.equipment2 = InterfacePart(screen, screenX//2 + 75, screenY - 26, "Consumable: ", "Nothing")
         self.health = InterfacePart(screen, 3, screenY - 26, "Health: ", "50/100", (204, 0, 0))
         self.healthBar = StatusIndicator(screen, 3, screenY - 30, 128, 50, (204, 0, 0))
         self.mentality = InterfacePart(screen, screenX - 160, screenY - 26, "Mentality: ", "30/100", (0, 153, 255))
@@ -32,10 +38,10 @@ class Interface(object):
         if newEquipment2 != self.equipment2.information:
             self.equipment2.setInformation(str(newEquipment2))
         if newHealth != self.health.information:
-            self.health.setInformation(str(newHealth))
+            self.health.setInformation(str(newHealth) + "/100")
             self.healthBar.setValue(int(newHealth))
         if newMentality != -1:
-            self.mentality.setInformation(str(newMentality))
+            self.mentality.setInformation(str(newMentality) + "/100")
             self.mentalityBar.setValue(int(newMentality))
 
 class InterfacePart(pygame.Rect):
@@ -80,5 +86,23 @@ class StatusIndicator(pygame.Rect):
 
 
 class ActionWheel(pygame.Rect):
-    def __init__(self):
+    def __init__(self, screen, positionX, positionY, options):
+        self.width = 48
+        self.height = 48
+        pygame.Rect.__init__(self, (positionX, positionY, self.width, self.height))
+        self.optionsCount = options
+        self.options = []
+        # if optionsCount == 1
+        #     self.options.append(pygame.Rect((positionX - 1, positionY - 1, barWidth + 2, 7)))
+
+
+    def update(self):
         pass
+
+        # mouse = pygame.mouse.get_pos()
+        # mouseClick = pygame.mouse.get_pressed()
+        # if self.playRect.x <= mouse[MOUSE_POS_X] <= self.playRect.x + self.playRect.width and self.playRect.y <= mouse[MOUSE_POS_Y] <= self.playRect.y + self.playRect.height:
+        #     self.playRectColor = self.BROWN
+        #     if mouseClick[MOUSE_BUTTON_LEFT]:
+        #         self.playActivated = True
+

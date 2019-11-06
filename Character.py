@@ -34,10 +34,10 @@ class Player(pygame.Rect):
         self.walkCount = 0
         self.health = random.randint(30, 70)
         self.mentality = 30 + 70 - self.health
-        self.weapon = "Hands"
-        self.consumable = "Bread"
+        self.weapon = "Bare Hands"
+        self.consumable = "Nothing"
         self.experience = 0
-        self.statusChanged = False
+        self.statusChanged = True
 
     def update(self):
         self.animation()

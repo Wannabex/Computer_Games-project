@@ -1,8 +1,13 @@
 import pygame
+from Interface import ActionWheel
 
 
 MOUSE_POS_X = 0
 MOUSE_POS_Y = 1
+
+MOUSE_BUTTON_LEFT = 0
+MOUSE_BUTTON_MIDDLE = 1
+MOUSE_BUTTON_RIGHT = 2
 
 ICON_WIDTH = 32
 ICON_HEIGHT = 32
@@ -15,11 +20,15 @@ class Weapon(pygame.Rect):
         self.itemIcons = icons
         self.itemIdle = icons[1]
         self.itemHover = icons[0]
+        #self.actions = ActionWheel()
 
     def update(self):
         mouse = pygame.mouse.get_pos()
+        mouseClick = pygame.mouse.get_pressed()
         if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height:
             self.screen.blit(self.itemHover, self)
+            #if mouseClick[MOUSE_BUTTON_LEFT]:
+                #self.actions.update()
         else:
             self.screen.blit(self.itemIdle, self)
 

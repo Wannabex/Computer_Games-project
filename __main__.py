@@ -16,11 +16,8 @@ class App:
         self.menuVisible = True
         self.menu = Menu.Menu(self._display_surf, self.screenWidth, self.screenHeight)
 
-
-
     def on_init(self):
         pass
-
 
     def on_event(self, event):
         if event.type == pygame.QUIT:

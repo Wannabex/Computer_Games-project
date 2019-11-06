@@ -12,8 +12,8 @@ class Game(object):
         self.exitGame = False
 
     def update(self):
-        self.onRender()
         self.onLoop()
+        self.onRender()
 
     def onLoop(self):
         self.hero.control()
