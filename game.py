@@ -9,6 +9,7 @@ class Game(object):
         self.background = pygame.image.load("./resources/images/environment/background.png")
         self.background = pygame.transform.scale(self.background, screenSize)
         self.gameInit()
+        self.exitGame = False
 
     def update(self):
         self.onRender()
@@ -29,6 +30,9 @@ class Game(object):
             self.hero.setHealth(random.randint(1, 100))
             self.sky.thunder.itsTime = True
             self.sounds.thunderstorm()
+        if keys[pygame.K_RIGHT]:
+            self.exitGame = True
+            del self
 
     def onRender(self):
         self.screen.blit(self.background, [0, 0])

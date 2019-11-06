@@ -28,17 +28,19 @@ class App:
 
     def inMenu(self):
         self.menu.update()
-        if self.menu.playClicked:
+        if self.menu.playActivated:
             self.game = Game.Game(self._display_surf, self.screenSize)
             self.menuVisible = False
-        if self.menu.exitClicked:
+        if self.menu.exitActivated:
             self._running = False
             self.menuVisible = False
 
-
-
     def inGame(self):
         self.game.update()
+        if self.game.exitGame:
+            self.menu.playActivated = False
+            self.menuVisible = True
+            del self.game
 
     def on_cleanup(self):
         pass
@@ -50,10 +52,11 @@ class App:
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
-            if self.menuVisible:
-                self.inMenu()
-            if self.menu.playClicked:
+            if self.menu.playActivated:
                 self.inGame()
+            elif self.menuVisible:
+                self.inMenu()
+
             pygame.display.update()
         self.on_cleanup()
 

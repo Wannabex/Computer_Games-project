@@ -31,10 +31,10 @@ class Menu():
         self.exitRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + self.rectHeight * 3, self.rectWidth, self.rectHeight))
         self.exitRectColor = self.BLACK
 
-        self.playClicked = False
-        self.optionsClicked = False
-        self.scoresClicked = False
-        self.exitClicked = False
+        self.playActivated = False
+        self.optionsActivated = False
+        self.scoresActivated = False
+        self.exitActivated = False
 
     def update(self):
         self.draw()
@@ -47,19 +47,19 @@ class Menu():
         if self.playRect.x <= mouse[MOUSE_POS_X] <= self.playRect.x + self.playRect.width and self.playRect.y <= mouse[MOUSE_POS_Y] <= self.playRect.y + self.playRect.height:
             self.playRectColor = self.BROWN
             if mouseClick[MOUSE_BUTTON_LEFT]:
-                self.playClicked = True
+                self.playActivated = True
         elif self.optionsRect.x <= mouse[MOUSE_POS_X] <= self.optionsRect.x + self.optionsRect.width and self.optionsRect.y <= mouse[MOUSE_POS_Y] <= self.optionsRect.y + self.optionsRect.height:
             self.optionsRectColor = self.BROWN
             if mouseClick[MOUSE_BUTTON_LEFT]:
-                self.optionsClicked = True
+                self.optionsActivated = True
         elif self.scoresRect.x <= mouse[MOUSE_POS_X] <= self.scoresRect.x + self.scoresRect.width and self.scoresRect.y <= mouse[MOUSE_POS_Y] <= self.scoresRect.y + self.scoresRect.height:
             self.scoresRectColor = self.BROWN
             if mouseClick[MOUSE_BUTTON_LEFT]:
-                self.scoresClicked = True
+                self.scoresActivated = True
         elif self.exitRect.x <= mouse[MOUSE_POS_X] <= self.exitRect.x + self.exitRect.width and self.exitRect.y <= mouse[MOUSE_POS_Y] <= self.exitRect.y + self.exitRect.height:
             self.exitRectColor = self.BROWN
             if mouseClick[MOUSE_BUTTON_LEFT]:
-                self.exitClicked = True
+                self.exitActivated = True
 
     def draw(self):
         self.screen.fill(self.BLACK)

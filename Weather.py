@@ -9,7 +9,7 @@ class Column(object):
         self.x = x
         self.maxAge = maxAge
         self.spawnCounter = 0
-        self.spawnRate = random.randint(2, 20)
+        self.spawnRate = random.randint(2, 15)
         self.screen = screen
         self.list = []
 
@@ -17,7 +17,7 @@ class Column(object):
         self.spawnCounter += 1
         if self.spawnCounter == self.spawnRate:
             self.list.append(Droplet(self, self.maxAge))
-            self.spawnRate = random.randint(2, 20)
+            self.spawnRate = random.randint(2, 15)
             self.spawnCounter = 0
         for droplet in self.list:
             droplet.update()
