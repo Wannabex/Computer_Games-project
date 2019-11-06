@@ -48,6 +48,10 @@ class Game(object):
         self.whip.update()
         self.shield.update()
         self.sword.update()
+        self.bomb.update()
+        self.garlic.update()
+        self.flute.update()
+        self.rune.update()
         self.hero.update()
         self.screen.blit(self.hero.playerImage, self.hero)
 
@@ -88,6 +92,26 @@ class Game(object):
                                                       self.building.rightWallX - Trash.Skeleton.SKELETON_WIDTH),
                                        random.randint(self.building.ceilingY,
                                                       self.building.floorY - Trash.Skeleton.SKELETON_HEIGHT - 3))
+        self.bomb = Equipment.Bomb(self.screen,
+                                     random.randint(self.building.leftWallX,
+                                                    self.building.rightWallX - Equipment.ICON_WIDTH),
+                                     random.randint(self.building.ceilingY,
+                                                    self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.garlic = Equipment.Garlic(self.screen,
+                                     random.randint(self.building.leftWallX,
+                                                    self.building.rightWallX - Equipment.ICON_WIDTH),
+                                     random.randint(self.building.ceilingY,
+                                                    self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.flute = Equipment.Flute(self.screen,
+                                     random.randint(self.building.leftWallX,
+                                                    self.building.rightWallX - Equipment.ICON_WIDTH),
+                                     random.randint(self.building.ceilingY,
+                                                    self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.rune = Equipment.Rune(self.screen,
+                                     random.randint(self.building.leftWallX,
+                                                    self.building.rightWallX - Equipment.ICON_WIDTH),
+                                     random.randint(self.building.ceilingY,
+                                                    self.building.floorY - Equipment.ICON_WIDTH - 3))
         self.sword = Equipment.Sword(self.screen,
                                      random.randint(self.building.leftWallX,
                                                     self.building.rightWallX - Equipment.ICON_WIDTH),

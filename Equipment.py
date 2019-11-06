@@ -51,30 +51,50 @@ class Shield(Weapon):
 
 
 class Consumable(pygame.Rect):
-    def __init__(self):
-        pygame.Rect.__init__(self, ())
+    def __init__(self, screen, positionX, positionY, icons):
+        pygame.Rect.__init__(self, (positionX, positionY, ICON_WIDTH, ICON_HEIGHT))
+        self.screen = screen
+        self.itemIcons = icons
+        self.itemIdle = icons[1]
+        self.itemHover = icons[0]
 
+    def update(self):
+        mouse = pygame.mouse.get_pos()
+        if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height:
+            self.screen.blit(self.itemHover, self)
+        else:
+            self.screen.blit(self.itemIdle, self)
 
 class Bomb(Consumable):
-    def __init__(self):
-        Consumable.__init__()
+    bombIcon = [pygame.image.load("./resources/images/items/consumables/bomb1.png"),
+                pygame.image.load("./resources/images/items/consumables/bomb2.png")]
+
+    def __init__(self, screen, positionX, positionY):
+        Consumable.__init__(self, screen, positionX, positionY, self.bombIcon)
 
 
 class Flute(Consumable):
-    def __init__(self):
-        Consumable.__init__()
+    fluteIcon = [pygame.image.load("./resources/images/items/consumables/flute1.png"),
+                pygame.image.load("./resources/images/items/consumables/flute2.png")]
 
+    def __init__(self, screen, positionX, positionY):
+        Consumable.__init__(self, screen, positionX, positionY, self.fluteIcon)
 
 
 class Garlic(Consumable):
-    def __init__(self):
-        Consumable.__init__()
+    garlicIcon = [pygame.image.load("./resources/images/items/consumables/garlic1.png"),
+                pygame.image.load("./resources/images/items/consumables/garlic2.png")]
 
+    def __init__(self, screen, positionX, positionY):
+        Consumable.__init__(self, screen, positionX, positionY, self.garlicIcon)
 
 
 class Rune(Consumable):
-    def __init__(self):
-        Consumable.__init__()
+    runeIcon = [pygame.image.load("./resources/images/items/consumables/rune1.png"),
+                  pygame.image.load("./resources/images/items/consumables/rune2.png")]
+
+    def __init__(self, screen, positionX, positionY):
+        Consumable.__init__(self, screen, positionX, positionY, self.runeIcon)
 
 
 
