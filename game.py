@@ -10,6 +10,10 @@ class Game(object):
         self.background = pygame.transform.scale(self.background, screenSize)
         self.gameInit()
 
+    def update(self):
+        self.onRender()
+        self.onLoop()
+
     def onLoop(self):
         self.hero.control()
         if self.hero.statusChanged:

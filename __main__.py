@@ -1,5 +1,5 @@
 import pygame
-import game, menu
+import Game, Menu, Sound
 
 class App:
     def __init__(self):
@@ -11,11 +11,12 @@ class App:
         self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF)  # | pygame.FULLSCREEN)
         pygame.display.set_caption("Trashing and Rushing")
         self.clock = pygame.time.Clock()
-
         self.clock.tick(27)
         self._running = True
-        self.menu = menu.Menu(self._display_surf, self.screenWidth, self.screenHeight)
-        self.game = game.Game(self._display_surf, self.screenSize)
+        self.menuVisible = True
+        self.menu = Menu.Menu(self._display_surf, self.screenWidth, self.screenHeight)
+
+
 
     def on_init(self):
         pass
@@ -25,16 +26,19 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
 
-    def on_loop(self):
+    def inMenu(self):
+        self.menu.update()
         if self.menu.playClicked:
-            self.game.onLoop()
-        else:
-            self.menu.update()
-        pygame.display.update()
+            self.game = Game.Game(self._display_surf, self.screenSize)
+            self.menuVisible = False
+        if self.menu.exitClicked:
+            self._running = False
+            self.menuVisible = False
 
 
-    def on_render(self):
-        pass
+
+    def inGame(self):
+        self.game.update()
 
     def on_cleanup(self):
         pass
@@ -46,8 +50,11 @@ class App:
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
-            self.on_loop()
-            self.on_render()
+            if self.menuVisible:
+                self.inMenu()
+            if self.menu.playClicked:
+                self.inGame()
+            pygame.display.update()
         self.on_cleanup()
 
 

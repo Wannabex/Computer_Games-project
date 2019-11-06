@@ -15,20 +15,20 @@ class Menu():
         self.screen = screen
         self.screenWidth = screenWidth
         self.screenHeight = screenHeight
-        self.rectWidth = 330
+        self.rectWidth = 335
         self.rectHeight = 60
         self.font = pygame.font.Font("./resources/other/gothic.ttf", 40)
         self.playInformation = self.font.render("    Play new game      ", True, self.WHITE)
         self.optionsInformation = self.font.render("          Options       ", True, self.WHITE)
         self.scoresInformation = self.font.render("  High scores table   ", True, self.WHITE)
         self.exitInformation = self.font.render("      Exit the game     ", True, self.WHITE)
-        self.playRect = pygame.Rect((self.screenWidth // 3, self.screenHeight // 3, self.rectWidth, self.rectHeight))
+        self.playRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3, self.rectWidth, self.rectHeight))
         self.playRectColor = self.BLACK
-        self.optionsRect = pygame.Rect( (self.screenWidth // 3, self.screenHeight // 3 + self.rectHeight, self.rectWidth, self.rectHeight))
+        self.optionsRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + self.rectHeight, self.rectWidth, self.rectHeight))
         self.optionsRectColor = self.BLACK
-        self.scoresRect = pygame.Rect( (self.screenWidth // 3, self.screenHeight // 3 + self.rectHeight * 2, self.rectWidth, self.rectHeight))
+        self.scoresRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + self.rectHeight * 2, self.rectWidth, self.rectHeight))
         self.scoresRectColor = self.BLACK
-        self.exitRect = pygame.Rect( (self.screenWidth // 3, self.screenHeight // 3 + self.rectHeight * 3, self.rectWidth, self.rectHeight))
+        self.exitRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + self.rectHeight * 3, self.rectWidth, self.rectHeight))
         self.exitRectColor = self.BLACK
 
         self.playClicked = False
