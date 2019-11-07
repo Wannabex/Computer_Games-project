@@ -12,11 +12,17 @@ class Menu():
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     BROWN = (153, 92, 0)
+    BLOOD = (128, 0, 0)
 
     def __init__(self, screen, screenWidth, screenHeight):
         self.screen = screen
         self.screenWidth = screenWidth
         self.screenHeight = screenHeight
+        self.rectWidth = 400
+        self.rectHeight = 100
+        self.font = pygame.font.Font("./resources/other/gothic.ttf", 80)
+        self.title = self.font.render("         TRASHING  &  RUSHING    ", True, self.BLOOD)
+        self.titleRect = pygame.Rect((10, 10, self.rectWidth, self.rectHeight))
         self.rectWidth = 335
         self.rectHeight = 55
         self.font = pygame.font.Font("./resources/other/gothic.ttf", 40)
@@ -69,6 +75,7 @@ class Menu():
 
     def draw(self):
         self.screen.fill(self.BLACK)
+        self.screen.blit(self.title, self.titleRect)
         pygame.draw.rect(self.screen, self.playRectColor, self.playRect)
         self.screen.blit(self.playInformation, self.playRect)
         pygame.draw.rect(self.screen, self.optionsRectColor, self.optionsRect)

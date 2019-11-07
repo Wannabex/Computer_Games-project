@@ -22,17 +22,21 @@ class Weapon(pygame.Rect):
         self.itemHover = icons[0]
         self.name = ""
         self.picked = False
-        #self.actions = ActionWheel()
+        self.actions = ActionWheel(screen, positionX - ActionWheel.WHEEL_WIDTH - 3, positionY - ActionWheel.WHEEL_HEIGHT - 3)
+        self.actions.setActionWheel(upIcon= self.itemIdle, downIcon=self.itemHover, rightIcon=self.itemIdle)
+        self.actionsVisible = False
 
     def update(self):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
         if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
             self.screen.blit(self.itemHover, self)
-            #if mouseClick[MOUSE_BUTTON_LEFT]:
-                #self.actions.update()
+            if mouseClick[MOUSE_BUTTON_LEFT]:
+                self.actionsVisible = True
         else:
             self.screen.blit(self.itemIdle, self)
+        if self.actionsVisible:
+            self.actions.update()
 
     def pickUp(self, weaponX, weaponY):
         self.x = weaponX

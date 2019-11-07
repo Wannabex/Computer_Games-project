@@ -71,23 +71,60 @@ class StatusIndicator(pygame.Rect):
 
 
 class ActionWheel(pygame.Rect):
-    def __init__(self, screen, positionX, positionY, weapon, consumable):
-        self.width = 48
-        self.height = 48
-        pygame.Rect.__init__(self, (positionX, positionY, self.width, self.height))
+    WHEEL_WIDTH = 48
+    WHEEL_HEIGHT = 48
+
+    def __init__(self, screen, positionX, positionY, weapon=0, consumable=0):
+        self.screen = screen
+        pygame.Rect.__init__(self, (positionX, positionY, self.WHEEL_WIDTH, self.WHEEL_HEIGHT))
+        self.optionWidth = 16
+        self.optionHeight = 16
+        self.optionUp = pygame.Rect((positionX + self.optionWidth, positionY, self.optionWidth, self.optionHeight))
+        self.optionLeft = pygame.Rect((positionX, positionY + self.optionHeight, self.optionWidth, self.optionHeight))
+        self.optionMiddle = pygame.Rect((positionX + self.optionWidth, positionY + self.optionHeight, self.optionWidth, self.optionHeight))
+        self.optionRight = pygame.Rect((positionX + 2 * self.optionWidth, positionY + self.optionHeight, self.optionWidth, self.optionHeight))
+        self.optionDown = pygame.Rect((positionX + self.optionWidth, positionY + 2 * self.optionHeight, self.optionWidth, self.optionHeight))
+        self.upIcon = 0
+        self.leftIcon = 0
+        self.middleIcon = 0
+        self.rightIcon = 0
+        self.downIcon = 0
         self.weapon = weapon
         self.consumable = consumable
-        # if optionsCount == 1
-        #     self.options.append(pygame.Rect((positionX - 1, positionY - 1, barWidth + 2, 7)))
+        self.upClicked = False
+        self.leftClicked = False
+        self.middleClicked = False
+        self.rightClicked = False
+        self.downClicked = False
 
+    def setActionWheel(self, upIcon=0, leftIcon=0, middleIcon=0, rightIcon=0, downIcon=0):
+        if upIcon != 0:
+            self.upIcon = upIcon
+        if leftIcon != 0:
+            self.leftIcon = leftIcon
+        if middleIcon != 0:
+            self.middleIcon = middleIcon
+        if rightIcon != 0:
+            self.rightIcon = rightIcon
+        if downIcon != 0:
+            self.downIcon = downIcon
 
     def update(self):
-        pass
+        if self.upIcon != 0:
+            self.screen.blit(self.upIcon, self.optionUp)
+        if self.leftIcon != 0:
+            self.screen.blit(self.leftIcon, self.optionLeft)
+        if self.middleIcon != 0:
+            self.screen.blit(self.middleIcon, self.optionMiddle)
+        if self.rightIcon != 0:
+            self.screen.blit(self.rightIcon, self.optionRight)
+        if self.downIcon != 0:
+            self.screen.blit(self.downIcon, self.optionDown)
 
-        # mouse = pygame.mouse.get_pos()
-        # mouseClick = pygame.mouse.get_pressed()
-        # if self.playRect.x <= mouse[MOUSE_POS_X] <= self.playRect.x + self.playRect.width and self.playRect.y <= mouse[MOUSE_POS_Y] <= self.playRect.y + self.playRect.height:
-        #     self.playRectColor = self.BROWN
-        #     if mouseClick[MOUSE_BUTTON_LEFT]:
-        #         self.playActivated = True
+
+    def wheelControl(self):
+        mouse = pygame.mouse.get_pos()
+        mouseClick = pygame.mouse.get_pressed()
+        #if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
+    
 
