@@ -20,17 +20,32 @@ class Weapon(pygame.Rect):
         self.itemIcons = icons
         self.itemIdle = icons[1]
         self.itemHover = icons[0]
+        self.name = ""
+        self.picked = False
         #self.actions = ActionWheel()
 
     def update(self):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
-        if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height:
+        if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
             self.screen.blit(self.itemHover, self)
             #if mouseClick[MOUSE_BUTTON_LEFT]:
                 #self.actions.update()
         else:
             self.screen.blit(self.itemIdle, self)
+
+    def pickUp(self, weaponX, weaponY):
+        self.x = weaponX
+        self.y = weaponY
+        self.picked = True
+
+    def drop(self, x, y):
+        self.x = x
+        self.y = y
+        self.picked = False
+
+    def getName(self):
+        return self.name
 
 
 class Sword(Weapon):
@@ -39,6 +54,7 @@ class Sword(Weapon):
 
     def __init__(self, screen, positionX, positionY):
         Weapon.__init__(self, screen, positionX, positionY, self.swordIcon)
+        self.name = "Sword"
 
 
 class Whip(Weapon):
@@ -47,6 +63,7 @@ class Whip(Weapon):
 
     def __init__(self, screen, positionX, positionY):
         Weapon.__init__(self, screen, positionX, positionY, self.whipIcon)
+        self.name = "Whip"
 
 
 
@@ -56,6 +73,7 @@ class Shield(Weapon):
 
     def __init__(self, screen, positionX, positionY):
         Weapon.__init__(self, screen, positionX, positionY, self.shieldIcon)
+        self.name = "Shield"
 
 
 
@@ -66,13 +84,28 @@ class Consumable(pygame.Rect):
         self.itemIcons = icons
         self.itemIdle = icons[1]
         self.itemHover = icons[0]
+        self.name = ""
+        self.picked = False
 
     def update(self):
         mouse = pygame.mouse.get_pos()
-        if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height:
+        if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
             self.screen.blit(self.itemHover, self)
         else:
             self.screen.blit(self.itemIdle, self)
+
+    def pickUp(self, consumableX, consumableY):
+        self.x = consumableX
+        self.y = consumableY
+        self.picked = True
+
+    def drop(self, x, y):
+        self.x = x
+        self.y = y
+        self.picked = False
+
+    def getName(self):
+        return self.name
 
 class Bomb(Consumable):
     bombIcon = [pygame.image.load("./resources/images/items/consumables/bomb1.png"),
@@ -80,6 +113,7 @@ class Bomb(Consumable):
 
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.bombIcon)
+        self.name = "Bomb"
 
 
 class Flute(Consumable):
@@ -88,6 +122,7 @@ class Flute(Consumable):
 
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.fluteIcon)
+        self.name = "Flute"
 
 
 class Garlic(Consumable):
@@ -96,6 +131,7 @@ class Garlic(Consumable):
 
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.garlicIcon)
+        self.name = "Garlic"
 
 
 class Rune(Consumable):
@@ -104,6 +140,7 @@ class Rune(Consumable):
 
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.runeIcon)
+        self.name = "Rune"
 
 
 

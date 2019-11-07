@@ -1,5 +1,6 @@
 import pygame
-import Game, Menu
+import Game
+import Menu
 
 class App:
     def __init__(self):
@@ -11,7 +12,7 @@ class App:
         self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF)  # | pygame.FULLSCREEN)
         pygame.display.set_caption("Trashing and Rushing")
         self.clock = pygame.time.Clock()
-        self.clock.tick(27)
+        self.clock.tick(216)
         self._running = True
         self.menuVisible = True
         self.menu = Menu.Menu(self._display_surf, self.screenWidth, self.screenHeight)

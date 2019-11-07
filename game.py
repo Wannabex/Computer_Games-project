@@ -1,5 +1,6 @@
 import pygame, random
-import Character, Weather, Interface, Building, Sound, Trash, Equipment
+import Character, Weather, Building, Sound, Trash, Equipment
+
 
 class Game(object):
     def __init__(self, screen, screenSize):
@@ -17,19 +18,17 @@ class Game(object):
 
     def onLoop(self):
         self.hero.control()
-        if self.hero.statusChanged:
-            self.interface.updateStatus(self.hero.getExperience(), "22:01", self.hero.getWeapon(),
-                                        self.hero.getConsumable(), self.hero.getHealth(), self.hero.getMentality())
-            self.hero.statusChanged = False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
             self.hero.setExperience(random.randint(10, 24214))
             self.sky.monster.itsTime = True
             self.sounds.monsterRoar()
+            self.hero.setConsumable(self.bomb)
         if keys[pygame.K_DOWN]:
             self.hero.setHealth(random.randint(1, 100))
             self.sky.thunder.itsTime = True
             self.sounds.thunderstorm()
+            self.hero.setWeapon(self.sword)
         if keys[pygame.K_RIGHT]:
             self.exitGame = True
             self.sounds.stopSounds()
@@ -41,7 +40,7 @@ class Game(object):
         for column in self.weather:
             column.update()
         # self.building.update()
-        self.interface.update()
+
         self.cultist.update()
         self.angel.update()
         self.skeleton.update()
@@ -69,12 +68,12 @@ class Game(object):
             self.weather.append(Weather.Column(columnNumber * Weather.SIZE, self.screen, self.building.floorY))
         self.sky = Weather.Sky(self.screen, self.screenWidth, self.screenHeight, self.building.leftWallX,
                                self.building.rightWallX, self.building.ceilingY)
-        self.interface = Interface.Interface(self.screen, self.screenWidth, self.screenHeight)
         self.hero = Character.Player(self.screen,
                                      random.randint(self.building.leftWallX,
                                                     self.building.rightWallX - Character.CHARACTER_WIDTH),
                                      random.randint(self.building.ceilingY,
-                                                    self.building.floorY - Character.CHARACTER_HEIGHT - 3))
+                                                    self.building.floorY - Character.CHARACTER_HEIGHT - 3),
+                                     self.screenWidth, self.screenHeight)
         self.hero.setConstraints(self.building.getWalls())
 
         self.cultist = Trash.Cultist(self.screen,

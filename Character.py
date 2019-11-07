@@ -1,6 +1,7 @@
 import pygame
 import random
-
+import Equipment
+import Interface
 
 MOUSE_BUTTON_LEFT = 0
 MOUSE_BUTTON_MIDDLE = 1
@@ -23,27 +24,29 @@ class Player(pygame.Rect):
                  pygame.image.load("./resources/characters/hero/R7.png"), pygame.image.load("./resources/characters/hero/R8.png"), pygame.image.load("./resources/characters/hero/R9.png")]
     stay = pygame.image.load("./resources/characters/hero/standing.png")
 
-    def __init__(self, screen, positionX, positionY):
+    def __init__(self, screen, positionX, positionY, screenX, screenY):
         pygame.Rect.__init__(self, (positionX, positionY, CHARACTER_WIDTH, CHARACTER_HEIGHT))
         self.screen = screen
+        self.interface = Interface.Interface(screen, screenX, screenY)
         self.playerImage = self.stay
         self.speed = 5
         self.goingLeft = False
         self.goingRight = False
         self.moving = False
         self.walkCount = 0
-        self.health = random.randint(30, 70)
-        self.mentality = 30 + 70 - self.health
-        self.weapon = "Bare Hands"
+        self.setHealth(random.randint(30, 70))
+        self.setMentality(30 + 70 - self.health)
+        self.weapon = "Nothing"
         self.consumable = "Nothing"
         self.experience = 0
-        self.statusChanged = True
+        self.time = "22:00"
 
     def update(self):
         self.animation()
         if self.moving:
             self.moveToDestination()
         self.screen.blit(self.playerImage, self)
+        self.interface.update()
 
     def animation(self):
         if self.goingLeft:
@@ -65,7 +68,6 @@ class Player(pygame.Rect):
                 destination = destination + self.width // 2
             elif self.rightWallX - self.width // 2 <= destination <= self.rightWallX:
                 destination = destination - self.width // 2
-
             if self.x < mouse[MOUSE_POS_X]:
                 self.setPath(destination)
             elif self.x > mouse[MOUSE_POS_X]:
@@ -126,38 +128,49 @@ class Player(pygame.Rect):
     def getPath(self):
         return self.destination
 
-    def setHealth(self, health):
-        self.health = health
-        self.statusChanged = True
+    def setHealth(self, newHealth):
+        self.health = newHealth
+        self.interface.health.setInformation(str(newHealth) + "/100")
+        self.interface.healthBar.setValue(int(newHealth))
 
     def getHealth(self):
         return self.health
 
-    def setMentality(self, mentality):
-        self.mentality = mentality
-        self.statusChanged = True
+    def setMentality(self, newMentality):
+        self.mentality = newMentality
+        self.interface.mentality.setInformation(str(newMentality) + "/100")
+        self.interface.mentalityBar.setValue(int(newMentality))
 
     def getMentality(self):
         return self.mentality
 
-    def setWeapon(self, weapon):
-        self.weapon = weapon
-        self.statusChanged = True
+    def setWeapon(self, newWeapon):
+        self.weapon = newWeapon.getName()
+        newWeapon.pickUp(self.interface.equipment1.x - Equipment.ICON_WIDTH - 3, self.interface.equipment1.y - 5)
+        self.interface.equipment1.setInformation(self.weapon)
 
     def getWeapon(self):
         return self.weapon
 
-    def setConsumable(self, consumable):
-        self.consumable = consumable
-        self.statusChanged = True
+    def setConsumable(self, newConsumable):
+        self.consumable = newConsumable.getName()
+        newConsumable.pickUp(self.interface.equipment2.x - Equipment.ICON_WIDTH - 3, self.interface.equipment1.y - 5)
+        self.interface.equipment2.setInformation(self.consumable)
 
     def getConsumable(self):
         return self.consumable
 
-    def setExperience(self, experience):
-        self.experience = experience
-        self.statusChanged = True
+    def setExperience(self, newExperience):
+        self.experience = newExperience
+        self.interface.score.setInformation(str(newExperience))
 
     def getExperience(self):
         return self.experience
+
+    def setTime(self, newTime):
+        self.time = newTime
+        self.interface.time.setInformation(str(newTime))
+
+    def getTime(self):
+        return self.time
 
