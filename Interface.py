@@ -126,5 +126,5 @@ class ActionWheel(pygame.Rect):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
         #if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
-    
+
 
