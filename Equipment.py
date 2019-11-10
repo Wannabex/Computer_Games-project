@@ -23,6 +23,7 @@ class Weapon(pygame.Rect):
         self.wheelIcon = wheel
         self.name = ""
         self.picked = False
+        self.clickable = True
         self.actionsVisible = False
 
     def update(self):
@@ -30,7 +31,7 @@ class Weapon(pygame.Rect):
         mouseClick = pygame.mouse.get_pressed()
         if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
             self.screen.blit(self.itemHover, self)
-            if mouseClick[MOUSE_BUTTON_LEFT] and not self.actionsVisible:
+            if mouseClick[MOUSE_BUTTON_LEFT] and self.clickable:
                 self.actionsVisible = True
         else:
             self.screen.blit(self.itemIdle, self)
@@ -68,22 +69,22 @@ class Weapon(pygame.Rect):
 class Sword(Weapon):
     swordIcon = [pygame.image.load("./resources/images/items/weapons/sword1.png"),
                  pygame.image.load("./resources/images/items/weapons/sword2.png")]
-    wheelIcon = [pygame.image.load("./resources/images/wheel/weapons/sword1.png"),
+    swordWheelIcon = [pygame.image.load("./resources/images/wheel/weapons/sword1.png"),
                  pygame.image.load("./resources/images/wheel/weapons/sword2.png")]
 
     def __init__(self, screen, positionX, positionY):
-        Weapon.__init__(self, screen, positionX, positionY, self.swordIcon, self.wheelIcon)
+        Weapon.__init__(self, screen, positionX, positionY, self.swordIcon, self.swordWheelIcon)
         self.name = "Sword"
 
 
 class Whip(Weapon):
     whipIcon = [pygame.image.load("./resources/images/items/weapons/whip1.png"),
                 pygame.image.load("./resources/images/items/weapons/whip2.png")]
-    wheelIcon = [pygame.image.load("./resources/images/wheel/weapons/whip1.png"),
+    whipWheelIcon = [pygame.image.load("./resources/images/wheel/weapons/whip1.png"),
                  pygame.image.load("./resources/images/wheel/weapons/whip2.png")]
 
     def __init__(self, screen, positionX, positionY):
-        Weapon.__init__(self, screen, positionX, positionY, self.whipIcon, self.wheelIcon)
+        Weapon.__init__(self, screen, positionX, positionY, self.whipIcon, self.whipWheelIcon)
         self.name = "Whip"
 
 
@@ -91,11 +92,11 @@ class Whip(Weapon):
 class Shield(Weapon):
     shieldIcon = [pygame.image.load("./resources/images/items/weapons/shield1.png"),
                   pygame.image.load("./resources/images/items/weapons/shield2.png")]
-    wheelIcon = [pygame.image.load("./resources/images/wheel/weapons/shield1.png"),
+    shieldWheelIcon = [pygame.image.load("./resources/images/wheel/weapons/shield1.png"),
                  pygame.image.load("./resources/images/wheel/weapons/shield2.png")]
 
     def __init__(self, screen, positionX, positionY):
-        Weapon.__init__(self, screen, positionX, positionY, self.shieldIcon, self.wheelIcon)
+        Weapon.__init__(self, screen, positionX, positionY, self.shieldIcon, self.shieldWheelIcon)
         self.name = "Shield"
 
 
@@ -109,6 +110,7 @@ class Consumable(pygame.Rect):
         self.wheelIcon = wheel
         self.name = ""
         self.picked = False
+        self.clickable = True
         self.actionsVisible = False
 
     def update(self):
@@ -116,7 +118,7 @@ class Consumable(pygame.Rect):
         mouseClick = pygame.mouse.get_pressed()
         if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
             self.screen.blit(self.itemHover, self)
-            if mouseClick[MOUSE_BUTTON_LEFT] and not self.actionsVisible:
+            if mouseClick[MOUSE_BUTTON_LEFT] and self.clickable:
                 self.actionsVisible = True
         else:
             self.screen.blit(self.itemIdle, self)
@@ -150,53 +152,48 @@ class Consumable(pygame.Rect):
     def getWheelIcon(self):
         return self.wheelIcon
 
-    #def wheelEvents(self):
-    #    if self.actions.middleClicked:
-    #        self.actionsVisible = False
-    #        del self.actions
-    #        self.actions = 0
 
 class Bomb(Consumable):
     bombIcon = [pygame.image.load("./resources/images/items/consumables/bomb1.png"),
                 pygame.image.load("./resources/images/items/consumables/bomb2.png")]
-    wheelIcon = [pygame.image.load("./resources/images/wheel/consumables/bomb1.png"),
+    bombWheelIcon = [pygame.image.load("./resources/images/wheel/consumables/bomb1.png"),
                  pygame.image.load("./resources/images/wheel/consumables/bomb2.png")]
 
     def __init__(self, screen, positionX, positionY):
-        Consumable.__init__(self, screen, positionX, positionY, self.bombIcon, self.wheelIcon)
+        Consumable.__init__(self, screen, positionX, positionY, self.bombIcon, self.bombWheelIcon)
         self.name = "Bomb"
 
 
 class Flute(Consumable):
     fluteIcon = [pygame.image.load("./resources/images/items/consumables/flute1.png"),
                 pygame.image.load("./resources/images/items/consumables/flute2.png")]
-    wheelIcon = [pygame.image.load("./resources/images/wheel/consumables/flute1.png"),
+    fluteWheelIcon = [pygame.image.load("./resources/images/wheel/consumables/flute1.png"),
                  pygame.image.load("./resources/images/wheel/consumables/flute2.png")]
 
     def __init__(self, screen, positionX, positionY):
-        Consumable.__init__(self, screen, positionX, positionY, self.fluteIcon, self.wheelIcon)
+        Consumable.__init__(self, screen, positionX, positionY, self.fluteIcon, self.fluteWheelIcon)
         self.name = "Flute"
 
 
 class Garlic(Consumable):
     garlicIcon = [pygame.image.load("./resources/images/items/consumables/garlic1.png"),
                 pygame.image.load("./resources/images/items/consumables/garlic2.png")]
-    wheelIcon = [pygame.image.load("./resources/images/wheel/consumables/garlic1.png"),
+    garlicWheelIcon = [pygame.image.load("./resources/images/wheel/consumables/garlic1.png"),
                  pygame.image.load("./resources/images/wheel/consumables/garlic2.png")]
 
     def __init__(self, screen, positionX, positionY):
-        Consumable.__init__(self, screen, positionX, positionY, self.garlicIcon, self.wheelIcon)
+        Consumable.__init__(self, screen, positionX, positionY, self.garlicIcon, self.garlicWheelIcon)
         self.name = "Garlic"
 
 
 class Rune(Consumable):
     runeIcon = [pygame.image.load("./resources/images/items/consumables/rune1.png"),
                   pygame.image.load("./resources/images/items/consumables/rune2.png")]
-    wheelIcon = [pygame.image.load("./resources/images/wheel/consumables/rune1.png"),
+    runeWheelIcon = [pygame.image.load("./resources/images/wheel/consumables/rune1.png"),
                  pygame.image.load("./resources/images/wheel/consumables/rune2.png")]
 
     def __init__(self, screen, positionX, positionY):
-        Consumable.__init__(self, screen, positionX, positionY, self.runeIcon, self.wheelIcon)
+        Consumable.__init__(self, screen, positionX, positionY, self.runeIcon, self.runeWheelIcon)
         self.name = "Rune"
 
 

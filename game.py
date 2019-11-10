@@ -21,16 +21,19 @@ class Game(object):
         if not self.actionWheel:
             for enemy in self.enemies:
                 if enemy.actionsVisible:
-                    self.actionWheel = Interface.ActionWheel(self.screen, enemy)
+                    self.actionWheel = Interface.ActionWheel(self.screen, enemy, weapon=self.checkCurrentWeapon(self.items), consumable=self.checkCurrentConsumable(self.items), takeable=False)
                     self.objectWithInterface = enemy
+                    self.changeClickable(self.items, self.enemies, self.objectWithInterface, newState=False)
             for item in self.items:
                 if item.actionsVisible:
                     self.actionWheel = Interface.ActionWheel(self.screen, item)
                     self.objectWithInterface = item
+                    self.changeClickable(self.items, self.enemies, self.objectWithInterface, newState=False)
         else:
             if self.objectWithInterface.wheelEvents(self.actionWheel.wheelEvents()) == 1:
                 del self.actionWheel
                 self.actionWheel = 0
+                self.changeClickable(self.items, self.enemies)
 
 
         self.hero.control()
@@ -155,4 +158,32 @@ class Game(object):
                                        random.randint(self.building.ceilingY,
                                                       self.building.floorY - Equipment.ICON_WIDTH - 3))
         self.items.append(self.shield)
+
+    def checkFreePositions(self):
+        pass
+
+    def checkCurrentWeapon(self, items):
+        if self.hero.weapon != "Nothing":
+            for item in items:
+                if item.name == self.hero.weapon:
+                    return item.wheelIcon
+        else:
+            return 0
+
+    def checkCurrentConsumable(self, items):
+        if self.hero.consumable != "Nothing":
+            for item in items:
+                if item.name == self.hero.consumable:
+                    return item.wheelIcon
+        else:
+            return 0
+
+    def changeClickable(self, items, enemies, objectWithWheel=0, newState=True):
+        for item in items:
+            if item != objectWithWheel:
+                item.clickable = newState
+        for enemy in enemies:
+            if enemy != objectWithWheel:
+                enemy.clickable = newState
+
 

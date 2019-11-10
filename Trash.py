@@ -13,6 +13,7 @@ class Trash(pygame.Rect):
         self.currentImage = self.spriteSheet[0]
         self.imageCount = len(self.spriteSheet)
         self.animationCount = 0
+        self.clickable = True
         self.actionsVisible = False
 
     def update(self):
@@ -20,7 +21,7 @@ class Trash(pygame.Rect):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
         if self.x <= mouse[Interface.MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[Interface.MOUSE_POS_Y] <= self.y + self.height:
-            if mouseClick[Interface.MOUSE_BUTTON_LEFT]:
+            if mouseClick[Interface.MOUSE_BUTTON_LEFT] and self.clickable:
                 self.actionsVisible = True
         self.screen.blit(self.currentImage, self)
 
@@ -60,7 +61,7 @@ class Angel(Trash):
                    pygame.image.load("./resources/characters/angel/S5.png"), pygame.image.load("./resources/characters/angel/S6.png"),
                    pygame.image.load("./resources/characters/angel/S7.png"), pygame.image.load("./resources/characters/angel/S8.png")]
     ANGEL_WIDTH = 122
-    ANGEL_HEIGHT = 58
+    ANGEL_HEIGHT = 117
 
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.ANGEL_WIDTH, self.ANGEL_HEIGHT, self.angelSprite)

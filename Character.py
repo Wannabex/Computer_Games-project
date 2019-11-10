@@ -73,28 +73,6 @@ class Player(pygame.Rect):
             elif self.x > mouse[MOUSE_POS_X]:
                 self.setPath(destination)
 
-        #keys = pygame.key.get_pressed()
-        # if keys[pygame.K_UP] and self.y > self.upY:
-        #     self.move_ip(0, -self.speed)
-        #     self.goingLeft = False
-        #     self.goingRight = False
-        # if keys[pygame.K_DOWN] and self.y < self.downY:
-        #     self.move_ip(0, +self.speed)
-        #     self.goingLeft = False
-        #     self.goingRight = False
-        # if keys[pygame.K_LEFT] and self.x > self.leftWallX:
-        #     self.move_ip(-self.speed, 0)
-        #     self.goingLeft = True
-        #     self.goingRight = False
-        # elif keys[pygame.K_RIGHT] and self.x < self.rightWallX - self.width:
-        #     self.move_ip(+self.speed, 0)
-        #     self.goingLeft = False
-        #     self.goingRight = True
-        # else:
-        #     self.goingLeft = False
-        #     self.goingRight = False
-        #     self.walkCount = 0
-
     def moveToDestination(self):
         if self.x < self.destination:
             if self.destination - self.x < self.speed:

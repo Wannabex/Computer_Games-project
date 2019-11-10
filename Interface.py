@@ -86,8 +86,8 @@ class ActionWheel(pygame.Rect):
 
     def __init__(self, screen, object, weapon=0, consumable=0, takeable=True):
         self.screen = screen
-        self.positionX = object.x - self.WHEEL_WIDTH
-        self.positionY = object.y - self.WHEEL_HEIGHT
+        self.positionX = object.x - self.WHEEL_WIDTH + 3
+        self.positionY = object.y - self.WHEEL_HEIGHT + 3
         pygame.Rect.__init__(self, (self.positionX, self.positionY, self.WHEEL_WIDTH, self.WHEEL_HEIGHT))
         self.optionWidth = 16
         self.optionHeight = 16
