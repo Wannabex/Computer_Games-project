@@ -14,17 +14,14 @@ class Trash(pygame.Rect):
         self.imageCount = len(self.spriteSheet)
         self.animationCount = 0
         self.actionsVisible = False
-        self.actions = 0
 
     def update(self):
         self.animation()
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
         if self.x <= mouse[Interface.MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[Interface.MOUSE_POS_Y] <= self.y + self.height:
-            if mouseClick[Interface.MOUSE_BUTTON_LEFT] and self.actions == 0:
+            if mouseClick[Interface.MOUSE_BUTTON_LEFT]:
                 self.actionsVisible = True
-
-
         self.screen.blit(self.currentImage, self)
 
     def animation(self):
@@ -32,18 +29,18 @@ class Trash(pygame.Rect):
         self.animationCount += 1
         self.animationCount %= self.imageCount * 3
 
-    def showActionWheel(self, heroWeapon=0, heroConsumable=0):
-        self.actions = ActionWheel(self.screen, self.x - ActionWheel.WHEEL_WIDTH - 3, 
-                                   self.y - ActionWheel.WHEEL_HEIGHT - 3, weapon=heroWeapon, consumable=heroConsumable)
-
-
-    def checkHeroWeapon(self, hero):
-
-
-
-    def checkHeroConsumable(self, hero):
-
-
+    def wheelEvents(self, clicked):
+        if clicked == 0:
+            self.actionsVisible = False
+        if clicked == 1:
+            self.actionsVisible = False
+        if clicked == 2:
+            self.actionsVisible = False
+            return 1
+        if clicked == 3:
+            self.actionsVisible = False
+        if clicked == 4:
+            self.actionsVisible = False
 
 
 class Cultist(Trash):
@@ -54,6 +51,7 @@ class Cultist(Trash):
 
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.CULTIST_WIDTH, self.CULTIST_HEIGHT, self.cultistSprite)
+        self.name = "Cultist"
 
 
 class Angel(Trash):
@@ -66,6 +64,7 @@ class Angel(Trash):
 
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.ANGEL_WIDTH, self.ANGEL_HEIGHT, self.angelSprite)
+        self.name = "Seraph"
 
 
 
@@ -81,3 +80,4 @@ class Skeleton(Trash):
 
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.SKELETON_WIDTH, self.SKELETON_HEIGHT, self.skeletonSprite)
+        self.name = "Skeleton"

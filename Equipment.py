@@ -22,7 +22,6 @@ class Weapon(pygame.Rect):
         self.itemHover = icons[0]
         self.wheelIcon = wheel
         self.name = ""
-        self.actions = 0
         self.picked = False
         self.actionsVisible = False
 
@@ -31,15 +30,10 @@ class Weapon(pygame.Rect):
         mouseClick = pygame.mouse.get_pressed()
         if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
             self.screen.blit(self.itemHover, self)
-            if mouseClick[MOUSE_BUTTON_LEFT] and self.actions == 0:
-                self.actions = ActionWheel(self.screen, self.x - ActionWheel.WHEEL_WIDTH - 3,
-                                           self.y - ActionWheel.WHEEL_HEIGHT - 3)
+            if mouseClick[MOUSE_BUTTON_LEFT] and not self.actionsVisible:
                 self.actionsVisible = True
         else:
             self.screen.blit(self.itemIdle, self)
-        if self.actionsVisible:
-            self.actions.update()
-            self.wheelEvents()
 
     def pickUp(self, weaponX, weaponY):
         self.x = weaponX
@@ -51,11 +45,18 @@ class Weapon(pygame.Rect):
         self.y = y
         self.picked = False
 
-    def wheelEvents(self):
-        if self.actions.middleClicked:
+    def wheelEvents(self, clicked):
+        if clicked == 0:
             self.actionsVisible = False
-            del self.actions
-            self.actions = 0
+        if clicked == 1:
+            self.actionsVisible = False
+        if clicked == 2:
+            self.actionsVisible = False
+            return 1
+        if clicked == 3:
+            self.actionsVisible = False
+        if clicked == 4:
+            self.actionsVisible = False
 
     def getName(self):
         return self.name
@@ -109,22 +110,16 @@ class Consumable(pygame.Rect):
         self.name = ""
         self.picked = False
         self.actionsVisible = False
-        self.actions = 0
 
     def update(self):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
         if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
             self.screen.blit(self.itemHover, self)
-            if mouseClick[MOUSE_BUTTON_LEFT] and self.actions == 0:
-                self.actions = ActionWheel(self.screen, self.x - ActionWheel.WHEEL_WIDTH - 3,
-                                           self.y - ActionWheel.WHEEL_HEIGHT - 3)
+            if mouseClick[MOUSE_BUTTON_LEFT] and not self.actionsVisible:
                 self.actionsVisible = True
         else:
             self.screen.blit(self.itemIdle, self)
-        if self.actionsVisible:
-            self.actions.update()
-            self.wheelEvents()
 
     def pickUp(self, consumableX, consumableY):
         self.x = consumableX
@@ -136,17 +131,30 @@ class Consumable(pygame.Rect):
         self.y = y
         self.picked = False
 
+    def wheelEvents(self, clicked):
+        if clicked == 0:
+            self.actionsVisible = False
+        if clicked == 1:
+            self.actionsVisible = False
+        if clicked == 2:
+            self.actionsVisible = False
+            return 1
+        if clicked == 3:
+            self.actionsVisible = False
+        if clicked == 4:
+            self.actionsVisible = False
+
     def getName(self):
         return self.name
     
     def getWheelIcon(self):
         return self.wheelIcon
 
-    def wheelEvents(self):
-        if self.actions.middleClicked:
-            self.actionsVisible = False
-            del self.actions
-            self.actions = 0
+    #def wheelEvents(self):
+    #    if self.actions.middleClicked:
+    #        self.actionsVisible = False
+    #        del self.actions
+    #        self.actions = 0
 
 class Bomb(Consumable):
     bombIcon = [pygame.image.load("./resources/images/items/consumables/bomb1.png"),

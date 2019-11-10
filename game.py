@@ -1,5 +1,5 @@
 import pygame, random
-import Character, Weather, Building, Sound, Trash, Equipment
+import Character, Weather, Building, Sound, Trash, Equipment, Interface
 
 
 class Game(object):
@@ -10,6 +10,7 @@ class Game(object):
         self.background = pygame.image.load("./resources/images/environment/background.png")
         self.background = pygame.transform.scale(self.background, screenSize)
         self.gameInit()
+        self.actionWheel = 0
         self.exitGame = False
 
     def update(self):
@@ -17,6 +18,21 @@ class Game(object):
         self.onRender()
 
     def onLoop(self):
+        if not self.actionWheel:
+            for enemy in self.enemies:
+                if enemy.actionsVisible:
+                    self.actionWheel = Interface.ActionWheel(self.screen, enemy)
+                    self.objectWithInterface = enemy
+            for item in self.items:
+                if item.actionsVisible:
+                    self.actionWheel = Interface.ActionWheel(self.screen, item)
+                    self.objectWithInterface = item
+        else:
+            if self.objectWithInterface.wheelEvents(self.actionWheel.wheelEvents()) == 1:
+                del self.actionWheel
+                self.actionWheel = 0
+
+
         self.hero.control()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
@@ -37,10 +53,9 @@ class Game(object):
     def onRender(self):
         self.screen.blit(self.background, [0, 0])
         self.sky.update()
-        for column in self.weather:
-            column.update()
+        #for column in self.weather:
+        #    column.update()
         # self.building.update()
-
         self.cultist.update()
         self.angel.update()
         self.skeleton.update()
@@ -51,6 +66,8 @@ class Game(object):
         self.garlic.update()
         self.flute.update()
         self.rune.update()
+        if self.actionWheel != 0:
+            self.actionWheel.update()
         self.hero.update()
         self.screen.blit(self.hero.playerImage, self.hero)
 
@@ -76,55 +93,66 @@ class Game(object):
                                      self.screenWidth, self.screenHeight)
         self.hero.setConstraints(self.building.getWalls())
 
+        self.enemies = []
+        self.items = []
         self.cultist = Trash.Cultist(self.screen,
                                      random.randint(self.building.leftWallX,
                                                     self.building.rightWallX - Trash.Cultist.CULTIST_WIDTH),
                                      random.randint(self.building.ceilingY,
                                                     self.building.floorY - Trash.Cultist.CULTIST_HEIGHT - 3))
+        self.enemies.append(self.cultist)
         self.angel = Trash.Angel(self.screen,
                                  random.randint(self.building.leftWallX,
                                                 self.building.rightWallX - Trash.Angel.ANGEL_WIDTH),
                                  random.randint(self.building.ceilingY,
                                                 self.building.floorY - Trash.Angel.ANGEL_HEIGHT - 3))
+        self.enemies.append(self.angel)
         self.skeleton = Trash.Skeleton(self.screen,
                                        random.randint(self.building.leftWallX,
                                                       self.building.rightWallX - Trash.Skeleton.SKELETON_WIDTH),
                                        random.randint(self.building.ceilingY,
                                                       self.building.floorY - Trash.Skeleton.SKELETON_HEIGHT - 3))
+        self.enemies.append(self.skeleton)
         self.bomb = Equipment.Bomb(self.screen,
                                      random.randint(self.building.leftWallX,
                                                     self.building.rightWallX - Equipment.ICON_WIDTH),
                                      random.randint(self.building.ceilingY,
                                                     self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.items.append(self.bomb)
         self.garlic = Equipment.Garlic(self.screen,
                                      random.randint(self.building.leftWallX,
                                                     self.building.rightWallX - Equipment.ICON_WIDTH),
                                      random.randint(self.building.ceilingY,
                                                     self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.items.append(self.garlic)
         self.flute = Equipment.Flute(self.screen,
                                      random.randint(self.building.leftWallX,
                                                     self.building.rightWallX - Equipment.ICON_WIDTH),
                                      random.randint(self.building.ceilingY,
                                                     self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.items.append(self.flute)
         self.rune = Equipment.Rune(self.screen,
                                      random.randint(self.building.leftWallX,
                                                     self.building.rightWallX - Equipment.ICON_WIDTH),
                                      random.randint(self.building.ceilingY,
                                                     self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.items.append(self.rune)
         self.sword = Equipment.Sword(self.screen,
                                      random.randint(self.building.leftWallX,
                                                     self.building.rightWallX - Equipment.ICON_WIDTH),
                                      random.randint(self.building.ceilingY,
                                                     self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.items.append(self.sword)
         self.whip = Equipment.Whip(self.screen,
                                    random.randint(self.building.leftWallX,
                                                   self.building.rightWallX - Equipment.ICON_WIDTH),
                                    random.randint(self.building.ceilingY,
                                                   self.building.floorY - Equipment.ICON_WIDTH - 3))
+        self.items.append(self.whip)
         self.shield = Equipment.Shield(self.screen,
                                        random.randint(self.building.leftWallX,
                                                       self.building.rightWallX - Equipment.ICON_WIDTH),
                                        random.randint(self.building.ceilingY,
                                                       self.building.floorY - Equipment.ICON_WIDTH - 3))
-
+        self.items.append(self.shield)
 
