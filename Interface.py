@@ -7,6 +7,9 @@ MOUSE_BUTTON_LEFT = 0
 MOUSE_BUTTON_MIDDLE = 1
 MOUSE_BUTTON_RIGHT = 2
 
+WHEEL_IDLE = 1
+WHEEL_HOVER = 0
+
 class Interface(object):
     def __init__(self, screen, screenX, screenY):
         self.score = InterfacePart(screen, 3, 3, "Score: ", "0")
@@ -74,7 +77,14 @@ class ActionWheel(pygame.Rect):
     WHEEL_WIDTH = 48
     WHEEL_HEIGHT = 48
 
-    def __init__(self, screen, positionX, positionY, weapon=0, consumable=0):
+    wheelCancel = [pygame.image.load("./resources/images/wheel/cancel1.png"),
+                   pygame.image.load("./resources/images/wheel/cancel2.png")]
+    wheelInspect = [pygame.image.load("./resources/images/wheel/inspect1.png"),
+                   pygame.image.load("./resources/images/wheel/inspect2.png")]
+    wheelTake = [pygame.image.load("./resources/images/wheel/take1.png"),
+                   pygame.image.load("./resources/images/wheel/take2.png")]
+
+    def __init__(self, screen, positionX, positionY, weapon=0, consumable=0, takeable=True):
         self.screen = screen
         pygame.Rect.__init__(self, (positionX, positionY, self.WHEEL_WIDTH, self.WHEEL_HEIGHT))
         self.optionWidth = 16
@@ -84,32 +94,27 @@ class ActionWheel(pygame.Rect):
         self.optionMiddle = pygame.Rect((positionX + self.optionWidth, positionY + self.optionHeight, self.optionWidth, self.optionHeight))
         self.optionRight = pygame.Rect((positionX + 2 * self.optionWidth, positionY + self.optionHeight, self.optionWidth, self.optionHeight))
         self.optionDown = pygame.Rect((positionX + self.optionWidth, positionY + 2 * self.optionHeight, self.optionWidth, self.optionHeight))
-        self.upIcon = 0
+        self.upIcon = self.wheelInspect[self.WHEEL_IDLE]
         self.leftIcon = 0
-        self.middleIcon = 0
+        self.middleIcon = self.wheelCancel[self.WHEEL_IDLE]
         self.rightIcon = 0
         self.downIcon = 0
-        self.weapon = weapon
-        self.consumable = consumable
+        if takeable:
+            self.downIcon = self.wheelTake[self.WHEEL_IDLE]
+        if weapon != 0:
+            self.wheelWeapon = weapon
+            self.leftIcon = self.wheelWeapon[self.WHEEL_IDLE]
+        if consumable != 0:
+            self.wheelConsumable = consumable
+            self.rightIcon = self.wheelConsumable[self.WHEEL_IDLE]
         self.upClicked = False
         self.leftClicked = False
         self.middleClicked = False
         self.rightClicked = False
         self.downClicked = False
 
-    def setActionWheel(self, upIcon=0, leftIcon=0, middleIcon=0, rightIcon=0, downIcon=0):
-        if upIcon != 0:
-            self.upIcon = upIcon
-        if leftIcon != 0:
-            self.leftIcon = leftIcon
-        if middleIcon != 0:
-            self.middleIcon = middleIcon
-        if rightIcon != 0:
-            self.rightIcon = rightIcon
-        if downIcon != 0:
-            self.downIcon = downIcon
-
     def update(self):
+        self.wheelControl()
         if self.upIcon != 0:
             self.screen.blit(self.upIcon, self.optionUp)
         if self.leftIcon != 0:
@@ -125,6 +130,30 @@ class ActionWheel(pygame.Rect):
     def wheelControl(self):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
-        #if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
+
+        if self.upIcon != 0:
+            self.upIcon = self.wheelInspect[self.WHEEL_IDLE]
+        if self.leftIcon != 0:
+            self.leftIcon = self.wheelWeapon[self.WHEEL_IDLE]
+        if self.middleIcon != 0:
+            self.middleIcon = self.wheelCancel[self.WHEEL_IDLE]
+        if self.rightIcon != 0:
+            self.rightIcon = self.wheelConsumable[self.WHEEL_IDLE]
+        if self.downIcon != 0:
+            self.downIcon = self.wheelTake[self.WHEEL_IDLE]
+
+        if self.optionUp.x <= mouse[MOUSE_POS_X] <= self.optionUp.x + self.optionUp.width and self.optionUp.y <= mouse[MOUSE_POS_Y] <= self.optionUp.y + self.optionUp.height:
+            self.upIcon = self.wheelInspect[self.WHEEL_HOVER]
+        elif self.leftIcon != 0 and self.optionLeft.x <= mouse[MOUSE_POS_X] <= self.optionLeft.x + self.optionLeft.width and self.optionLeft.y <= mouse[MOUSE_POS_Y] <= self.optionLeft.y + self.optionLeft.height:
+            self.leftIcon = self.wheelWeapon[self.WHEEL_HOVER]
+        elif self.optionMiddle.x <= mouse[MOUSE_POS_X] <= self.optionMiddle.x + self.optionMiddle.width and self.optionMiddle.y <= mouse[MOUSE_POS_Y] <= self.optionMiddle.y + self.optionMiddle.height:
+            self.middleIcon = self.wheelCancel[self.WHEEL_HOVER]
+            if mouseClick[MOUSE_BUTTON_LEFT]:
+                self.middleClicked = True
+        elif self.rightIcon != 0 and self.optionRight.x <= mouse[MOUSE_POS_X] <= self.optionRight.x + self.optionRight.width and self.optionRight.y <= mouse[MOUSE_POS_Y] <= self.optionRight.y + self.optionRight.height:
+            self.rightIcon = self.wheelConsumable[self.WHEEL_HOVER]
+        elif self.downIcon != 0 and self.optionDown.x <= mouse[MOUSE_POS_X] <= self.optionDown.x + self.optionDown.width and self.optionDown.y <= mouse[MOUSE_POS_Y] <= self.optionDown.y + self.optionDown.height:
+            self.downIcon = self.wheelTake[self.WHEEL_HOVER]
+
 
 

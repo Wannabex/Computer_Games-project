@@ -62,7 +62,7 @@ class Player(pygame.Rect):
     def control(self):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
-        if mouseClick[MOUSE_BUTTON_LEFT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX + self.width // 2:
+        if mouseClick[MOUSE_BUTTON_RIGHT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX + self.width // 2:
             destination = mouse[MOUSE_POS_X] - self.width // 2
             if self.leftWallX - self.width // 2 <= destination <= self.leftWallX:
                 destination = destination + self.width // 2

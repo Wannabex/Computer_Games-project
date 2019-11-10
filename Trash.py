@@ -1,4 +1,6 @@
 import pygame
+import Interface
+from Interface import ActionWheel
 import random
 
 
@@ -11,15 +13,37 @@ class Trash(pygame.Rect):
         self.currentImage = self.spriteSheet[0]
         self.imageCount = len(self.spriteSheet)
         self.animationCount = 0
+        self.actionsVisible = False
+        self.actions = 0
 
     def update(self):
         self.animation()
+        mouse = pygame.mouse.get_pos()
+        mouseClick = pygame.mouse.get_pressed()
+        if self.x <= mouse[Interface.MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[Interface.MOUSE_POS_Y] <= self.y + self.height:
+            if mouseClick[Interface.MOUSE_BUTTON_LEFT] and self.actions == 0:
+                self.actionsVisible = True
+
+
         self.screen.blit(self.currentImage, self)
 
     def animation(self):
         self.currentImage = self.spriteSheet[self.animationCount // 3]
         self.animationCount += 1
         self.animationCount %= self.imageCount * 3
+
+    def showActionWheel(self, heroWeapon=0, heroConsumable=0):
+        self.actions = ActionWheel(self.screen, self.x - ActionWheel.WHEEL_WIDTH - 3, 
+                                   self.y - ActionWheel.WHEEL_HEIGHT - 3, weapon=heroWeapon, consumable=heroConsumable)
+
+
+    def checkHeroWeapon(self, hero):
+
+
+
+    def checkHeroConsumable(self, hero):
+
+
 
 
 class Cultist(Trash):
