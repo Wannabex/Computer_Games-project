@@ -13,6 +13,7 @@ class Trash(pygame.Rect):
         self.currentImage = self.spriteSheet[0]
         self.imageCount = len(self.spriteSheet)
         self.animationCount = 0
+        self.fpsRatio = 3
         self.clickable = True
         self.actionsVisible = False
 
@@ -26,9 +27,9 @@ class Trash(pygame.Rect):
         self.screen.blit(self.currentImage, self)
 
     def animation(self):
-        self.currentImage = self.spriteSheet[self.animationCount // 3]
+        self.currentImage = self.spriteSheet[self.animationCount // self.fpsRatio]
         self.animationCount += 1
-        self.animationCount %= self.imageCount * 3
+        self.animationCount %= self.imageCount * self.fpsRatio
 
     def wheelEvents(self, clicked):
         if clicked == 0:
@@ -53,6 +54,7 @@ class Cultist(Trash):
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.CULTIST_WIDTH, self.CULTIST_HEIGHT, self.cultistSprite)
         self.name = "Cultist"
+        self.fpsRatio = 9
 
 
 class Angel(Trash):
