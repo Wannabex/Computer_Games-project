@@ -1,6 +1,8 @@
 import pygame
-import Game
 import Menu
+import Game
+import Options
+
 
 class App:
     def __init__(self):
@@ -29,7 +31,9 @@ class App:
         if self.menu.playActivated:
             self.game = Game.Game(self._display_surf, self.screenSize)
             self.menuVisible = False
-        if self.menu.exitActivated:
+        elif self.menu.optionsActivated:
+            self.options = Options.Options(self._display_surf, self.screenSize)
+        elif self.menu.exitActivated:
             self._running = False
             self.menuVisible = False
 
@@ -39,6 +43,13 @@ class App:
             self.menu.playActivated = False
             self.menuVisible = True
             del self.game
+
+    def inOptions(self):
+        self.options.update()
+        if self.options.exitOptions:
+            self.menu.optionsActivated = False
+            self.menuVisible = True
+            del self.options
 
     def on_cleanup(self):
         pass
@@ -52,8 +63,11 @@ class App:
                 self.on_event(event)
             if self.menu.playActivated:
                 self.inGame()
+            elif self.menu.optionsActivated:
+                self.inOptions()
             elif self.menuVisible:
                 self.inMenu()
+
 
             pygame.display.update()
         self.on_cleanup()

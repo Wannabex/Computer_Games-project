@@ -1,7 +1,6 @@
 import pygame, random
 import Character, Weather, Building, Sound, Trash, Equipment, Interface
 
-
 class Game(object):
     def __init__(self, screen, screenSize):
         self.screen = screen
@@ -12,6 +11,7 @@ class Game(object):
         self.gameInit()
         self.actionWheel = 0
         self.exitGame = False
+        self.rainEffect = False
 
     def update(self):
         self.onLoop()
@@ -23,12 +23,12 @@ class Game(object):
                 if enemy.actionsVisible:
                     self.actionWheel = Interface.ActionWheel(self.screen, enemy, weapon=self.checkCurrentWeapon(self.items), consumable=self.checkCurrentConsumable(self.items), takeable=False)
                     self.objectWithInterface = enemy
-                    self.changeClickable(self.items, self.enemies, self.objectWithInterface, newState=False)
+                    self.changeClickable(self.items, self.enemies, objectWithWheel=self.objectWithInterface, newState=False)
             for item in self.items:
                 if item.actionsVisible:
                     self.actionWheel = Interface.ActionWheel(self.screen, item)
                     self.objectWithInterface = item
-                    self.changeClickable(self.items, self.enemies, self.objectWithInterface, newState=False)
+                    self.changeClickable(self.items, self.enemies, objectWithWheel=.objectWithInterface, newState=False)
         else:
             if self.objectWithInterface.wheelEvents(self.actionWheel.wheelEvents()) == 1:
                 del self.actionWheel
@@ -56,8 +56,9 @@ class Game(object):
     def onRender(self):
         self.screen.blit(self.background, [0, 0])
         self.sky.update()
-        #for column in self.weather:
-        #    column.update()
+        if self.rainEffect:
+            for column in self.weather:
+                column.update()
         self.building.update()
         self.cultist.update()
         self.angel.update()
@@ -78,14 +79,15 @@ class Game(object):
     def gameInit(self):
         self.sounds = Sound.Sound()
         self.building = Building.Building(self.screen, self.screenSize)
-        self.weather = []
-        for columnNumber in range(1, self.building.leftWallX // Weather.SIZE):
-            self.weather.append(Weather.Column(columnNumber * Weather.SIZE, self.screen, self.building.floorY))
-        for columnNumber in range(self.building.leftWallX // Weather.SIZE, self.building.rightWallX // Weather.SIZE):
-            self.weather.append(
-                Weather.Column(columnNumber * Weather.SIZE, self.screen, self.building.leftWallX))
-        for columnNumber in range(self.building.rightWallX // Weather.SIZE, self.screenWidth // Weather.SIZE):
-            self.weather.append(Weather.Column(columnNumber * Weather.SIZE, self.screen, self.building.floorY))
+        if self.rainEffect:
+            self.weather = []
+            for columnNumber in range(1, self.building.leftWallX // Weather.SIZE):
+                self.weather.append(Weather.Column(columnNumber * Weather.SIZE, self.screen, self.building.floorY))
+            for columnNumber in range(self.building.leftWallX // Weather.SIZE, self.building.rightWallX // Weather.SIZE):
+                self.weather.append(
+                    Weather.Column(columnNumber * Weather.SIZE, self.screen, self.building.leftWallX))
+            for columnNumber in range(self.building.rightWallX // Weather.SIZE, self.screenWidth // Weather.SIZE):
+                self.weather.append(Weather.Column(columnNumber * Weather.SIZE, self.screen, self.building.floorY))
         self.sky = Weather.Sky(self.screen, self.screenWidth, self.screenHeight, self.building.leftWallX,
                                self.building.rightWallX, self.building.ceilingY)
         self.hero = Character.Player(self.screen,
@@ -191,8 +193,6 @@ class Game(object):
             xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
         for currentlyChecked in range(len(yOccupied)):
             yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
-        print(xConditionChecked)
-        print(yConditionChecked)
         while not all(xConditionChecked) and not all(yConditionChecked):
             object.x = random.randint(self.building.leftWallX, self.building.rightWallX - object.width)
             object.y = random.randint(self.building.ceilingY, self.building.floorY - object.height - 3)
@@ -202,7 +202,6 @@ class Game(object):
                 xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
             for currentlyChecked in range(len(yOccupied)):
                 yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
-        print(all(xConditionChecked) and all(yConditionChecked))
 
     def checkCurrentWeapon(self, items):
         if self.hero.weapon != "Nothing":
