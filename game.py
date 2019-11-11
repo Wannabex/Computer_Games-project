@@ -180,27 +180,34 @@ class Game(object):
         yOccupied = []
         yHeightOccupied = []
         for spawned in currentlySpawned:
-            xOccupied.append(spawned.x)
-            xWidthOccupied.append(spawned.x + spawned.width + 50)
-            yOccupied.append(spawned.y)
-            yHeightOccupied.append(spawned.y + spawned.height + 50)
+            xOccupied.append(spawned.x - object.width - 10)
+            xWidthOccupied.append(spawned.x + spawned.width + object.width + 10)
+            yOccupied.append(spawned.y - object.height - 10)
+            yHeightOccupied.append(spawned.y + spawned.height + object.height + 10)
 
         xConditionChecked = []
         yConditionChecked = []
         for currentlyChecked in range(len(xOccupied)):
-            xConditionChecked.append(xOccupied[currentlyChecked] <= object.x <= xWidthOccupied[currentlyChecked])
+            #xConditionChecked.append(not (xOccupied[currentlyChecked] <= object.x <= xWidthOccupied[currentlyChecked]))
+            xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
         for currentlyChecked in range(len(yOccupied)):
-            yConditionChecked.append(yOccupied[currentlyChecked] <= object.y <= yHeightOccupied[currentlyChecked])
-        while all(xConditionChecked) and all(yConditionChecked):
+            #yConditionChecked.append(not (yOccupied[currentlyChecked] <= object.y <= yHeightOccupied[currentlyChecked]))
+            yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
+        print("bede czekowac")
+        print(xConditionChecked)
+        print(yConditionChecked)
+        while not all(xConditionChecked) and not all(yConditionChecked):
+            print("start")
             object.x = random.randint(self.building.leftWallX, self.building.rightWallX - object.width)
             object.y = random.randint(self.building.ceilingY, self.building.floorY - object.height - 3)
             xConditionChecked = []
             yConditionChecked = []
             for currentlyChecked in range(len(xOccupied)):
-                xConditionChecked.append(xOccupied[currentlyChecked] <= object.x <= xWidthOccupied[currentlyChecked])
+                # xConditionChecked.append(not (xOccupied[currentlyChecked] <= object.x <= xWidthOccupied[currentlyChecked]))
+                xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
             for currentlyChecked in range(len(yOccupied)):
-                yConditionChecked.append(yOccupied[currentlyChecked] <= object.y <= yHeightOccupied[currentlyChecked])
-
+                # yConditionChecked.append(not (yOccupied[currentlyChecked] <= object.y <= yHeightOccupied[currentlyChecked]))
+                yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
         print(all(xConditionChecked) and all(yConditionChecked))
 
     def checkCurrentWeapon(self, items):
