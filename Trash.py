@@ -8,6 +8,7 @@ class Trash(pygame.Rect):
     def __init__(self, screen, positionX, positionY, width, height, sprite):
         pygame.Rect.__init__(self, (positionX, positionY, width, height))
         self.name = "Trash"
+        self.description = "Enemy"
         self.screen = screen
         self.spriteSheet = sprite
         self.currentImage = self.spriteSheet[0]
@@ -54,6 +55,7 @@ class Cultist(Trash):
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.CULTIST_WIDTH, self.CULTIST_HEIGHT, self.cultistSprite)
         self.name = "Cultist"
+        self.description = ""
         self.fpsRatio = 9
 
 
@@ -68,7 +70,7 @@ class Angel(Trash):
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.ANGEL_WIDTH, self.ANGEL_HEIGHT, self.angelSprite)
         self.name = "Seraph"
-
+        self.description = ""
 
 
 class Skeleton(Trash):
@@ -84,3 +86,6 @@ class Skeleton(Trash):
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.SKELETON_WIDTH, self.SKELETON_HEIGHT, self.skeletonSprite)
         self.name = "Skeleton"
+        self.description = ""
+
+

@@ -75,6 +75,7 @@ class Sword(Weapon):
     def __init__(self, screen, positionX, positionY):
         Weapon.__init__(self, screen, positionX, positionY, self.swordIcon, self.swordWheelIcon)
         self.name = "Sword"
+        self.description = ""
 
 
 class Whip(Weapon):
@@ -86,7 +87,7 @@ class Whip(Weapon):
     def __init__(self, screen, positionX, positionY):
         Weapon.__init__(self, screen, positionX, positionY, self.whipIcon, self.whipWheelIcon)
         self.name = "Whip"
-
+        self.description = ""
 
 
 class Shield(Weapon):
@@ -98,7 +99,7 @@ class Shield(Weapon):
     def __init__(self, screen, positionX, positionY):
         Weapon.__init__(self, screen, positionX, positionY, self.shieldIcon, self.shieldWheelIcon)
         self.name = "Shield"
-
+        self.description = ""
 
 class Consumable(pygame.Rect):
     def __init__(self, screen, positionX, positionY, icons, wheel):
@@ -162,7 +163,7 @@ class Bomb(Consumable):
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.bombIcon, self.bombWheelIcon)
         self.name = "Bomb"
-
+        self.description = ""
 
 class Flute(Consumable):
     fluteIcon = [pygame.image.load("./resources/images/items/consumables/flute1.png"),
@@ -173,7 +174,7 @@ class Flute(Consumable):
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.fluteIcon, self.fluteWheelIcon)
         self.name = "Flute"
-
+        self.description = ""
 
 class Garlic(Consumable):
     garlicIcon = [pygame.image.load("./resources/images/items/consumables/garlic1.png"),
@@ -184,7 +185,7 @@ class Garlic(Consumable):
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.garlicIcon, self.garlicWheelIcon)
         self.name = "Garlic"
-
+        self.description = ""
 
 class Rune(Consumable):
     runeIcon = [pygame.image.load("./resources/images/items/consumables/rune1.png"),
@@ -195,7 +196,7 @@ class Rune(Consumable):
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.runeIcon, self.runeWheelIcon)
         self.name = "Rune"
-
+        self.description = ""
 
 
 

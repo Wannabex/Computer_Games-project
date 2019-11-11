@@ -58,7 +58,7 @@ class Game(object):
         self.sky.update()
         #for column in self.weather:
         #    column.update()
-        # self.building.update()
+        self.building.update()
         self.cultist.update()
         self.angel.update()
         self.skeleton.update()
@@ -188,25 +188,19 @@ class Game(object):
         xConditionChecked = []
         yConditionChecked = []
         for currentlyChecked in range(len(xOccupied)):
-            #xConditionChecked.append(not (xOccupied[currentlyChecked] <= object.x <= xWidthOccupied[currentlyChecked]))
             xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
         for currentlyChecked in range(len(yOccupied)):
-            #yConditionChecked.append(not (yOccupied[currentlyChecked] <= object.y <= yHeightOccupied[currentlyChecked]))
             yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
-        print("bede czekowac")
         print(xConditionChecked)
         print(yConditionChecked)
         while not all(xConditionChecked) and not all(yConditionChecked):
-            print("start")
             object.x = random.randint(self.building.leftWallX, self.building.rightWallX - object.width)
             object.y = random.randint(self.building.ceilingY, self.building.floorY - object.height - 3)
             xConditionChecked = []
             yConditionChecked = []
             for currentlyChecked in range(len(xOccupied)):
-                # xConditionChecked.append(not (xOccupied[currentlyChecked] <= object.x <= xWidthOccupied[currentlyChecked]))
                 xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
             for currentlyChecked in range(len(yOccupied)):
-                # yConditionChecked.append(not (yOccupied[currentlyChecked] <= object.y <= yHeightOccupied[currentlyChecked]))
                 yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
         print(all(xConditionChecked) and all(yConditionChecked))
 
