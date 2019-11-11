@@ -8,10 +8,16 @@ class Game(object):
         self.screenWidth, self.screenHeight = screenSize
         self.background = pygame.image.load("./resources/images/environment/background.png")
         self.background = pygame.transform.scale(self.background, screenSize)
-        self.gameInit()
         self.actionWheel = 0
         self.exitGame = False
-        self.rainEffect = False
+        self.configFile = open("./resources/config.txt", 'r')
+        self.fileContent = self.configFile.readline()
+        if self.fileContent.endswith("True"):
+            self.rainEffect = True
+        elif self.fileContent.endswith("False"):
+            self.rainEffect = False
+        self.configFile.close()
+        self.gameInit()
 
     def update(self):
         self.onLoop()
@@ -34,8 +40,6 @@ class Game(object):
                 del self.actionWheel
                 self.actionWheel = 0
                 self.changeClickable(self.items, self.enemies)
-
-
         self.hero.control()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
@@ -53,7 +57,7 @@ class Game(object):
             self.sounds.stopSounds()
             del self
 
-    def onRender(self):
+    def onRender(self):        
         self.screen.blit(self.background, [0, 0])
         self.sky.update()
         if self.rainEffect:

@@ -18,34 +18,31 @@ class Menu():
         self.screen = screen
         self.screenWidth = screenWidth
         self.screenHeight = screenHeight
-        self.rectWidth = 400
-        self.rectHeight = 100
+        rectWidth = 400
+        rectHeight = 100
         self.font = pygame.font.Font("./resources/other/gothic.ttf", 80)
         self.title = self.font.render("         TRASHING  &  RUSHING    ", True, self.BLOOD)
-        self.titleRect = pygame.Rect((10, 10, self.rectWidth, self.rectHeight))
-        self.rectWidth = 335
-        self.rectHeight = 55
+        self.titleRect = pygame.Rect((10, 10, rectWidth, rectHeight))
+        rectWidth = 335
+        rectHeight = 55
         self.font = pygame.font.Font("./resources/other/gothic.ttf", 40)
         self.playInformation = self.font.render("    Play new game      ", True, self.WHITE)
         self.optionsInformation = self.font.render("          Options       ", True, self.WHITE)
         self.scoresInformation = self.font.render("  High scores table   ", True, self.WHITE)
         self.exitInformation = self.font.render("      Exit the game     ", True, self.WHITE)
-        self.playRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3, self.rectWidth, self.rectHeight))
+        self.playRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3, rectWidth, rectHeight))
         self.playRectColor = self.BLACK
-        self.optionsRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + self.rectHeight, self.rectWidth, self.rectHeight))
+        self.optionsRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + rectHeight, rectWidth, rectHeight))
         self.optionsRectColor = self.BLACK
-        self.scoresRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + self.rectHeight * 2, self.rectWidth, self.rectHeight))
+        self.scoresRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + rectHeight * 2, rectWidth, rectHeight))
         self.scoresRectColor = self.BLACK
-        self.exitRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + self.rectHeight * 3, self.rectWidth, self.rectHeight))
+        self.exitRect = pygame.Rect((3 * self.screenWidth // 8, self.screenHeight // 3 + rectHeight * 3, rectWidth, rectHeight))
         self.exitRectColor = self.BLACK
-
         self.playActivated = False
         self.optionsActivated = False
         self.scoresActivated = False
         self.exitActivated = False
-        pygame.mixer.music.load("./resources/sound/menu.mp3")
-        pygame.mixer.music.set_volume(1)
-        pygame.mixer.music.play(-1)
+        self.startMenuMusic()
 
     def update(self):
         self.draw()
@@ -84,3 +81,8 @@ class Menu():
         self.screen.blit(self.scoresInformation, self.scoresRect)
         pygame.draw.rect(self.screen, self.exitRectColor, self.exitRect)
         self.screen.blit(self.exitInformation, self.exitRect)
+
+    def startMenuMusic(self):
+        pygame.mixer.music.load("./resources/sound/menu.mp3")
+        pygame.mixer.music.set_volume(1)
+        pygame.mixer.music.play(-1)

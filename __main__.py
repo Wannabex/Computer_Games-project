@@ -26,6 +26,14 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
 
+    def inGame(self):
+        self.game.update()
+        if self.game.exitGame:
+            self.menu.playActivated = False
+            self.menuVisible = True
+            self.menu.startMenuMusic()
+            del self.game
+
     def inMenu(self):
         self.menu.update()
         if self.menu.playActivated:
@@ -33,16 +41,10 @@ class App:
             self.menuVisible = False
         elif self.menu.optionsActivated:
             self.options = Options.Options(self._display_surf, self.screenSize)
+            self.menuVisible = False
         elif self.menu.exitActivated:
             self._running = False
             self.menuVisible = False
-
-    def inGame(self):
-        self.game.update()
-        if self.game.exitGame:
-            self.menu.playActivated = False
-            self.menuVisible = True
-            del self.game
 
     def inOptions(self):
         self.options.update()
@@ -57,18 +59,15 @@ class App:
     def on_execute(self):
         if self.on_init() == False:
             self._running = False
-
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
             if self.menu.playActivated:
                 self.inGame()
-            elif self.menu.optionsActivated:
-                self.inOptions()
             elif self.menuVisible:
                 self.inMenu()
-
-
+            elif self.menu.optionsActivated:
+                self.inOptions()
             pygame.display.update()
         self.on_cleanup()
 

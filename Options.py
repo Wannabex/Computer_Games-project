@@ -70,7 +70,6 @@ class Options():
                 self.configFile = open("./resources/config.txt", 'w')
                 self.configFile.seek(0, 0)
                 self.configFile.write(self.fileContent)
-                print(self.fileContent)
                 self.configFile.close()
         elif self.optionsExitRect.x <= mouse[MOUSE_POS_X] <= self.optionsExitRect.x + self.optionsExitRect.width and self.optionsExitRect.y <= mouse[MOUSE_POS_Y] <= self.optionsExitRect.y + self.optionsExitRect.height:
             self.optionsExitRectColor = self.BROWN
