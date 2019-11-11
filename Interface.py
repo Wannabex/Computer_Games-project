@@ -86,6 +86,7 @@ class ActionWheel(pygame.Rect):
 
     def __init__(self, screen, object, weapon=0, consumable=0, takeable=True):
         self.screen = screen
+        self.interfacedObject = object
         self.positionX = object.x - self.WHEEL_WIDTH + 3
         self.positionY = object.y - self.WHEEL_HEIGHT + 3
         pygame.Rect.__init__(self, (self.positionX, self.positionY, self.WHEEL_WIDTH, self.WHEEL_HEIGHT))
@@ -128,7 +129,9 @@ class ActionWheel(pygame.Rect):
             self.screen.blit(self.rightIcon, self.optionRight)
         if self.downIcon != 0:
             self.screen.blit(self.downIcon, self.optionDown)
-
+        if self.upClicked:
+            pygame.draw.rect(self.screen, (0, 0, 0), self.descriptionRect)
+            self.screen.blit(self.descriptionText, self.descriptionRect)
 
     def wheelControl(self):
         mouse = pygame.mouse.get_pos()
@@ -147,16 +150,23 @@ class ActionWheel(pygame.Rect):
 
         if self.optionUp.x <= mouse[MOUSE_POS_X] <= self.optionUp.x + self.optionUp.width and self.optionUp.y <= mouse[MOUSE_POS_Y] <= self.optionUp.y + self.optionUp.height:
             self.upIcon = self.wheelInspect[WHEEL_HOVER]
-        elif self.leftIcon != 0 and self.optionLeft.x <= mouse[MOUSE_POS_X] <= self.optionLeft.x + self.optionLeft.width and self.optionLeft.y <= mouse[MOUSE_POS_Y] <= self.optionLeft.y + self.optionLeft.height:
+            if mouseClick[MOUSE_BUTTON_LEFT]:
+                self.upClicked = True
+                self.showInterfacedObjectDescritpion()
+        elif self.leftIcon and self.optionLeft.x <= mouse[MOUSE_POS_X] <= self.optionLeft.x + self.optionLeft.width and self.optionLeft.y <= mouse[MOUSE_POS_Y] <= self.optionLeft.y + self.optionLeft.height:
             self.leftIcon = self.wheelWeapon[WHEEL_HOVER]
         elif self.optionMiddle.x <= mouse[MOUSE_POS_X] <= self.optionMiddle.x + self.optionMiddle.width and self.optionMiddle.y <= mouse[MOUSE_POS_Y] <= self.optionMiddle.y + self.optionMiddle.height:
             self.middleIcon = self.wheelCancel[WHEEL_HOVER]
             if mouseClick[MOUSE_BUTTON_LEFT]:
                 self.middleClicked = True
-        elif self.rightIcon != 0 and self.optionRight.x <= mouse[MOUSE_POS_X] <= self.optionRight.x + self.optionRight.width and self.optionRight.y <= mouse[MOUSE_POS_Y] <= self.optionRight.y + self.optionRight.height:
+                self.upClicked = False
+        elif self.rightIcon and self.optionRight.x <= mouse[MOUSE_POS_X] <= self.optionRight.x + self.optionRight.width and self.optionRight.y <= mouse[MOUSE_POS_Y] <= self.optionRight.y + self.optionRight.height:
             self.rightIcon = self.wheelConsumable[WHEEL_HOVER]
-        elif self.downIcon != 0 and self.optionDown.x <= mouse[MOUSE_POS_X] <= self.optionDown.x + self.optionDown.width and self.optionDown.y <= mouse[MOUSE_POS_Y] <= self.optionDown.y + self.optionDown.height:
+        elif self.downIcon and self.optionDown.x <= mouse[MOUSE_POS_X] <= self.optionDown.x + self.optionDown.width and self.optionDown.y <= mouse[MOUSE_POS_Y] <= self.optionDown.y + self.optionDown.height:
             self.downIcon = self.wheelTake[WHEEL_HOVER]
+        elif self.upClicked and self.descriptionRect.x <= mouse[MOUSE_POS_X] <= self.descriptionRect.x + self.descriptionRect.width and self.descriptionRect.y <= mouse[MOUSE_POS_Y] <= self.descriptionRect.y + self.descriptionRect.height:
+            if mouseClick[MOUSE_BUTTON_LEFT]:
+                self.upClicked = False
 
     def wheelEvents(self):
         if self.upClicked:
@@ -169,4 +179,11 @@ class ActionWheel(pygame.Rect):
             return 3
         if self.downClicked:
             return 4
+
+    def showInterfacedObjectDescritpion(self):
+        self.font = pygame.font.Font("./resources/other/gothic.ttf", 12)
+        self.descriptionText = self.font.render(self.interfacedObject.description, True, (255, 255, 255))
+        descriptionWidth = len(self.interfacedObject.description) * 7
+        descriptionHeight = 20
+        self.descriptionRect = pygame.Rect((self.positionX + 50, self.positionY, descriptionWidth, descriptionHeight))
 
