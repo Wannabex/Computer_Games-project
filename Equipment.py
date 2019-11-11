@@ -25,6 +25,7 @@ class Weapon(pygame.Rect):
         self.picked = False
         self.clickable = True
         self.actionsVisible = False
+        self.descriptionShowed = False
 
     def update(self):
         mouse = pygame.mouse.get_pos()
@@ -65,6 +66,9 @@ class Weapon(pygame.Rect):
     def getwheelIcon(self):
         return self.wheelIcon
 
+    def showDescription(self):
+        descriptionShowed = True
+
 
 class Sword(Weapon):
     swordIcon = [pygame.image.load("./resources/images/items/weapons/sword1.png"),
@@ -75,7 +79,7 @@ class Sword(Weapon):
     def __init__(self, screen, positionX, positionY):
         Weapon.__init__(self, screen, positionX, positionY, self.swordIcon, self.swordWheelIcon)
         self.name = "Sword"
-        self.description = ""
+        self.description = "Very pointy"
 
 
 class Whip(Weapon):
@@ -87,7 +91,7 @@ class Whip(Weapon):
     def __init__(self, screen, positionX, positionY):
         Weapon.__init__(self, screen, positionX, positionY, self.whipIcon, self.whipWheelIcon)
         self.name = "Whip"
-        self.description = ""
+        self.description = "Can hurt people"
 
 
 class Shield(Weapon):
@@ -99,7 +103,7 @@ class Shield(Weapon):
     def __init__(self, screen, positionX, positionY):
         Weapon.__init__(self, screen, positionX, positionY, self.shieldIcon, self.shieldWheelIcon)
         self.name = "Shield"
-        self.description = ""
+        self.description = "Good for protection and bashing"
 
 class Consumable(pygame.Rect):
     def __init__(self, screen, positionX, positionY, icons, wheel):
@@ -163,7 +167,7 @@ class Bomb(Consumable):
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.bombIcon, self.bombWheelIcon)
         self.name = "Bomb"
-        self.description = ""
+        self.description = "Bomb goes boom"
 
 class Flute(Consumable):
     fluteIcon = [pygame.image.load("./resources/images/items/consumables/flute1.png"),
@@ -174,7 +178,7 @@ class Flute(Consumable):
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.fluteIcon, self.fluteWheelIcon)
         self.name = "Flute"
-        self.description = ""
+        self.description = "Flute plays music"
 
 class Garlic(Consumable):
     garlicIcon = [pygame.image.load("./resources/images/items/consumables/garlic1.png"),
@@ -185,7 +189,7 @@ class Garlic(Consumable):
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.garlicIcon, self.garlicWheelIcon)
         self.name = "Garlic"
-        self.description = ""
+        self.description = "Garlic is strong against vampires"
 
 class Rune(Consumable):
     runeIcon = [pygame.image.load("./resources/images/items/consumables/rune1.png"),
@@ -196,7 +200,7 @@ class Rune(Consumable):
     def __init__(self, screen, positionX, positionY):
         Consumable.__init__(self, screen, positionX, positionY, self.runeIcon, self.runeWheelIcon)
         self.name = "Rune"
-        self.description = ""
+        self.description = "Rune can teleport things"
 
 
 

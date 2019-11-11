@@ -24,22 +24,7 @@ class Game(object):
         self.onRender()
 
     def onLoop(self):
-        if not self.actionWheel:
-            for enemy in self.enemies:
-                if enemy.actionsVisible:
-                    self.actionWheel = Interface.ActionWheel(self.screen, enemy, weapon=self.checkCurrentWeapon(self.items), consumable=self.checkCurrentConsumable(self.items), takeable=False)
-                    self.objectWithInterface = enemy
-                    self.changeClickable(self.items, self.enemies, objectWithWheel=self.objectWithInterface, newState=False)
-            for item in self.items:
-                if item.actionsVisible:
-                    self.actionWheel = Interface.ActionWheel(self.screen, item)
-                    self.objectWithInterface = item
-                    self.changeClickable(self.items, self.enemies, objectWithWheel=self.objectWithInterface, newState=False)
-        else:
-            if self.objectWithInterface.wheelEvents(self.actionWheel.wheelEvents()) == 1:
-                del self.actionWheel
-                self.actionWheel = 0
-                self.changeClickable(self.items, self.enemies)
+        self.checkActionWheel()
         self.hero.control()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
@@ -206,6 +191,24 @@ class Game(object):
                 xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
             for currentlyChecked in range(len(yOccupied)):
                 yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
+
+    def checkActionWheel(self):
+        if not self.actionWheel:
+            for enemy in self.enemies:
+                if enemy.actionsVisible:
+                    self.actionWheel = Interface.ActionWheel(self.screen, enemy, weapon=self.checkCurrentWeapon(self.items), consumable=self.checkCurrentConsumable(self.items), takeable=False)
+                    self.objectWithInterface = enemy
+                    self.changeClickable(self.items, self.enemies, objectWithWheel=self.objectWithInterface, newState=False)
+            for item in self.items:
+                if item.actionsVisible:
+                    self.actionWheel = Interface.ActionWheel(self.screen, item)
+                    self.objectWithInterface = item
+                    self.changeClickable(self.items, self.enemies, objectWithWheel=self.objectWithInterface, newState=False)
+        else:
+            if self.objectWithInterface.wheelEvents(self.actionWheel.wheelEvents()) == 1:
+                del self.actionWheel
+                self.actionWheel = 0
+                self.changeClickable(self.items, self.enemies)
 
     def checkCurrentWeapon(self, items):
         if self.hero.weapon != "Nothing":

@@ -55,7 +55,7 @@ class Cultist(Trash):
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.CULTIST_WIDTH, self.CULTIST_HEIGHT, self.cultistSprite)
         self.name = "Cultist"
-        self.description = ""
+        self.descriptionText = "This is Cultist"
         self.fpsRatio = 9
 
 
@@ -70,7 +70,7 @@ class Angel(Trash):
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.ANGEL_WIDTH, self.ANGEL_HEIGHT, self.angelSprite)
         self.name = "Seraph"
-        self.description = ""
+        self.descriptionText = "This is Seraph"
 
 
 class Skeleton(Trash):
@@ -86,6 +86,6 @@ class Skeleton(Trash):
     def __init__(self, screen, positionX, positionY):
         Trash.__init__(self, screen, positionX, positionY, self.SKELETON_WIDTH, self.SKELETON_HEIGHT, self.skeletonSprite)
         self.name = "Skeleton"
-        self.description = ""
+        self.descriptionText = "This is skeleton"
 
 

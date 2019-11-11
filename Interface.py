@@ -114,6 +114,7 @@ class ActionWheel(pygame.Rect):
         self.middleClicked = False
         self.rightClicked = False
         self.downClicked = False
+        self.descriptionVisible = False
 
     def update(self):
         self.wheelControl()
