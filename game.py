@@ -28,7 +28,7 @@ class Game(object):
                 if item.actionsVisible:
                     self.actionWheel = Interface.ActionWheel(self.screen, item)
                     self.objectWithInterface = item
-                    self.changeClickable(self.items, self.enemies, objectWithWheel=.objectWithInterface, newState=False)
+                    self.changeClickable(self.items, self.enemies, objectWithWheel=self.objectWithInterface, newState=False)
         else:
             if self.objectWithInterface.wheelEvents(self.actionWheel.wheelEvents()) == 1:
                 del self.actionWheel
