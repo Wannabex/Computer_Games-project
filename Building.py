@@ -15,6 +15,18 @@ class Building(pygame.Rect):
         self.floor2Y = self.ceilingY + 461
         self.floor1Y = self.ceilingY + 637
         self.floorsYs = [self.floor3Y, self.floor2Y, self.floor1Y]
+        self.floor1LeftColumnX = self.leftWallX + 663
+        self.floor1RightColumnX = self.leftWallX + 1014
+        self.stoneDoor1X = self.leftWallX + 225 #Floor1
+        self.stoneDoor2X = self.leftWallX + 1050 #Floor1
+        self.woodenDoor1X = self.leftWallX + 1166 #Floor1
+        self.woodenDoor1X = self.leftWallX + 222 #Floor2
+        self.oldDoor1X = self.leftWallX + 623 #Floor2
+        self.oldDoor1X = self.leftWallX + 972 #Floor3
+        self.inDoor = False
+        self.doorMoveCount = 0
+        self.doorMoveTime = 20
+        self.currentlySpawned = []
 
     def update(self):
         pygame.draw.rect(self.screen, (255, 255, 255), self)
@@ -23,30 +35,41 @@ class Building(pygame.Rect):
     def getWalls(self):
         return self.constraints
 
-    def checkFreePositions(self, object, items, enemies):
-        currentlySpawned = []
-        for item in items:
-            currentlySpawned.append(item)
-        for enemy in enemies:
-            currentlySpawned.append(enemy)
-        xOccupied = []
-        xWidthOccupied = []
-        for spawned in currentlySpawned:
-            xOccupied.append(spawned.x - object.width - 10)
-            xWidthOccupied.append(spawned.x + spawned.width + object.width + 10)
-        xConditionChecked = []
-        for currentlyChecked in range(len(xOccupied)):
-            xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
-        while not all(xConditionChecked):
-            object.x = random.randint(self.leftWallX, self.rightWallX - object.width)
-            if type(object) == Trash.Angel:
-                object.y = random.choice(self.floorsYs[:2]) - object.height
-            else:
-                object.y = random.choice(self.floorsYs) - object.height
+    def spawnObject(self, object):
+        self.objectPositionSelect(object)
+        self.checkFreePositions(object)
+        self.currentlySpawned.append(object)
 
+    def objectPositionSelect(self, object):
+        if not type(object) == Trash.Angel:
+            object.y = random.choice(self.floorsYs) - object.height
+        else:
+            object.y = random.choice(self.floorsYs[:2]) - object.height
+        if not (object.y == self.floor1Y - object.height):
+            object.x = random.randint(self.leftWallX, self.rightWallX - object.width)
+        else:
+            side = random.randint(1, 2)
+            print(side)
+            if side == 1:
+                object.x = random.randint(self.leftWallX, self.floor1LeftColumnX - object.width)
+            else:
+                object.x = random.randint(self.floor1RightColumnX, self.rightWallX - object.width)
+
+    def checkFreePositions(self, object):
+        if len(self.currentlySpawned) > 1:
+            xOccupied = []
+            xWidthOccupied = []
+            for spawned in self.currentlySpawned:
+                xOccupied.append(spawned.x - object.width - 10)
+                xWidthOccupied.append(spawned.x + spawned.width + object.width + 10)
             xConditionChecked = []
             for currentlyChecked in range(len(xOccupied)):
                 xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
+            while not all(xConditionChecked):
+                self.objectPositionSelect(object)
+                xConditionChecked = []
+                for currentlyChecked in range(len(xOccupied)):
+                    xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
 
 
 

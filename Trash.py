@@ -8,10 +8,8 @@ class Trash(pygame.Rect):
     def __init__(self, screen, building, width, height, sprite):
         self.screen = screen
         self.building = building
-        positionX = random.randint(self.building.leftWallX,
-                                   self.building.rightWallX - width)
-        positionY = random.choice(self.building.floorsYs) - height
-        pygame.Rect.__init__(self, (positionX, positionY, width, height))
+        pygame.Rect.__init__(self, (0, 0, width, height))
+        self.building.spawnObject(self)
         self.name = "Trash"
         self.description = "Enemy"
         self.spriteSheet = sprite

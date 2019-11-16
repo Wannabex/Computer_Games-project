@@ -17,10 +17,8 @@ class Weapon(pygame.Rect):
     def __init__(self, screen, building, icons, wheel):
         self.building = building
         self.screen = screen
-        positionX = random.randint(self.building.leftWallX,
-                                   self.building.rightWallX - ICON_WIDTH)
-        positionY = random.choice(self.building.floorsYs) - ICON_HEIGHT
-        pygame.Rect.__init__(self, (positionX, positionY, ICON_WIDTH, ICON_HEIGHT))
+        pygame.Rect.__init__(self, (0, 0, ICON_WIDTH, ICON_HEIGHT))
+        self.building.spawnObject(self)
         self.itemIcons = icons
         self.itemIdle = icons[1]
         self.itemHover = icons[0]
@@ -114,10 +112,8 @@ class Consumable(pygame.Rect):
     def __init__(self, screen, building, icons, wheel):
         self.building = building
         self.screen = screen
-        positionX = random.randint(self.building.leftWallX,
-                                   self.building.rightWallX - ICON_WIDTH)
-        positionY = random.choice(self.building.floorsYs) - ICON_HEIGHT
-        pygame.Rect.__init__(self, (positionX, positionY, ICON_WIDTH, ICON_HEIGHT))
+        pygame.Rect.__init__(self, (0, 0, ICON_WIDTH, ICON_HEIGHT))
+        self.building.spawnObject(self)
         self.itemIcons = icons
         self.itemIdle = icons[1]
         self.itemHover = icons[0]

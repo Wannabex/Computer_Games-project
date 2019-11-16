@@ -28,12 +28,8 @@ class Player(pygame.Rect):
     def __init__(self, screen, building, screenX, screenY):
         self.screen = screen
         self.building = building
-        positionX = random.randint(self.building.leftWallX,
-                       self.building.rightWallX - CHARACTER_WIDTH)
-
-        positionY = random.choice(self.building.floorsYs) - CHARACTER_HEIGHT
-        print(positionY)
-        pygame.Rect.__init__(self, (positionX, positionY, CHARACTER_WIDTH, CHARACTER_HEIGHT))
+        pygame.Rect.__init__(self, (0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT))
+        self.building.spawnObject(self)
         self.interface = Interface.Interface(screen, screenX, screenY)
         self.playerImage = self.stay
         self.speed = 5

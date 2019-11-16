@@ -90,39 +90,30 @@ class Game(object):
         self.enemies.append(self.cultist)
 
         self.angel = Trash.Angel(self.screen, self.building)
-        self.building.checkFreePositions(self.angel, self.items, self.enemies)
         self.enemies.append(self.angel)
 
         self.skeleton = Trash.Skeleton(self.screen, self.building)
-        self.building.checkFreePositions(self.skeleton, self.items, self.enemies)
         self.enemies.append(self.skeleton)
 
         self.bomb = Equipment.Bomb(self.screen, self.building)
-        self.building.checkFreePositions(self.bomb, self.items, self.enemies)
         self.items.append(self.bomb)
 
         self.garlic = Equipment.Garlic(self.screen, self.building)
-        self.building.checkFreePositions(self.garlic, self.items, self.enemies)
         self.items.append(self.garlic)
 
         self.flute = Equipment.Flute(self.screen, self.building)
-        self.building.checkFreePositions(self.flute, self.items, self.enemies)
         self.items.append(self.flute)
 
         self.rune = Equipment.Rune(self.screen, self.building)
-        self.building.checkFreePositions(self.rune, self.items, self.enemies)
         self.items.append(self.rune)
 
         self.sword = Equipment.Sword(self.screen, self.building)
-        self.building.checkFreePositions(self.sword, self.items, self.enemies)
         self.items.append(self.sword)
 
         self.whip = Equipment.Whip(self.screen, self.building)
-        self.building.checkFreePositions(self.whip, self.items, self.enemies)
         self.items.append(self.whip)
 
         self.shield = Equipment.Shield(self.screen, self.building)
-        self.building.checkFreePositions(self.shield, self.items, self.enemies)
         self.items.append(self.shield)
 
     def checkActionWheel(self):
