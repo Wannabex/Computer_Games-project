@@ -23,6 +23,8 @@ class Player(pygame.Rect):
     walkRight = [pygame.image.load("./resources/characters/hero/R1.png"), pygame.image.load("./resources/characters/hero/R2.png"), pygame.image.load("./resources/characters/hero/R3.png"),
                  pygame.image.load("./resources/characters/hero/R4.png"), pygame.image.load("./resources/characters/hero/R5.png"), pygame.image.load("./resources/characters/hero/R6.png"),
                  pygame.image.load("./resources/characters/hero/R7.png"), pygame.image.load("./resources/characters/hero/R8.png"), pygame.image.load("./resources/characters/hero/R9.png")]
+    walkFloor = [pygame.image.load("./resources/characters/hero/D1.png"), pygame.image.load("./resources/characters/hero/D2.png"), pygame.image.load("./resources/characters/hero/D3.png")]
+
     stay = pygame.image.load("./resources/characters/hero/standing.png")
 
     def __init__(self, screen, building, screenX, screenY):
@@ -36,6 +38,10 @@ class Player(pygame.Rect):
         self.goingLeft = False
         self.goingRight = False
         self.moving = False
+        self.atDoor = False
+        self.inDoor = False
+        self.doorMoveCount = 0
+        self.doorMoveTime = 20
         self.walkCount = 0
         self.setHealth(random.randint(30, 70))
         self.setMentality(30 + 70 - self.health)
@@ -44,14 +50,27 @@ class Player(pygame.Rect):
         self.experience = 0
         self.time = "22:00"
         self.setConstraints(self.building.getWalls())
-       # self.CurrentFloor =
-
+        if self.building.floor2Y <= self.y <= self.building.floorY:
+            self.currentFloor = 1
+        elif self.building.floor3Y <= self.y <= self.building.floor2Y:
+            self.currentFloor = 2
+        elif self.building.ceilingY <= self.y <= self.building.floor3Y:
+            self.currentFloor = 3
+        self.destinationFloor = self.currentFloor
+        self.onWayToFloor = self.currentFloor
 
     def update(self):
-        self.animation()
-        if self.moving:
-            self.moveToDestination()
-        self.screen.blit(self.playerImage, self)
+        if not self.inDoor:
+            self.control()
+            self.animation()
+            if self.moving:
+                self.moveToDestination()
+            self.screen.blit(self.playerImage, self)
+        else:
+            self.doorMoveCount += 1
+            if self.doorMoveCount == self.doorMoveTime:
+                self.doorMoveCount = 0
+                self.newFloorReached()
         self.interface.update()
 
     def animation(self):
@@ -61,6 +80,13 @@ class Player(pygame.Rect):
         elif self.goingRight:
             self.playerImage = self.walkRight[self.walkCount // 3]
             self.walkCount += 1
+        elif self.atDoor:
+            self.playerImage = self.walkFloor[self.walkCount // 9]
+            self.walkCount += 1
+            if self.walkCount == 27:
+                self.walkCount = 0
+                self.atDoor = False
+                self.inDoor = True
         else:
             self.playerImage = self.stay
         self.walkCount %= 27
@@ -68,41 +94,105 @@ class Player(pygame.Rect):
     def control(self):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
-        if mouseClick[MOUSE_BUTTON_RIGHT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX + self.width // 2:
+        if mouseClick[MOUSE_BUTTON_RIGHT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX + self.width // 2 and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floorY:
+            if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor2Y <= mouse[MOUSE_POS_Y] <= self.building.floorY:
+                self.destinationFloor = 1
+                if self.currentFloor == 2:
+                    self.onWayToFloor = 1
+                elif self.currentFloor == 3:
+                    self.onWayToFloor = 2
+            elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor3Y <= mouse[MOUSE_POS_Y] <= self.building.floor2Y:
+                self.destinationFloor = 2
+                self.onWayToFloor = 2
+            elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floor3Y:
+                self.destinationFloor = 3
+                if self.currentFloor == 2:
+                    self.onWayToFloor = 3
+                elif self.currentFloor == 1:
+                    self.onWayToFloor = 2
+
             destination = mouse[MOUSE_POS_X] - self.width // 2
             if self.leftWallX - self.width // 2 <= destination <= self.leftWallX:
                 destination = destination + self.width // 2
             elif self.rightWallX - self.width // 2 <= destination <= self.rightWallX:
                 destination = destination - self.width // 2
-            if self.x < mouse[MOUSE_POS_X]:
-                self.setPath(destination)
-            elif self.x > mouse[MOUSE_POS_X]:
+            if self.x < mouse[MOUSE_POS_X] or self.x > mouse[MOUSE_POS_X]:
                 self.setPath(destination)
 
     def moveToDestination(self):
-        if self.x < self.destination:
-            if self.destination - self.x < self.speed:
-                self.move_ip((self.destination - self.x), 0)
-            else:
-                self.move_ip(+self.speed, 0)
-            self.goingLeft = False
-            self.goingRight = True
-        elif self.x > self.destination:
-            if self.x - self.destination < self.speed:
-                self.move_ip((self.destination - self.x), 0)
-            else:
-                self.move_ip(-self.speed, 0)
-            self.goingLeft = True
-            self.goingRight = False
-        if self.x == self.destination:
-            self.moving = False
-            self.goingLeft = False
-            self.goingRight = False
-            self.walkCount = 0
+        if self.currentFloor == self.destinationFloor:
+            if self.x < self.destination:
+                if self.destination - self.x < self.speed:
+                    self.move_ip((self.destination - self.x), 0)
+                else:
+                    self.move_ip(+self.speed, 0)
+                self.goingLeft = False
+                self.goingRight = True
+            elif self.x > self.destination:
+                if self.x - self.destination < self.speed:
+                    self.move_ip((self.destination - self.x), 0)
+                else:
+                    self.move_ip(-self.speed, 0)
+                self.goingLeft = True
+                self.goingRight = False
+            if self.x == self.destination:
+                self.moving = False
+                self.goingLeft = False
+                self.goingRight = False
+                self.walkCount = 0
+        else:
+            if self.currentFloor == 1 and self.onWayToFloor == 2:
+                destinationDoor = self.building.woodenDoor1X
+            elif self.currentFloor == 2 and self.onWayToFloor == 3:
+                destinationDoor = self.building.oldDoor1X
+            elif self.currentFloor == 2 and self.onWayToFloor == 1:
+                destinationDoor = self.building.woodenDoor2X
+            elif self.currentFloor == 3 and self.onWayToFloor == 2:
+                destinationDoor = self.building.oldDoor2X
+
+            if self.x < destinationDoor:
+                if destinationDoor - self.x < self.speed:
+                    self.move_ip((destinationDoor - self.x), 0)
+                else:
+                    self.move_ip(+self.speed, 0)
+                self.goingLeft = False
+                self.goingRight = True
+            elif self.x > destinationDoor:
+                if self.x - destinationDoor < self.speed:
+                    self.move_ip((destinationDoor - self.x), 0)
+                else:
+                    self.move_ip(-self.speed, 0)
+                self.goingLeft = True
+                self.goingRight = False
+            if self.x == destinationDoor:
+                self.moving = False
+                self.goingLeft = False
+                self.goingRight = False
+                self.walkCount = 0
+                self.atDoor = True
+
+    def newFloorReached(self):
+        lastFloor = self.currentFloor
+        self.currentFloor = self.onWayToFloor
+        self.onWayToFloor = self.destinationFloor
+        self.inDoor = False
+        if self.currentFloor == 1:
+            self.x = self.building.woodenDoor1X
+            self.y = self.building.floor1Y - self.height
+        elif self.currentFloor == 2 and lastFloor == 1:
+            self.x = self.building.woodenDoor2X
+            self.y = self.building.floor2Y - self.height
+        elif self.currentFloor == 2 and lastFloor == 3:
+            self.x = self.building.oldDoor1X
+            self.y = self.building.floor2Y - self.height
+        elif self.currentFloor == 3:
+            self.x = self.building.oldDoor2X
+            self.y = self.building.floor3Y - self.height
+        if not (self.x == self.destination):
+            self.moving = True
 
     def setConstraints(self, constraints):
         self.constraints = self.leftWallX, self.rightWallX, self.downY, self.upY = constraints
-        # self.leftWallX += self.width // 2
         self.rightWallX -= self.width // 2
 
     def setPath(self, destination):

@@ -25,7 +25,6 @@ class Game(object):
 
     def onLoop(self):
         self.checkActionWheel()
-        self.hero.control()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
             self.hero.setExperience(random.randint(10, 24214))

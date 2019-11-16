@@ -14,18 +14,20 @@ class Building(pygame.Rect):
         self.floor3Y = self.ceilingY + 208
         self.floor2Y = self.ceilingY + 461
         self.floor1Y = self.ceilingY + 637
-        self.floorsYs = [self.floor3Y, self.floor2Y, self.floor1Y]
+        self.floorsYs = [self.floor3Y, self.floor2Y, self.floor1Y, self.floor1Y]
         self.floor1LeftColumnX = self.leftWallX + 663
         self.floor1RightColumnX = self.leftWallX + 1014
         self.stoneDoor1X = self.leftWallX + 225 #Floor1
         self.stoneDoor2X = self.leftWallX + 1050 #Floor1
+        self.stoneDoorWidth = 65
         self.woodenDoor1X = self.leftWallX + 1166 #Floor1
-        self.woodenDoor1X = self.leftWallX + 222 #Floor2
+        self.woodenDoor2X = self.leftWallX + 222 #Floor2
+        self.woodenDoorWidth = 41
         self.oldDoor1X = self.leftWallX + 623 #Floor2
-        self.oldDoor1X = self.leftWallX + 972 #Floor3
-        self.inDoor = False
-        self.doorMoveCount = 0
-        self.doorMoveTime = 20
+        self.oldDoor2X = self.leftWallX + 972 #Floor3
+        self.oldDoorWidth = 36
+        self.doorsX = [self.stoneDoor1X, self.stoneDoor2X, self.woodenDoor1X, self.woodenDoor2X, self.oldDoor1X, self.oldDoor2X]
+        self.doorsWidth = [self.stoneDoorWidth,self.stoneDoorWidth, self.woodenDoorWidth, self.woodenDoorWidth, self.oldDoorWidth, self.oldDoorWidth]
         self.currentlySpawned = []
 
     def update(self):
@@ -49,7 +51,6 @@ class Building(pygame.Rect):
             object.x = random.randint(self.leftWallX, self.rightWallX - object.width)
         else:
             side = random.randint(1, 2)
-            print(side)
             if side == 1:
                 object.x = random.randint(self.leftWallX, self.floor1LeftColumnX - object.width)
             else:
@@ -70,7 +71,6 @@ class Building(pygame.Rect):
                 xConditionChecked = []
                 for currentlyChecked in range(len(xOccupied)):
                     xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
-
 
 
 
