@@ -49,9 +49,11 @@ class Player(pygame.Rect):
         self.consumable = "Nothing"
         self.experience = 0
         self.time = "22:00"
-        self.setConstraints(self.building.getWalls())
         if self.building.floor2Y <= self.y <= self.building.floorY:
-            self.currentFloor = 1
+            if self.building.leftWallX <= self.x <= self.building.floor1LeftColumnX - self.width:
+                self.currentFloor = 0
+            if self.building.floor1RightColumnX <= self.x <= self.building.rightWallX - self.width:
+                self.currentFloor = 1
         elif self.building.floor3Y <= self.y <= self.building.floor2Y:
             self.currentFloor = 2
         elif self.building.ceilingY <= self.y <= self.building.floor3Y:
@@ -94,30 +96,36 @@ class Player(pygame.Rect):
     def control(self):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
-        if mouseClick[MOUSE_BUTTON_RIGHT] and self.leftWallX <= mouse[MOUSE_POS_X] <= self.rightWallX + self.width // 2 and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floorY:
+        if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.rightWallX + self.width // 2 and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floorY:
             if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor2Y <= mouse[MOUSE_POS_Y] <= self.building.floorY:
-                self.destinationFloor = 1
-                if self.currentFloor == 2:
-                    self.onWayToFloor = 1
-                elif self.currentFloor == 3:
-                    self.onWayToFloor = 2
+                if self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.floor1LeftColumnX - self.width:
+                    self.destinationFloor = 0
+                if self.building.floor1RightColumnX <= mouse[MOUSE_POS_X] <= self.building.rightWallX - self.width:
+                    self.destinationFloor = 1
             elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor3Y <= mouse[MOUSE_POS_Y] <= self.building.floor2Y:
                 self.destinationFloor = 2
-                self.onWayToFloor = 2
             elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floor3Y:
                 self.destinationFloor = 3
-                if self.currentFloor == 2:
-                    self.onWayToFloor = 3
-                elif self.currentFloor == 1:
-                    self.onWayToFloor = 2
+            if not (self.currentFloor == self.destinationFloor):
+                if self.destinationFloor < self.currentFloor:
+                    self.onWayToFloor = self.currentFloor - 1
+                elif self.destinationFloor > self.currentFloor:
+                    self.onWayToFloor = self.currentFloor + 1
 
             destination = mouse[MOUSE_POS_X] - self.width // 2
-            if self.leftWallX - self.width // 2 <= destination <= self.leftWallX:
-                destination = destination + self.width // 2
-            elif self.rightWallX - self.width // 2 <= destination <= self.rightWallX:
-                destination = destination - self.width // 2
-            if self.x < mouse[MOUSE_POS_X] or self.x > mouse[MOUSE_POS_X]:
-                self.setPath(destination)
+            if not (self.building.floor2Y <= mouse[MOUSE_POS_Y] <= self.building.floorY
+                    and self.building.floor1LeftColumnX <= mouse[MOUSE_POS_X] <= self.building.floor1RightColumnX):
+                if self.building.floor2Y <= mouse[MOUSE_POS_Y] <= self.building.floorY:
+                    if self.building.floor1RightColumnX <= mouse[MOUSE_POS_X] <= self.building.floor1RightColumnX + self.width // 2:
+                        destination = self.building.floor1RightColumnX
+                    elif self.building.floor1LeftColumnX - self.width <= mouse[MOUSE_POS_X] <= self.building.floor1LeftColumnX:
+                        destination = self.building.floor1LeftColumnX - self.width
+                if self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.leftWallX + self.building.leftWallX + self.width // 2:
+                    destination = self.building.leftWallX
+                elif self.building.rightWallX - self.width <= mouse[MOUSE_POS_X] <= self.building.rightWallX:
+                    destination = self.building.rightWallX - self.width
+                if self.x < mouse[MOUSE_POS_X] or self.x > mouse[MOUSE_POS_X]:
+                    self.setPath(destination)
 
     def moveToDestination(self):
         if self.currentFloor == self.destinationFloor:
@@ -141,12 +149,16 @@ class Player(pygame.Rect):
                 self.goingRight = False
                 self.walkCount = 0
         else:
-            if self.currentFloor == 1 and self.onWayToFloor == 2:
+            if self.currentFloor == 0 and self.onWayToFloor == 1:
+                destinationDoor = self.building.stoneDoor1X
+            elif self.currentFloor == 1 and self.onWayToFloor == 0:
+                destinationDoor = self.building.stoneDoor2X
+            elif self.currentFloor == 1 and self.onWayToFloor == 2:
                 destinationDoor = self.building.woodenDoor1X
-            elif self.currentFloor == 2 and self.onWayToFloor == 3:
-                destinationDoor = self.building.oldDoor1X
             elif self.currentFloor == 2 and self.onWayToFloor == 1:
                 destinationDoor = self.building.woodenDoor2X
+            elif self.currentFloor == 2 and self.onWayToFloor == 3:
+                destinationDoor = self.building.oldDoor1X
             elif self.currentFloor == 3 and self.onWayToFloor == 2:
                 destinationDoor = self.building.oldDoor2X
 
@@ -176,7 +188,11 @@ class Player(pygame.Rect):
         self.currentFloor = self.onWayToFloor
         self.onWayToFloor = self.destinationFloor
         self.inDoor = False
-        if self.currentFloor == 1:
+        if self.currentFloor == 0:
+            self.x = self.building.stoneDoor1X
+        if self.currentFloor == 1 and lastFloor == 0:
+            self.x = self.building.stoneDoor2X
+        if self.currentFloor == 1 and lastFloor == 2:
             self.x = self.building.woodenDoor1X
             self.y = self.building.floor1Y - self.height
         elif self.currentFloor == 2 and lastFloor == 1:
@@ -190,10 +206,6 @@ class Player(pygame.Rect):
             self.y = self.building.floor3Y - self.height
         if not (self.x == self.destination):
             self.moving = True
-
-    def setConstraints(self, constraints):
-        self.constraints = self.leftWallX, self.rightWallX, self.downY, self.upY = constraints
-        self.rightWallX -= self.width // 2
 
     def setPath(self, destination):
         self.destination = destination
