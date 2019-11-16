@@ -79,118 +79,51 @@ class Game(object):
                 self.weather.append(Weather.Column(columnNumber * Weather.SIZE, self.screen, self.building.floorY))
         self.sky = Weather.Sky(self.screen, self.screenWidth, self.screenHeight, self.building.leftWallX,
                                self.building.rightWallX, self.building.ceilingY)
-        self.hero = Character.Player(self.screen,
-                                     random.randint(self.building.leftWallX,
-                                                    self.building.rightWallX - Character.CHARACTER_WIDTH),
-                                     random.randint(self.building.ceilingY,
-                                                    self.building.floorY - Character.CHARACTER_HEIGHT - 3),
-                                     self.screenWidth, self.screenHeight)
-        self.hero.setConstraints(self.building.getWalls())
+
+        # RANDOMLY SPAWNED
+
+        self.hero = Character.Player(self.screen, self.building, self.screenWidth, self.screenHeight)
 
         self.enemies = []
         self.items = []
-        self.cultist = Trash.Cultist(self.screen,
-                                     random.randint(self.building.leftWallX,
-                                                    self.building.rightWallX - Trash.Cultist.CULTIST_WIDTH),
-                                     random.randint(self.building.ceilingY,
-                                                    self.building.floorY - Trash.Cultist.CULTIST_HEIGHT - 3))
+        self.cultist = Trash.Cultist(self.screen, self.building)
         self.enemies.append(self.cultist)
-        self.angel = Trash.Angel(self.screen,
-                                 random.randint(self.building.leftWallX,
-                                                self.building.rightWallX - Trash.Angel.ANGEL_WIDTH),
-                                 random.randint(self.building.ceilingY,
-                                                self.building.floorY - Trash.Angel.ANGEL_HEIGHT - 3))
-        self.checkFreePositions(self.angel)
+
+        self.angel = Trash.Angel(self.screen, self.building)
+        self.building.checkFreePositions(self.angel, self.items, self.enemies)
         self.enemies.append(self.angel)
-        self.skeleton = Trash.Skeleton(self.screen,
-                                       random.randint(self.building.leftWallX,
-                                                      self.building.rightWallX - Trash.Skeleton.SKELETON_WIDTH),
-                                       random.randint(self.building.ceilingY,
-                                                      self.building.floorY - Trash.Skeleton.SKELETON_HEIGHT - 3))
-        self.checkFreePositions(self.skeleton)
+
+        self.skeleton = Trash.Skeleton(self.screen, self.building)
+        self.building.checkFreePositions(self.skeleton, self.items, self.enemies)
         self.enemies.append(self.skeleton)
-        self.bomb = Equipment.Bomb(self.screen,
-                                     random.randint(self.building.leftWallX,
-                                                    self.building.rightWallX - Equipment.ICON_WIDTH),
-                                     random.randint(self.building.ceilingY,
-                                                    self.building.floorY - Equipment.ICON_WIDTH - 3))
-        self.checkFreePositions(self.bomb)
+
+        self.bomb = Equipment.Bomb(self.screen, self.building)
+        self.building.checkFreePositions(self.bomb, self.items, self.enemies)
         self.items.append(self.bomb)
-        self.garlic = Equipment.Garlic(self.screen,
-                                     random.randint(self.building.leftWallX,
-                                                    self.building.rightWallX - Equipment.ICON_WIDTH),
-                                     random.randint(self.building.ceilingY,
-                                                    self.building.floorY - Equipment.ICON_WIDTH - 3))
-        self.checkFreePositions(self.garlic)
+
+        self.garlic = Equipment.Garlic(self.screen, self.building)
+        self.building.checkFreePositions(self.garlic, self.items, self.enemies)
         self.items.append(self.garlic)
-        self.flute = Equipment.Flute(self.screen,
-                                     random.randint(self.building.leftWallX,
-                                                    self.building.rightWallX - Equipment.ICON_WIDTH),
-                                     random.randint(self.building.ceilingY,
-                                                    self.building.floorY - Equipment.ICON_WIDTH - 3))
-        self.checkFreePositions(self.flute)
+
+        self.flute = Equipment.Flute(self.screen, self.building)
+        self.building.checkFreePositions(self.flute, self.items, self.enemies)
         self.items.append(self.flute)
-        self.rune = Equipment.Rune(self.screen,
-                                     random.randint(self.building.leftWallX,
-                                                    self.building.rightWallX - Equipment.ICON_WIDTH),
-                                     random.randint(self.building.ceilingY,
-                                                    self.building.floorY - Equipment.ICON_WIDTH - 3))
-        self.checkFreePositions(self.rune)
+
+        self.rune = Equipment.Rune(self.screen, self.building)
+        self.building.checkFreePositions(self.rune, self.items, self.enemies)
         self.items.append(self.rune)
-        self.sword = Equipment.Sword(self.screen,
-                                     random.randint(self.building.leftWallX,
-                                                    self.building.rightWallX - Equipment.ICON_WIDTH),
-                                     random.randint(self.building.ceilingY,
-                                                    self.building.floorY - Equipment.ICON_WIDTH - 3))
-        self.checkFreePositions(self.sword)
+
+        self.sword = Equipment.Sword(self.screen, self.building)
+        self.building.checkFreePositions(self.sword, self.items, self.enemies)
         self.items.append(self.sword)
-        self.whip = Equipment.Whip(self.screen,
-                                   random.randint(self.building.leftWallX,
-                                                  self.building.rightWallX - Equipment.ICON_WIDTH),
-                                   random.randint(self.building.ceilingY,
-                                                  self.building.floorY - Equipment.ICON_WIDTH - 3))
-        self.checkFreePositions(self.whip)
+
+        self.whip = Equipment.Whip(self.screen, self.building)
+        self.building.checkFreePositions(self.whip, self.items, self.enemies)
         self.items.append(self.whip)
-        self.shield = Equipment.Shield(self.screen,
-                                       random.randint(self.building.leftWallX,
-                                                      self.building.rightWallX - Equipment.ICON_WIDTH),
-                                       random.randint(self.building.ceilingY,
-                                                      self.building.floorY - Equipment.ICON_WIDTH - 3))
-        self.checkFreePositions(self.shield)
+
+        self.shield = Equipment.Shield(self.screen, self.building)
+        self.building.checkFreePositions(self.shield, self.items, self.enemies)
         self.items.append(self.shield)
-
-
-    def checkFreePositions(self, object):
-        currentlySpawned = []
-        for item in self.items:
-            currentlySpawned.append(item)
-        for enemy in self.enemies:
-            currentlySpawned.append(enemy)
-        xOccupied = []
-        xWidthOccupied = []
-        yOccupied = []
-        yHeightOccupied = []
-        for spawned in currentlySpawned:
-            xOccupied.append(spawned.x - object.width - 10)
-            xWidthOccupied.append(spawned.x + spawned.width + object.width + 10)
-            yOccupied.append(spawned.y - object.height - 10)
-            yHeightOccupied.append(spawned.y + spawned.height + object.height + 10)
-
-        xConditionChecked = []
-        yConditionChecked = []
-        for currentlyChecked in range(len(xOccupied)):
-            xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
-        for currentlyChecked in range(len(yOccupied)):
-            yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
-        while not all(xConditionChecked) and not all(yConditionChecked):
-            object.x = random.randint(self.building.leftWallX, self.building.rightWallX - object.width)
-            object.y = random.randint(self.building.ceilingY, self.building.floorY - object.height - 3)
-            xConditionChecked = []
-            yConditionChecked = []
-            for currentlyChecked in range(len(xOccupied)):
-                xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
-            for currentlyChecked in range(len(yOccupied)):
-                yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
 
     def checkActionWheel(self):
         if not self.actionWheel:

@@ -2,6 +2,7 @@ import pygame
 import random
 import Equipment
 import Interface
+import Building
 
 MOUSE_BUTTON_LEFT = 0
 MOUSE_BUTTON_MIDDLE = 1
@@ -24,9 +25,15 @@ class Player(pygame.Rect):
                  pygame.image.load("./resources/characters/hero/R7.png"), pygame.image.load("./resources/characters/hero/R8.png"), pygame.image.load("./resources/characters/hero/R9.png")]
     stay = pygame.image.load("./resources/characters/hero/standing.png")
 
-    def __init__(self, screen, positionX, positionY, screenX, screenY):
-        pygame.Rect.__init__(self, (positionX, positionY, CHARACTER_WIDTH, CHARACTER_HEIGHT))
+    def __init__(self, screen, building, screenX, screenY):
         self.screen = screen
+        self.building = building
+        positionX = random.randint(self.building.leftWallX,
+                       self.building.rightWallX - CHARACTER_WIDTH)
+
+        positionY = random.choice(self.building.floorsYs) - CHARACTER_HEIGHT
+        print(positionY)
+        pygame.Rect.__init__(self, (positionX, positionY, CHARACTER_WIDTH, CHARACTER_HEIGHT))
         self.interface = Interface.Interface(screen, screenX, screenY)
         self.playerImage = self.stay
         self.speed = 5
@@ -40,6 +47,9 @@ class Player(pygame.Rect):
         self.consumable = "Nothing"
         self.experience = 0
         self.time = "22:00"
+        self.setConstraints(self.building.getWalls())
+       # self.CurrentFloor =
+
 
     def update(self):
         self.animation()

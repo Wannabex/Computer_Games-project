@@ -1,15 +1,19 @@
 import pygame
 import Interface
-from Interface import ActionWheel
+import Building
 import random
 
 
 class Trash(pygame.Rect):
-    def __init__(self, screen, positionX, positionY, width, height, sprite):
+    def __init__(self, screen, building, width, height, sprite):
+        self.screen = screen
+        self.building = building
+        positionX = random.randint(self.building.leftWallX,
+                                   self.building.rightWallX - width)
+        positionY = random.choice(self.building.floorsYs) - height
         pygame.Rect.__init__(self, (positionX, positionY, width, height))
         self.name = "Trash"
         self.description = "Enemy"
-        self.screen = screen
         self.spriteSheet = sprite
         self.currentImage = self.spriteSheet[0]
         self.imageCount = len(self.spriteSheet)
@@ -17,6 +21,7 @@ class Trash(pygame.Rect):
         self.fpsRatio = 3
         self.clickable = True
         self.actionsVisible = False
+
 
     def update(self):
         self.animation()
@@ -52,8 +57,8 @@ class Cultist(Trash):
     CULTIST_WIDTH = 44
     CULTIST_HEIGHT = 60
 
-    def __init__(self, screen, positionX, positionY):
-        Trash.__init__(self, screen, positionX, positionY, self.CULTIST_WIDTH, self.CULTIST_HEIGHT, self.cultistSprite)
+    def __init__(self, screen, building):
+        Trash.__init__(self, screen, building, self.CULTIST_WIDTH, self.CULTIST_HEIGHT, self.cultistSprite)
         self.name = "Cultist"
         self.description = "This is Cultist"
         self.fpsRatio = 9
@@ -67,10 +72,12 @@ class Angel(Trash):
     ANGEL_WIDTH = 122
     ANGEL_HEIGHT = 117
 
-    def __init__(self, screen, positionX, positionY):
-        Trash.__init__(self, screen, positionX, positionY, self.ANGEL_WIDTH, self.ANGEL_HEIGHT, self.angelSprite)
+    def __init__(self, screen, building):
+        Trash.__init__(self, screen, building, self.ANGEL_WIDTH, self.ANGEL_HEIGHT, self.angelSprite)
         self.name = "Seraph"
         self.description = "This is Seraph"
+        self.y = random.choice(self.building.floorsYs[:1]) - self.ANGEL_HEIGHT
+
 
 
 class Skeleton(Trash):
@@ -83,8 +90,8 @@ class Skeleton(Trash):
     SKELETON_WIDTH = 42
     SKELETON_HEIGHT = 58
 
-    def __init__(self, screen, positionX, positionY):
-        Trash.__init__(self, screen, positionX, positionY, self.SKELETON_WIDTH, self.SKELETON_HEIGHT, self.skeletonSprite)
+    def __init__(self, screen, building):
+        Trash.__init__(self, screen, building, self.SKELETON_WIDTH, self.SKELETON_HEIGHT, self.skeletonSprite)
         self.name = "Skeleton"
         self.description = "This is skeleton"
 

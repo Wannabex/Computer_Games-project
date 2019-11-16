@@ -1,5 +1,6 @@
 import pygame
-
+import random
+import Trash
 
 class Building(pygame.Rect):
     def __init__(self, screen, screenSize):
@@ -7,10 +8,77 @@ class Building(pygame.Rect):
         self.constraints = self.leftWallX, self.rightWallX, self.floorY, self.ceilingY = 125, self.screenWidth - 125, self.screenHeight - 40, 100
         pygame.Rect.__init__(self, (self.leftWallX, self.ceilingY, self.rightWallX - self.leftWallX, self.floorY - self.ceilingY))
         self.screen = screen
+        print(self.rightWallX - self.x)
+        print(self.floorY - self.y)
+        self.manor = pygame.image.load("./resources/images/gameboard/manor2.png")
+        self.floor3Y = self.ceilingY + 208
+        self.floor2Y = self.ceilingY + 461
+        self.floor1Y = self.ceilingY + 637
+        self.floorsYs = [self.floor3Y, self.floor2Y, self.floor1Y]
 
     def update(self):
         pygame.draw.rect(self.screen, (255, 255, 255), self)
-        #self.screen.blit(self.surf, self)
+        self.screen.blit(self.manor, self)
 
     def getWalls(self):
         return self.constraints
+
+    def checkFreePositions(self, object, items, enemies):
+        currentlySpawned = []
+        for item in items:
+            currentlySpawned.append(item)
+        for enemy in enemies:
+            currentlySpawned.append(enemy)
+        xOccupied = []
+        xWidthOccupied = []
+        for spawned in currentlySpawned:
+            xOccupied.append(spawned.x - object.width - 10)
+            xWidthOccupied.append(spawned.x + spawned.width + object.width + 10)
+        xConditionChecked = []
+        for currentlyChecked in range(len(xOccupied)):
+            xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
+        while not all(xConditionChecked):
+            object.x = random.randint(self.leftWallX, self.rightWallX - object.width)
+            if type(object) == Trash.Angel:
+                object.y = random.choice(self.floorsYs[:2]) - object.height
+            else:
+                object.y = random.choice(self.floorsYs) - object.height
+
+            xConditionChecked = []
+            for currentlyChecked in range(len(xOccupied)):
+                xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
+
+
+
+
+    # def checkFreePositions(self, object, items, enemies):
+    #     currentlySpawned = []
+    #     for item in items:
+    #         currentlySpawned.append(item)
+    #     for enemy in enemies:
+    #         currentlySpawned.append(enemy)
+    #     xOccupied = []
+    #     xWidthOccupied = []
+    #     yOccupied = []
+    #     yHeightOccupied = []
+    #     for spawned in currentlySpawned:
+    #         xOccupied.append(spawned.x - object.width - 10)
+    #         xWidthOccupied.append(spawned.x + spawned.width + object.width + 10)
+    #         yOccupied.append(spawned.y - object.height - 10)
+    #         yHeightOccupied.append(spawned.y + spawned.height + object.height + 10)
+    #
+    #     xConditionChecked = []
+    #     yConditionChecked = []
+    #     for currentlyChecked in range(len(xOccupied)):
+    #         xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
+    #     for currentlyChecked in range(len(yOccupied)):
+    #         yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
+    #     while not all(xConditionChecked) and not all(yConditionChecked):
+    #         object.x = random.randint(self.building.leftWallX, self.building.rightWallX - object.width)
+    #         object.y = random.randint(self.building.ceilingY, self.building.floorY - object.height - 3)
+    #         xConditionChecked = []
+    #         yConditionChecked = []
+    #         for currentlyChecked in range(len(xOccupied)):
+    #             xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
+    #         for currentlyChecked in range(len(yOccupied)):
+    #             yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked]),

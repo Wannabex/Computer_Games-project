@@ -1,6 +1,6 @@
 import pygame
-from Interface import ActionWheel
-
+import Building
+import random
 
 MOUSE_POS_X = 0
 MOUSE_POS_Y = 1
@@ -14,9 +14,13 @@ ICON_HEIGHT = 32
 
 
 class Weapon(pygame.Rect):
-    def __init__(self, screen, positionX, positionY, icons, wheel):
-        pygame.Rect.__init__(self, (positionX, positionY, ICON_WIDTH, ICON_HEIGHT))
+    def __init__(self, screen, building, icons, wheel):
+        self.building = building
         self.screen = screen
+        positionX = random.randint(self.building.leftWallX,
+                                   self.building.rightWallX - ICON_WIDTH)
+        positionY = random.choice(self.building.floorsYs) - ICON_HEIGHT
+        pygame.Rect.__init__(self, (positionX, positionY, ICON_WIDTH, ICON_HEIGHT))
         self.itemIcons = icons
         self.itemIdle = icons[1]
         self.itemHover = icons[0]
@@ -26,6 +30,7 @@ class Weapon(pygame.Rect):
         self.clickable = True
         self.actionsVisible = False
         self.descriptionShowed = False
+
 
     def update(self):
         mouse = pygame.mouse.get_pos()
@@ -76,8 +81,8 @@ class Sword(Weapon):
     swordWheelIcon = [pygame.image.load("./resources/images/wheel/weapons/sword1.png"),
                  pygame.image.load("./resources/images/wheel/weapons/sword2.png")]
 
-    def __init__(self, screen, positionX, positionY):
-        Weapon.__init__(self, screen, positionX, positionY, self.swordIcon, self.swordWheelIcon)
+    def __init__(self, screen, building):
+        Weapon.__init__(self, screen, building, self.swordIcon, self.swordWheelIcon)
         self.name = "Sword"
         self.description = "Very pointy"
 
@@ -88,8 +93,8 @@ class Whip(Weapon):
     whipWheelIcon = [pygame.image.load("./resources/images/wheel/weapons/whip1.png"),
                  pygame.image.load("./resources/images/wheel/weapons/whip2.png")]
 
-    def __init__(self, screen, positionX, positionY):
-        Weapon.__init__(self, screen, positionX, positionY, self.whipIcon, self.whipWheelIcon)
+    def __init__(self, screen, building):
+        Weapon.__init__(self, screen, building, self.whipIcon, self.whipWheelIcon)
         self.name = "Whip"
         self.description = "Can hurt people"
 
@@ -100,15 +105,19 @@ class Shield(Weapon):
     shieldWheelIcon = [pygame.image.load("./resources/images/wheel/weapons/shield1.png"),
                  pygame.image.load("./resources/images/wheel/weapons/shield2.png")]
 
-    def __init__(self, screen, positionX, positionY):
-        Weapon.__init__(self, screen, positionX, positionY, self.shieldIcon, self.shieldWheelIcon)
+    def __init__(self, screen, building):
+        Weapon.__init__(self, screen, building, self.shieldIcon, self.shieldWheelIcon)
         self.name = "Shield"
         self.description = "Good for protection and bashing"
 
 class Consumable(pygame.Rect):
-    def __init__(self, screen, positionX, positionY, icons, wheel):
-        pygame.Rect.__init__(self, (positionX, positionY, ICON_WIDTH, ICON_HEIGHT))
+    def __init__(self, screen, building, icons, wheel):
+        self.building = building
         self.screen = screen
+        positionX = random.randint(self.building.leftWallX,
+                                   self.building.rightWallX - ICON_WIDTH)
+        positionY = random.choice(self.building.floorsYs) - ICON_HEIGHT
+        pygame.Rect.__init__(self, (positionX, positionY, ICON_WIDTH, ICON_HEIGHT))
         self.itemIcons = icons
         self.itemIdle = icons[1]
         self.itemHover = icons[0]
@@ -117,6 +126,7 @@ class Consumable(pygame.Rect):
         self.picked = False
         self.clickable = True
         self.actionsVisible = False
+
 
     def update(self):
         mouse = pygame.mouse.get_pos()
@@ -164,8 +174,8 @@ class Bomb(Consumable):
     bombWheelIcon = [pygame.image.load("./resources/images/wheel/consumables/bomb1.png"),
                  pygame.image.load("./resources/images/wheel/consumables/bomb2.png")]
 
-    def __init__(self, screen, positionX, positionY):
-        Consumable.__init__(self, screen, positionX, positionY, self.bombIcon, self.bombWheelIcon)
+    def __init__(self, screen, building):
+        Consumable.__init__(self, screen, building, self.bombIcon, self.bombWheelIcon)
         self.name = "Bomb"
         self.description = "Bomb goes boom"
 
@@ -175,8 +185,8 @@ class Flute(Consumable):
     fluteWheelIcon = [pygame.image.load("./resources/images/wheel/consumables/flute1.png"),
                  pygame.image.load("./resources/images/wheel/consumables/flute2.png")]
 
-    def __init__(self, screen, positionX, positionY):
-        Consumable.__init__(self, screen, positionX, positionY, self.fluteIcon, self.fluteWheelIcon)
+    def __init__(self, screen, building):
+        Consumable.__init__(self, screen, building, self.fluteIcon, self.fluteWheelIcon)
         self.name = "Flute"
         self.description = "Flute plays music"
 
@@ -186,8 +196,8 @@ class Garlic(Consumable):
     garlicWheelIcon = [pygame.image.load("./resources/images/wheel/consumables/garlic1.png"),
                  pygame.image.load("./resources/images/wheel/consumables/garlic2.png")]
 
-    def __init__(self, screen, positionX, positionY):
-        Consumable.__init__(self, screen, positionX, positionY, self.garlicIcon, self.garlicWheelIcon)
+    def __init__(self, screen, building):
+        Consumable.__init__(self, screen, building, self.garlicIcon, self.garlicWheelIcon)
         self.name = "Garlic"
         self.description = "Garlic is strong against vampires"
 
@@ -197,8 +207,8 @@ class Rune(Consumable):
     runeWheelIcon = [pygame.image.load("./resources/images/wheel/consumables/rune1.png"),
                  pygame.image.load("./resources/images/wheel/consumables/rune2.png")]
 
-    def __init__(self, screen, positionX, positionY):
-        Consumable.__init__(self, screen, positionX, positionY, self.runeIcon, self.runeWheelIcon)
+    def __init__(self, screen, building):
+        Consumable.__init__(self, screen, building, self.runeIcon, self.runeWheelIcon)
         self.name = "Rune"
         self.description = "Rune can teleport things"
 
