@@ -28,13 +28,9 @@ class Game(object):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
             self.hero.setExperience(random.randint(10, 24214))
-            self.sky.monster.itsTime = True
-            self.sounds.monsterRoar()
             self.hero.setConsumable(self.bomb)
         if keys[pygame.K_DOWN]:
             self.hero.setHealth(random.randint(1, 100))
-            self.sky.thunder.itsTime = True
-            self.sounds.thunderstorm()
             self.hero.setWeapon(self.sword)
         if keys[pygame.K_RIGHT]:
             self.exitGame = True
@@ -77,10 +73,9 @@ class Game(object):
             for columnNumber in range(self.building.rightWallX // Weather.SIZE, self.screenWidth // Weather.SIZE):
                 self.weather.append(Weather.Column(columnNumber * Weather.SIZE, self.screen, self.building.floorY))
         self.sky = Weather.Sky(self.screen, self.screenWidth, self.screenHeight, self.building.leftWallX,
-                               self.building.rightWallX, self.building.ceilingY)
+                               self.building.rightWallX, self.building.ceilingY, self.sounds)
 
         # RANDOMLY SPAWNED
-
         self.hero = Character.Player(self.screen, self.building, self.screenWidth, self.screenHeight)
 
         self.enemies = []

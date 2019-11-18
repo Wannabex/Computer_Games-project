@@ -47,14 +47,31 @@ class Sky(object):
               pygame.image.load("./resources/images/environment/thunder4.png")]
     monsters = [pygame.image.load("./resources/images/environment/monster1.png"), pygame.image.load("./resources/images/environment/monster2.png"), pygame.image.load("./resources/images/environment/monster3.png")]
 
-    def __init__(self, screen, screenWidth, screenHeight, leftWallX, rightWallX, ceilingY):
+    def __init__(self, screen, screenWidth, screenHeight, leftWallX, rightWallX, ceilingY, sound):
         self.screen = screen
+        self.sound = sound
         self.thunder = SomethingInTheSky(screen, self.thunders, screenWidth - 50, screenHeight - 100, leftWallX - 25, rightWallX, ceilingY)
         self.monster = SomethingInTheSky(screen, self.monsters, screenWidth - 100, screenHeight - 100, leftWallX - 100, rightWallX - 100, ceilingY)
+        self.thunderDelay = random.randint(30,60)
+        self.thunderCounter = 0
+        self.monsterDelay = random.randint(70,130)
+        self.monsterCounter = 0
+
 
     def update(self):
-        self.monster.appear()
-        self.thunder.appear()
+        self.monsterCounter += 1
+        self.thunderCounter += 1
+        if self.monsterCounter == self.monsterDelay:
+            self.monster.appear()
+            self.sound.monsterRoar()
+            self.monsterCounter = 0
+            self.monsterDelay = random.randint(70, 130)
+        if self.thunderCounter == self.thunderDelay:
+            self.sound.thunderstorm()
+            self.thunder.appear()
+
+            self.thunderCounter = 0
+            self.thunderDelay = random.randint(30, 60)
 
 
 
@@ -73,28 +90,27 @@ class SomethingInTheSky(pygame.Rect):
         self.itsTime = False
 
     def appear(self):
-        if self.itsTime:
-            if self.appearanceTime == 0:
-                screenSide = random.randint(1, 3)
-                if screenSide == 1:
-                    self.x = random.randint(-50, self.leftWallX)
-                    self.y = random.randint(-50, self.skyHeight)
-                elif screenSide == 2:
-                    self.x = random.randint(-50, self.skyWidth + 50)
-                    self.y = random.randint(-50, self.ceilingY - 50)
-                else:
-                    self.x = random.randint(self.rightWallX, self.skyWidth - 50)
-                    self.y = random.randint(-50, self.skyHeight)
-                self.appearanceTime = random.randint(1, 3)
-                self.thunderImage = random.choice(self.images)
-            if self.shownTime < self.appearanceTime:
-                self.update()
-                self.shownTime += 1
-            if self.shownTime >= self.appearanceTime:
-                self.appearanceTime = 0
-                self.shownTime = 0
-                self.itsTime = False
+        if self.appearanceTime == 0:
+            screenSide = random.randint(1, 3)
+            if screenSide == 1:
+                self.x = random.randint(-50, self.leftWallX)
+                self.y = random.randint(-50, self.skyHeight)
+            elif screenSide == 2:
+                self.x = random.randint(-50, self.skyWidth + 50)
+                self.y = random.randint(-50, self.ceilingY - 50)
+            else:
+                self.x = random.randint(self.rightWallX, self.skyWidth - 50)
+                self.y = random.randint(-50, self.skyHeight)
+            self.appearanceTime = random.randint(1, 3)
+            self.thingImage = random.choice(self.images)
+        if self.shownTime < self.appearanceTime:
+            self.update()
+            self.shownTime += 1
+        if self.shownTime >= self.appearanceTime:
+            self.appearanceTime = 0
+            self.shownTime = 0
+            self.itsTime = False
 
     def update(self):
-        self.screen.blit(self.thunderImage, self)
+        self.screen.blit(self.thingImage, self)
 

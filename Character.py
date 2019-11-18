@@ -45,8 +45,8 @@ class Player(pygame.Rect):
         self.walkCount = 0
         self.setHealth(random.randint(30, 70))
         self.setMentality(30 + 70 - self.health)
-        self.weapon = "Nothing"
-        self.consumable = "Nothing"
+        self.weapon = 0
+        self.consumable = 0
         self.experience = 0
         self.time = "22:00"
         if self.building.floor2Y <= self.y <= self.building.floorY:
@@ -231,18 +231,23 @@ class Player(pygame.Rect):
         return self.mentality
 
     def setWeapon(self, newWeapon):
-        self.weapon = newWeapon.getName()
+        self.weapon = newWeapon
         newWeapon.pickUp(self.interface.equipment1.x - Equipment.ICON_WIDTH - 3, self.interface.equipment1.y - 5)
-        self.interface.equipment1.setInformation(self.weapon)
+        if self.weapon == 0:
+            self.interface.equipment1.setInformation("Nothing")
+        else:
+            self.interface.equipment1.setInformation(self.weapon.getName())
 
     def getWeapon(self):
         return self.weapon
 
     def setConsumable(self, newConsumable):
-        self.consumable = newConsumable.getName()
+        self.consumable = newConsumable
         newConsumable.pickUp(self.interface.equipment2.x - Equipment.ICON_WIDTH - 3, self.interface.equipment1.y - 5)
-        self.interface.equipment2.setInformation(self.consumable)
-
+        if self.consumable == 0:
+            self.interface.equipment2.setInformation("Nothing")
+        else:
+            self.interface.equipment2.setInformation(self.consumable.getName())
     def getConsumable(self):
         return self.consumable
 
