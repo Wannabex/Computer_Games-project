@@ -114,12 +114,12 @@ class Game(object):
         if not self.actionWheel:
             for enemy in self.enemies:
                 if enemy.actionsVisible:
-                    self.actionWheel = Interface.ActionWheel(self.screen, enemy, weapon=self.checkCurrentWeapon(self.items), consumable=self.checkCurrentConsumable(self.items), takeable=False)
+                    self.actionWheel = Interface.ActionWheel(self.screen, self.hero, enemy, weapon=self.checkCurrentWeapon(self.items), consumable=self.checkCurrentConsumable(self.items), takeable=False)
                     self.objectWithInterface = enemy
                     self.changeClickable(self.items, self.enemies, objectWithWheel=self.objectWithInterface, newState=False)
             for item in self.items:
                 if item.actionsVisible:
-                    self.actionWheel = Interface.ActionWheel(self.screen, item)
+                    self.actionWheel = Interface.ActionWheel(self.screen, self.hero, item)
                     self.objectWithInterface = item
                     self.changeClickable(self.items, self.enemies, objectWithWheel=self.objectWithInterface, newState=False)
         else:
@@ -129,17 +129,17 @@ class Game(object):
                 self.changeClickable(self.items, self.enemies)
 
     def checkCurrentWeapon(self, items):
-        if self.hero.weapon != "Nothing":
+        if self.hero.weapon != 0:
             for item in items:
-                if item.name == self.hero.weapon:
+                if item == self.hero.weapon:
                     return item.wheelIcon
         else:
             return 0
 
     def checkCurrentConsumable(self, items):
-        if self.hero.consumable != "Nothing":
+        if self.hero.consumable != 0:
             for item in items:
-                if item.name == self.hero.consumable:
+                if item == self.hero.consumable:
                     return item.wheelIcon
         else:
             return 0

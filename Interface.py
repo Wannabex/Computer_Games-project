@@ -84,8 +84,9 @@ class ActionWheel(pygame.Rect):
     wheelTake = [pygame.image.load("./resources/images/wheel/take1.png"),
                    pygame.image.load("./resources/images/wheel/take2.png")]
 
-    def __init__(self, screen, object, weapon=0, consumable=0, takeable=True):
+    def __init__(self, screen, hero, object, weapon=0, consumable=0, takeable=True):
         self.screen = screen
+        self.hero = hero
         self.interfacedObject = object
         self.positionX = object.x - self.WHEEL_WIDTH + 3
         self.positionY = object.y - self.WHEEL_HEIGHT + 3
@@ -164,6 +165,12 @@ class ActionWheel(pygame.Rect):
             self.rightIcon = self.wheelConsumable[WHEEL_HOVER]
         elif self.downIcon and self.optionDown.x <= mouse[MOUSE_POS_X] <= self.optionDown.x + self.optionDown.width and self.optionDown.y <= mouse[MOUSE_POS_Y] <= self.optionDown.y + self.optionDown.height:
             self.downIcon = self.wheelTake[WHEEL_HOVER]
+            if mouseClick[MOUSE_BUTTON_LEFT]:
+                self.downClicked = True
+                self.hero.destinationObject = self.interfacedObject
+                self.onWayToItemOrEnemy = True
+                self.middleClicked = True
+
         elif self.upClicked and self.descriptionRect.x <= mouse[MOUSE_POS_X] <= self.descriptionRect.x + self.descriptionRect.width and self.descriptionRect.y <= mouse[MOUSE_POS_Y] <= self.descriptionRect.y + self.descriptionRect.height:
             if mouseClick[MOUSE_BUTTON_LEFT]:
                 self.upClicked = False

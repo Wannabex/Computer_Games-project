@@ -52,9 +52,9 @@ class Sky(object):
         self.sound = sound
         self.thunder = SomethingInTheSky(screen, self.thunders, screenWidth - 50, screenHeight - 100, leftWallX - 25, rightWallX, ceilingY)
         self.monster = SomethingInTheSky(screen, self.monsters, screenWidth - 100, screenHeight - 100, leftWallX - 100, rightWallX - 100, ceilingY)
-        self.thunderDelay = random.randint(30,60)
+        self.thunderDelay = random.randint(40,70)
         self.thunderCounter = 0
-        self.monsterDelay = random.randint(70,130)
+        self.monsterDelay = random.randint(100,200)
         self.monsterCounter = 0
 
 
@@ -65,14 +65,13 @@ class Sky(object):
             self.monster.appear()
             self.sound.monsterRoar()
             self.monsterCounter = 0
-            self.monsterDelay = random.randint(70, 130)
+            self.monsterDelay = random.randint(100, 200)
         if self.thunderCounter == self.thunderDelay:
             self.sound.thunderstorm()
             self.thunder.appear()
 
             self.thunderCounter = 0
-            self.thunderDelay = random.randint(30, 60)
-
+            self.thunderDelay = random.randint(40, 70)
 
 
 class SomethingInTheSky(pygame.Rect):

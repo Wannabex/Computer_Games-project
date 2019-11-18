@@ -47,6 +47,8 @@ class Player(pygame.Rect):
         self.setMentality(30 + 70 - self.health)
         self.weapon = 0
         self.consumable = 0
+        self.destinationObject = 0
+        self.onWayToItemOrEnemy = False
         self.experience = 0
         self.time = "22:00"
         if self.building.floor2Y <= self.y <= self.building.floorY:
@@ -96,15 +98,15 @@ class Player(pygame.Rect):
     def control(self):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
-        if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.rightWallX + self.width // 2 and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floorY:
-            if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor2Y <= mouse[MOUSE_POS_Y] <= self.building.floorY:
+        if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.rightWallX and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floorY :
+            if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor2Y <= mouse[MOUSE_POS_Y] <= self.building.floorY or self.onWayToItemOrEnemy:
                 if self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.floor1LeftColumnX - self.width:
                     self.destinationFloor = 0
                 if self.building.floor1RightColumnX <= mouse[MOUSE_POS_X] <= self.building.rightWallX - self.width:
                     self.destinationFloor = 1
-            elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor3Y <= mouse[MOUSE_POS_Y] <= self.building.floor2Y:
+            elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor3Y <= mouse[MOUSE_POS_Y] <= self.building.floor2Y or self.onWayToItemOrEnemy:
                 self.destinationFloor = 2
-            elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floor3Y:
+            elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floor3Y or self.onWayToItemOrEnemy:
                 self.destinationFloor = 3
             if not (self.currentFloor == self.destinationFloor):
                 if self.destinationFloor < self.currentFloor:
@@ -120,14 +122,19 @@ class Player(pygame.Rect):
                         destination = self.building.floor1RightColumnX
                     elif self.building.floor1LeftColumnX - self.width <= mouse[MOUSE_POS_X] <= self.building.floor1LeftColumnX:
                         destination = self.building.floor1LeftColumnX - self.width
-                if self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.leftWallX + self.building.leftWallX + self.width // 2:
+                if self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.leftWallX + self.width // 2:
                     destination = self.building.leftWallX
                 elif self.building.rightWallX - self.width <= mouse[MOUSE_POS_X] <= self.building.rightWallX:
                     destination = self.building.rightWallX - self.width
                 if self.x < mouse[MOUSE_POS_X] or self.x > mouse[MOUSE_POS_X]:
                     self.setPath(destination)
 
+            self.onWayToItemOrEnemy = False
+
     def moveToDestination(self):
+        if self.destinationObject != 0:
+            self.goForEquipment()
+
         if self.currentFloor == self.destinationFloor:
             if self.x < self.destination:
                 if self.destination - self.x < self.speed:
@@ -229,6 +236,22 @@ class Player(pygame.Rect):
 
     def getMentality(self):
         return self.mentality
+
+    def goForEquipment(self):
+        print(type(self.destinationObject))
+        print(abs(self.x - self.destinationObject.x))
+        if self.destinationObject != 0:
+            if (type(self.destinationObject) == Equipment.Sword or type(self.destinationObject) == Equipment.Shield or type(self.destinationObject) == Equipment.Whip) and abs(self.x - self.destinationObject.x) <= 10:
+                if self.weapon != 0:
+                    self.weapon.drop(self.destinationObject.x, self.destinationObject.y)
+                self.setWeapon(self.destinationObject)
+                self.destinationObject = 0
+            if (type(self.destinationObject) == Equipment.Bomb or type(self.destinationObject) == Equipment.Garlic
+                or type(self.destinationObject) == Equipment.Flute or type(self.destinationObject) == Equipment.Rune) and abs((self.x + self.width // 2) - self.destinationObject.x) <= 10:
+                if self.consumable != 0:
+                    self.consumable.drop(self.destinationObject.x, self.destinationObject.y)
+                self.setConsumable(self.destinationObject)
+                self.destinationObject = 0
 
     def setWeapon(self, newWeapon):
         self.weapon = newWeapon
