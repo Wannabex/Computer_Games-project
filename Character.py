@@ -48,7 +48,6 @@ class Player(pygame.Rect):
         self.weapon = 0
         self.consumable = 0
         self.destinationObject = 0
-        self.onWayToItemOrEnemy = False
         self.experience = 0
         self.time = "22:00"
         if self.building.floor2Y <= self.y <= self.building.floorY:
@@ -98,22 +97,10 @@ class Player(pygame.Rect):
     def control(self):
         mouse = pygame.mouse.get_pos()
         mouseClick = pygame.mouse.get_pressed()
-        if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.rightWallX and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floorY :
-            if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor2Y <= mouse[MOUSE_POS_Y] <= self.building.floorY or self.onWayToItemOrEnemy:
-                if self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.floor1LeftColumnX - self.width:
-                    self.destinationFloor = 0
-                if self.building.floor1RightColumnX <= mouse[MOUSE_POS_X] <= self.building.rightWallX - self.width:
-                    self.destinationFloor = 1
-            elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.floor3Y <= mouse[MOUSE_POS_Y] <= self.building.floor2Y or self.onWayToItemOrEnemy:
-                self.destinationFloor = 2
-            elif mouseClick[MOUSE_BUTTON_RIGHT] and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floor3Y or self.onWayToItemOrEnemy:
-                self.destinationFloor = 3
-            if not (self.currentFloor == self.destinationFloor):
-                if self.destinationFloor < self.currentFloor:
-                    self.onWayToFloor = self.currentFloor - 1
-                elif self.destinationFloor > self.currentFloor:
-                    self.onWayToFloor = self.currentFloor + 1
 
+        if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.rightWallX and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floorY:
+            self.destinationObject = 0
+            destinationFloor = mouse[MOUSE_POS_Y]
             destination = mouse[MOUSE_POS_X] - self.width // 2
             if not (self.building.floor2Y <= mouse[MOUSE_POS_Y] <= self.building.floorY
                     and self.building.floor1LeftColumnX <= mouse[MOUSE_POS_X] <= self.building.floor1RightColumnX):
@@ -126,10 +113,7 @@ class Player(pygame.Rect):
                     destination = self.building.leftWallX
                 elif self.building.rightWallX - self.width <= mouse[MOUSE_POS_X] <= self.building.rightWallX:
                     destination = self.building.rightWallX - self.width
-                if self.x < mouse[MOUSE_POS_X] or self.x > mouse[MOUSE_POS_X]:
-                    self.setPath(destination)
-
-            self.onWayToItemOrEnemy = False
+                self.setPath(destination, destinationFloor)
 
     def moveToDestination(self):
         if self.destinationObject != 0:
@@ -214,8 +198,24 @@ class Player(pygame.Rect):
         if not (self.x == self.destination):
             self.moving = True
 
-    def setPath(self, destination):
-        self.destination = destination
+    def setPath(self, destinationX, destinationY):
+        self.destination = destinationX
+
+        if self.building.floor2Y <= destinationY <= self.building.floorY:
+            if self.building.leftWallX <= self.destination <= self.building.floor1LeftColumnX - self.width:
+                self.destinationFloor = 0
+            if self.building.floor1RightColumnX <= self.destination <= self.building.rightWallX - self.width:
+                self.destinationFloor = 1
+        elif self.building.floor3Y <= destinationY <= self.building.floor2Y:
+            self.destinationFloor = 2
+        elif self.building.ceilingY <= destinationY <= self.building.floor3Y:
+            self.destinationFloor = 3
+        if not (self.currentFloor == self.destinationFloor):
+            if self.destinationFloor < self.currentFloor:
+                self.onWayToFloor = self.currentFloor - 1
+            elif self.destinationFloor > self.currentFloor:
+                self.onWayToFloor = self.currentFloor + 1
+
         self.moving = True
 
     def getPath(self):
@@ -241,13 +241,15 @@ class Player(pygame.Rect):
         print(type(self.destinationObject))
         print(abs(self.x - self.destinationObject.x))
         if self.destinationObject != 0:
-            if (type(self.destinationObject) == Equipment.Sword or type(self.destinationObject) == Equipment.Shield or type(self.destinationObject) == Equipment.Whip) and abs(self.x - self.destinationObject.x) <= 10:
+            if (type(self.destinationObject) == Equipment.Sword or type(self.destinationObject) == Equipment.Shield or type(self.destinationObject) == Equipment.Whip) \
+                    and abs((self.x + self.width // 2 ) - (self.destinationObject.x + self.destinationObject.width // 2)) <= 20 and abs(self.y - self.destinationObject.y) < 100:
                 if self.weapon != 0:
                     self.weapon.drop(self.destinationObject.x, self.destinationObject.y)
                 self.setWeapon(self.destinationObject)
                 self.destinationObject = 0
-            if (type(self.destinationObject) == Equipment.Bomb or type(self.destinationObject) == Equipment.Garlic
-                or type(self.destinationObject) == Equipment.Flute or type(self.destinationObject) == Equipment.Rune) and abs((self.x + self.width // 2) - self.destinationObject.x) <= 10:
+            if (type(self.destinationObject) == Equipment.Bomb or type(self.destinationObject) == Equipment.Garlic or type(self.destinationObject) == Equipment.Flute or
+                type(self.destinationObject) == Equipment.Rune) and abs((self.x + self.width // 2) - (self.destinationObject.x + self.destinationObject.width // 2)) <= 20\
+                and abs(self.y - self.destinationObject.y) < 100:
                 if self.consumable != 0:
                     self.consumable.drop(self.destinationObject.x, self.destinationObject.y)
                 self.setConsumable(self.destinationObject)

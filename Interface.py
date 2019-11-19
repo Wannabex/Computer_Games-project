@@ -168,7 +168,7 @@ class ActionWheel(pygame.Rect):
             if mouseClick[MOUSE_BUTTON_LEFT]:
                 self.downClicked = True
                 self.hero.destinationObject = self.interfacedObject
-                self.onWayToItemOrEnemy = True
+                self.hero.setPath(self.interfacedObject.x, self.interfacedObject.y)
                 self.middleClicked = True
 
         elif self.upClicked and self.descriptionRect.x <= mouse[MOUSE_POS_X] <= self.descriptionRect.x + self.descriptionRect.width and self.descriptionRect.y <= mouse[MOUSE_POS_Y] <= self.descriptionRect.y + self.descriptionRect.height:
