@@ -9,7 +9,6 @@ class Trash(pygame.Rect):
         self.screen = screen
         self.building = building
         pygame.Rect.__init__(self, (0, 0, width, height))
-        self.building.spawnObject(self)
         self.name = "Trash"
         self.description = "Enemy"
         self.spriteSheet = sprite
@@ -22,6 +21,9 @@ class Trash(pygame.Rect):
         self.physicalPower = 0
         self.mentalPower = 0
         self.dead = False
+
+    def spawn(self):
+        self.building.spawnObject(self)
 
     def update(self):
         if not self.dead:

@@ -30,8 +30,8 @@ class Player(pygame.Rect):
         self.screen = screen
         self.building = building
         pygame.Rect.__init__(self, (0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT))
-        self.building.spawnObject(self)
         self.interface = Interface.Interface(screen, screenX, screenY)
+        self.spawn()
         self.playerImage = self.stay
         self.speed = 5
         self.goingLeft = False
@@ -61,6 +61,9 @@ class Player(pygame.Rect):
             self.currentFloor = 3
         self.destinationFloor = self.currentFloor
         self.onWayToFloor = self.currentFloor
+
+    def spawn(self):
+        self.building.spawnObject(self)
 
     def update(self):
         if not self.inDoor:
@@ -102,6 +105,7 @@ class Player(pygame.Rect):
         if mouseClick[MOUSE_BUTTON_RIGHT] and self.building.leftWallX <= mouse[MOUSE_POS_X] <= self.building.rightWallX and self.building.ceilingY <= mouse[MOUSE_POS_Y] <= self.building.floorY:
             self.destinationEquipment = 0
             self.destinationEnemy = 0
+            self.atDoor = False
             destinationFloor = mouse[MOUSE_POS_Y]
             destination = mouse[MOUSE_POS_X] - self.width // 2
             if not (self.building.floor2Y <= mouse[MOUSE_POS_Y] <= self.building.floorY

@@ -18,7 +18,6 @@ class Weapon(pygame.Rect):
         self.building = building
         self.screen = screen
         pygame.Rect.__init__(self, (0, 0, ICON_WIDTH, ICON_HEIGHT))
-        self.building.spawnObject(self)
         self.itemIcons = icons
         self.itemIdle = icons[1]
         self.itemHover = icons[0]
@@ -29,6 +28,8 @@ class Weapon(pygame.Rect):
         self.actionsVisible = False
         self.descriptionShowed = False
 
+    def spawn(self):
+        self.building.spawnObject(self)
 
     def update(self):
         mouse = pygame.mouse.get_pos()
@@ -113,7 +114,6 @@ class Consumable(pygame.Rect):
         self.building = building
         self.screen = screen
         pygame.Rect.__init__(self, (0, 0, ICON_WIDTH, ICON_HEIGHT))
-        self.building.spawnObject(self)
         self.itemIcons = icons
         self.itemIdle = icons[1]
         self.itemHover = icons[0]
@@ -123,6 +123,8 @@ class Consumable(pygame.Rect):
         self.clickable = True
         self.actionsVisible = False
 
+    def spawn(self):
+        self.building.spawnObject(self)
 
     def update(self):
         mouse = pygame.mouse.get_pos()
