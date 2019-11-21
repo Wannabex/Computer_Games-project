@@ -21,15 +21,19 @@ class Trash(pygame.Rect):
         self.actionsVisible = False
         self.physicalPower = 0
         self.mentalPower = 0
+        self.dead = False
 
     def update(self):
-        self.animation()
-        mouse = pygame.mouse.get_pos()
-        mouseClick = pygame.mouse.get_pressed()
-        if self.x <= mouse[Interface.MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[Interface.MOUSE_POS_Y] <= self.y + self.height:
-            if mouseClick[Interface.MOUSE_BUTTON_LEFT] and self.clickable:
-                self.actionsVisible = True
-        self.screen.blit(self.currentImage, self)
+        if not self.dead:
+            self.animation()
+            mouse = pygame.mouse.get_pos()
+            mouseClick = pygame.mouse.get_pressed()
+            if self.x <= mouse[Interface.MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[Interface.MOUSE_POS_Y] <= self.y + self.height:
+                if mouseClick[Interface.MOUSE_BUTTON_LEFT] and self.clickable:
+                    self.actionsVisible = True
+            self.screen.blit(self.currentImage, self)
+        else:
+            del self
 
     def animation(self):
         self.currentImage = self.spriteSheet[self.animationCount // self.fpsRatio]
@@ -48,6 +52,7 @@ class Trash(pygame.Rect):
             self.actionsVisible = False
         if clicked == 4:
             self.actionsVisible = False
+
 
 
 class Cultist(Trash):

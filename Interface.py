@@ -156,10 +156,11 @@ class ActionWheel(pygame.Rect):
                 self.showInterfacedObjectDescritpion()
         elif self.leftIcon and self.optionLeft.x <= mouse[MOUSE_POS_X] <= self.optionLeft.x + self.optionLeft.width and self.optionLeft.y <= mouse[MOUSE_POS_Y] <= self.optionLeft.y + self.optionLeft.height:
             self.leftIcon = self.wheelWeapon[WHEEL_HOVER]
-            self.leftClicked = True
-            self.middleClicked = True
-            self.hero.destinationEnemy = self.interfacedObject
-            self.hero.setPath(self.interfacedObject.x, self.interfacedObject.y)
+            if mouseClick[MOUSE_BUTTON_LEFT]:
+                #self.leftClicked = True
+                self.middleClicked = True
+                self.hero.destinationEnemy = self.interfacedObject
+                self.hero.setPath(self.interfacedObject.x - self.interfacedObject.width // 2, self.interfacedObject.y)
         elif self.optionMiddle.x <= mouse[MOUSE_POS_X] <= self.optionMiddle.x + self.optionMiddle.width and self.optionMiddle.y <= mouse[MOUSE_POS_Y] <= self.optionMiddle.y + self.optionMiddle.height:
             self.middleIcon = self.wheelCancel[WHEEL_HOVER]
             if mouseClick[MOUSE_BUTTON_LEFT]:
@@ -170,10 +171,10 @@ class ActionWheel(pygame.Rect):
         elif self.downIcon and self.optionDown.x <= mouse[MOUSE_POS_X] <= self.optionDown.x + self.optionDown.width and self.optionDown.y <= mouse[MOUSE_POS_Y] <= self.optionDown.y + self.optionDown.height:
             self.downIcon = self.wheelTake[WHEEL_HOVER]
             if mouseClick[MOUSE_BUTTON_LEFT]:
-                self.downClicked = True
+                #self.downClicked = True
                 self.middleClicked = True
                 self.hero.destinationEquipment = self.interfacedObject
-                self.hero.setPath(self.interfacedObject.x, self.interfacedObject.y)
+                self.hero.setPath(self.interfacedObject.x - self.interfacedObject.width // 2, self.interfacedObject.y)
 
         elif self.upClicked and self.descriptionRect.x <= mouse[MOUSE_POS_X] <= self.descriptionRect.x + self.descriptionRect.width and self.descriptionRect.y <= mouse[MOUSE_POS_Y] <= self.descriptionRect.y + self.descriptionRect.height:
             if mouseClick[MOUSE_BUTTON_LEFT]:

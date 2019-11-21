@@ -2,7 +2,6 @@ import pygame
 import random
 import Equipment
 import Interface
-import Building
 
 MOUSE_BUTTON_LEFT = 0
 MOUSE_BUTTON_MIDDLE = 1
@@ -261,7 +260,8 @@ class Player(pygame.Rect):
         if abs((self.x + self.width // 2) - (self.destinationEnemy.x + self.destinationEnemy.width // 2)) <= 20 and abs(self.y - self.destinationEnemy.y) < 100:
             self.setHealth(self.getHealth() - self.destinationEnemy.physicalPower)
             self.setMentality(self.getMentality() - self.destinationEnemy.mentalPower)
-            del self.destinationEnemy
+            pygame.mixer.Sound("./resources/sound/fight.wav").play()
+            self.destinationEnemy.dead = True
             self.destinationEnemy = 0
 
             
