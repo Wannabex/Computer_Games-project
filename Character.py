@@ -238,8 +238,6 @@ class Player(pygame.Rect):
         return self.mentality
 
     def goForEquipment(self):
-        print(type(self.destinationObject))
-        print(abs(self.x - self.destinationObject.x))
         if self.destinationObject != 0:
             if (type(self.destinationObject) == Equipment.Sword or type(self.destinationObject) == Equipment.Shield or type(self.destinationObject) == Equipment.Whip) \
                     and abs((self.x + self.width // 2 ) - (self.destinationObject.x + self.destinationObject.width // 2)) <= 20 and abs(self.y - self.destinationObject.y) < 100:
