@@ -19,7 +19,8 @@ class Trash(pygame.Rect):
         self.fpsRatio = 3
         self.clickable = True
         self.actionsVisible = False
-
+        self.physicalPower = 0
+        self.mentalPower = 0
 
     def update(self):
         self.animation()
@@ -60,7 +61,8 @@ class Cultist(Trash):
         self.name = "Cultist"
         self.description = "This is Cultist"
         self.fpsRatio = 9
-
+        self.physicalPower = 10
+        self.mentalPower = 15
 
 class Angel(Trash):
     angelSprite = [pygame.image.load("./resources/characters/angel/S1.png"), pygame.image.load("./resources/characters/angel/S2.png"),
@@ -75,6 +77,8 @@ class Angel(Trash):
         self.name = "Seraph"
         self.description = "This is Seraph"
         self.y = random.choice(self.building.floorsYs[:1]) - self.ANGEL_HEIGHT
+        self.physicalPower = 20
+        self.mentalPower = 35
 
 
 
@@ -92,5 +96,6 @@ class Skeleton(Trash):
         Trash.__init__(self, screen, building, self.SKELETON_WIDTH, self.SKELETON_HEIGHT, self.skeletonSprite)
         self.name = "Skeleton"
         self.description = "This is skeleton"
-
+        self.physicalPower = 40
+        self.mentalPower = 5
 

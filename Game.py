@@ -9,6 +9,7 @@ class Game(object):
         self.background = pygame.image.load("./resources/images/environment/background.png")
         self.background = pygame.transform.scale(self.background, screenSize)
         self.actionWheel = 0
+        self.gameOver = False
         self.exitGame = False
         self.configFile = open("./resources/config.txt", 'r')
         self.fileContent = self.configFile.readline()
@@ -18,10 +19,26 @@ class Game(object):
             self.rainEffect = False
         self.configFile.close()
         self.gameInit()
+        self.font = pygame.font.Font("./resources/other/gothic.ttf", 80)
+        self.overInformation = self.font.render("    GAME   OVER      ", True, (128, 0, 0))
+        rectWidth = 500
+        rectHeight = 100
+        self.overRect = pygame.Rect(( self.screenWidth // 4, self.screenHeight // 3, rectWidth, rectHeight))
+        self.loadingMenuCounter = 7
 
     def update(self):
-        self.onLoop()
-        self.onRender()
+        if not self.gameOver:
+            self.onLoop()
+            self.onRender()
+        else:
+            mouseClick = pygame.mouse.get_pressed()
+            if mouseClick[Interface.MOUSE_BUTTON_LEFT] or mouseClick[Interface.MOUSE_BUTTON_RIGHT]:
+                self.loadingMenuCounter -= 1
+                if self.loadingMenuCounter <= 0:
+                    self.gameOver = False
+                    self.exitGame = True
+            self.screen.fill((0, 0, 0))
+            self.screen.blit(self.overInformation, self.overRect)
 
     def onLoop(self):
         self.checkActionWheel()
@@ -33,12 +50,12 @@ class Game(object):
             self.hero.setHealth(random.randint(1, 100))
             self.hero.setWeapon(self.sword)
         if keys[pygame.K_RIGHT]:
-            self.exitGame = True
+            self.gameOver = True
             self.sounds.stopSounds()
             del self
 
-    def onRender(self):        
-        self.screen.blit(self.background, [0, 0])
+    def onRender(self):
+        self.screen .blit(self.background, [0, 0])
         self.sky.update()
         if self.rainEffect:
             for column in self.weather:
@@ -57,7 +74,10 @@ class Game(object):
         if self.actionWheel != 0:
             self.actionWheel.update()
         self.hero.update()
+        if self.hero.getHealth() < 0 or self.hero.getMentality() < 0:
+            self.gameOver = True
         self.screen.blit(self.hero.playerImage, self.hero)
+
 
 
     def gameInit(self):

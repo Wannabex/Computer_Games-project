@@ -62,10 +62,10 @@ class App:
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
-            if self.menu.playActivated:
-                self.inGame()
-            elif self.menuVisible:
+            if self.menuVisible:
                 self.inMenu()
+            elif self.menu.playActivated:
+                self.inGame()
             elif self.menu.optionsActivated:
                 self.inOptions()
             pygame.display.update()
