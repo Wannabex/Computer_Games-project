@@ -185,7 +185,12 @@ class Player(pygame.Rect):
     def newFloorReached(self):
         lastFloor = self.currentFloor
         self.currentFloor = self.onWayToFloor
-        self.onWayToFloor = self.destinationFloor
+        if self.destinationFloor > self.currentFloor:
+            self.onWayToFloor += 1
+        elif self.destinationFloor < self.currentFloor:
+            self.onWayToFloor -= 1
+        else:
+            self.onWayToFloor = self.destinationFloor
         self.inDoor = False
         if self.currentFloor == 0:
             self.x = self.building.stoneDoor1X

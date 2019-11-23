@@ -111,15 +111,15 @@ class Game(object):
         self.cultist2 = Trash.Cultist(self.screen, self.building)
         self.enemiesToSpawn.append(self.cultist2)
 
-        # self.angel = Trash.Angel(self.screen, self.building)
-        # self.enemiesToSpawn.append(self.angel)
-
+        self.angel = Trash.Angel(self.screen, self.building)
+        #self.enemies.append(self.angel)
+        #self.angel.spawn()
+        self.enemiesToSpawn.append(self.angel)
 
         self.skeleton = Trash.Skeleton(self.screen, self.building)
         self.enemiesToSpawn.append(self.skeleton)
         self.skeleton2 = Trash.Skeleton(self.screen, self.building)
         self.enemiesToSpawn.append(self.skeleton2)
-
 
         self.bomb = Equipment.Bomb(self.screen, self.building)
         self.equipmentToSpawn.append(self.bomb)
@@ -148,23 +148,23 @@ class Game(object):
         self.enemySpawnCounter += 1
         if self.enemiesPresent < 4 and self.enemySpawnCounter >= self.enemySpawnTime:
             enemySpawning = random.choice(self.enemiesToSpawn)
+            self.enemies.append(enemySpawning)
             enemySpawning.spawn()
             self.enemiesToSpawn.remove(enemySpawning)
-            self.enemies.append(enemySpawning)
             self.enemySpawnTime = random.randint(4, 15)
             self.enemySpawnCounter = 0
             self.enemiesPresent += 1
                         
     def randomEquipmentSpawn(self):
         self.equipmentSpawnCounter += 1
-        if self.equipmentPresent <= 9 and self.equipmentSpawnCounter >= self.equipmentSpawnTime:
+        if self.equipmentPresent < 9 and self.equipmentSpawnCounter >= self.equipmentSpawnTime:
             equipmentSpawning = random.choice(self.equipmentToSpawn)
             if self.equipmentPresent >= 2 and (not self.weaponAlreadySpawned()):
                 while not (type(equipmentSpawning) == Equipment.Sword or type(equipmentSpawning) == Equipment.Shield or type(equipmentSpawning) == Equipment.Whip):
                     equipmentSpawning = random.choice(self.equipmentToSpawn)
             equipmentSpawning.spawn()
-            self.equipmentToSpawn.remove(equipmentSpawning)
             self.equipment.append(equipmentSpawning)
+            self.equipmentToSpawn.remove(equipmentSpawning)
             self.equipmentSpawnTime = random.randint(2, 10)
             self.equipmentSpawnCounter = 0
             self.equipmentPresent += 1            
