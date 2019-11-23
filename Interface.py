@@ -1,4 +1,5 @@
 import pygame
+import Equipment
 
 MOUSE_POS_X = 0
 MOUSE_POS_Y = 1
@@ -168,6 +169,12 @@ class ActionWheel(pygame.Rect):
                 self.upClicked = False
         elif self.rightIcon and self.optionRight.x <= mouse[MOUSE_POS_X] <= self.optionRight.x + self.optionRight.width and self.optionRight.y <= mouse[MOUSE_POS_Y] <= self.optionRight.y + self.optionRight.height:
             self.rightIcon = self.wheelConsumable[WHEEL_HOVER]
+            if mouseClick[MOUSE_BUTTON_LEFT] and type(self.hero.consumable) == Equipment.Rune:
+                self.middleClicked = True
+                self.hero.x = self.interfacedObject.x - self.interfacedObject.width // 2
+                self.hero.y = self.interfacedObject.y + self.interfacedObject.height - self.hero.height
+                #self.hero.setPath(self.interfacedObject.x - self.interfacedObject.width // 2, self.interfacedObject.y)
+                #self.rightClicked = True
         elif self.downIcon and self.optionDown.x <= mouse[MOUSE_POS_X] <= self.optionDown.x + self.optionDown.width and self.optionDown.y <= mouse[MOUSE_POS_Y] <= self.optionDown.y + self.optionDown.height:
             self.downIcon = self.wheelTake[WHEEL_HOVER]
             if mouseClick[MOUSE_BUTTON_LEFT]:

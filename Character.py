@@ -36,18 +36,25 @@ class Player(pygame.Rect):
         self.speed = 5
         self.goingLeft = False
         self.goingRight = False
+        self.regenTimer = 40
+        self.regenCounter = 0
+        self.regenCooldownCounter = 0
+        self.regenCooldown = 10
+        self.healthRegen = 2
+        self.mentalityRegen = 1
         self.moving = False
         self.atDoor = False
         self.inDoor = False
         self.doorMoveCount = 0
         self.doorMoveTime = 20
         self.walkCount = 0
-        self.setHealth(random.randint(30, 70))
-        self.setMentality(30 + 70 - self.health)
+        self.setHealth(random.randint(80, 100))
+        self.setMentality(100 + 80 - self.health)
         self.weapon = 0
         self.consumable = 0
         self.destinationEquipment = 0
         self.destinationEnemy = 0
+        self.enemyKilled = False
         self.experience = 0
         self.time = "22:00"
         if self.building.floor2Y <= self.y <= self.building.floorY:
@@ -68,6 +75,7 @@ class Player(pygame.Rect):
     def update(self):
         if not self.inDoor:
             self.control()
+            self.regeneration()
             self.animation()
             if self.moving:
                 self.moveToDestination()
@@ -81,13 +89,16 @@ class Player(pygame.Rect):
 
     def animation(self):
         if self.goingLeft:
+            self.regenCounter = 0
             self.playerImage = self.walkLeft[self.walkCount//3]
             self.walkCount += 1
         elif self.goingRight:
+            self.regenCounter = 0
             self.playerImage = self.walkRight[self.walkCount // 3]
             self.walkCount += 1
             self.dead = True
         elif self.atDoor:
+            self.regenCounter = 0
             self.playerImage = self.walkFloor[self.walkCount // 9]
             self.walkCount += 1
             if self.walkCount == 27:
@@ -96,6 +107,7 @@ class Player(pygame.Rect):
                 self.inDoor = True
         else:
             self.playerImage = self.stay
+            self.regenCounter += 1
         self.walkCount %= 27
 
     def control(self):
@@ -120,6 +132,11 @@ class Player(pygame.Rect):
                 elif self.building.rightWallX - self.width <= mouse[MOUSE_POS_X] <= self.building.rightWallX:
                     destination = self.building.rightWallX - self.width
                 self.setPath(destination, destinationFloor)
+
+    def statusUpdate(self):
+        if self.enemyKilled:
+            self.enemyKilled = False
+            return 1
 
     def moveToDestination(self):
         if self.destinationEquipment != 0:
@@ -235,6 +252,8 @@ class Player(pygame.Rect):
         return self.destination
 
     def setHealth(self, newHealth):
+        if newHealth > 100:
+            newHealth = 100
         self.health = newHealth
         self.interface.health.setInformation(str(newHealth) + "/100")
         self.interface.healthBar.setValue(int(newHealth))
@@ -243,6 +262,8 @@ class Player(pygame.Rect):
         return self.health
 
     def setMentality(self, newMentality):
+        if newMentality > 100:
+            newMentality = 100
         self.mentality = newMentality
         self.interface.mentality.setInformation(str(newMentality) + "/100")
         self.interface.mentalityBar.setValue(int(newMentality))
@@ -272,8 +293,27 @@ class Player(pygame.Rect):
             self.setExperience(self.getExperience() + self.destinationEnemy.experienceReward)
             pygame.mixer.Sound("./resources/sound/fight.wav").play()
             self.destinationEnemy.dead = True
+            self.enemyKilled = True
             self.destinationEnemy = 0
-            
+
+    def destroyWeapon(self):
+        self.weapon.destroyed = True
+        self.weapon = 0
+        self.interface.equipment1.setInformation("Nothing")
+
+    def destroyConsumable(self):
+        self.consumable.destroyed = True
+        self.consumable = 0
+        self.interface.equipment2.setInformation("Nothing")
+
+    def regeneration(self):
+        if self.regenCounter > self.regenTimer:
+            self.regenCooldownCounter += 1
+            if self.regenCooldownCounter == self.regenCooldown:
+                self.setHealth(self.getHealth() + self.healthRegen)
+                self.setMentality(self.getMentality() + self.mentalityRegen)
+                self.regenCooldownCounter = 0
+
     def setWeapon(self, newWeapon):
         self.weapon = newWeapon
         newWeapon.pickUp(self.interface.equipment1.x - Equipment.ICON_WIDTH - 3, self.interface.equipment1.y - 5)
@@ -292,6 +332,7 @@ class Player(pygame.Rect):
             self.interface.equipment2.setInformation("Nothing")
         else:
             self.interface.equipment2.setInformation(self.consumable.getName())
+
     def getConsumable(self):
         return self.consumable
 

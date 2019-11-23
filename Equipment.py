@@ -27,19 +27,23 @@ class Weapon(pygame.Rect):
         self.clickable = True
         self.actionsVisible = False
         self.descriptionShowed = False
+        self.destroyed = False
 
     def spawn(self):
         self.building.spawnObject(self)
 
     def update(self):
-        mouse = pygame.mouse.get_pos()
-        mouseClick = pygame.mouse.get_pressed()
-        if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
-            self.screen.blit(self.itemHover, self)
-            if mouseClick[MOUSE_BUTTON_LEFT] and self.clickable:
-                self.actionsVisible = True
+        if not self.destroyed:
+            mouse = pygame.mouse.get_pos()
+            mouseClick = pygame.mouse.get_pressed()
+            if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
+                self.screen.blit(self.itemHover, self)
+                if mouseClick[MOUSE_BUTTON_LEFT] and self.clickable:
+                    self.actionsVisible = True
+            else:
+                self.screen.blit(self.itemIdle, self)
         else:
-            self.screen.blit(self.itemIdle, self)
+            del self
 
     def pickUp(self, weaponX, weaponY):
         self.x = weaponX
@@ -122,19 +126,23 @@ class Consumable(pygame.Rect):
         self.picked = False
         self.clickable = True
         self.actionsVisible = False
+        self.destroyed = False
 
     def spawn(self):
         self.building.spawnObject(self)
 
     def update(self):
-        mouse = pygame.mouse.get_pos()
-        mouseClick = pygame.mouse.get_pressed()
-        if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
-            self.screen.blit(self.itemHover, self)
-            if mouseClick[MOUSE_BUTTON_LEFT] and self.clickable:
-                self.actionsVisible = True
+        if not self.destroyed:
+            mouse = pygame.mouse.get_pos()
+            mouseClick = pygame.mouse.get_pressed()
+            if self.x <= mouse[MOUSE_POS_X] <= self.x + self.width and self.y <= mouse[MOUSE_POS_Y] <= self.y + self.height and not self.picked:
+                self.screen.blit(self.itemHover, self)
+                if mouseClick[MOUSE_BUTTON_LEFT] and self.clickable:
+                    self.actionsVisible = True
+            else:
+                self.screen.blit(self.itemIdle, self)
         else:
-            self.screen.blit(self.itemIdle, self)
+            del self
 
     def pickUp(self, consumableX, consumableY):
         self.x = consumableX

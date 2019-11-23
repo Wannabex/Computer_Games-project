@@ -50,10 +50,6 @@ class Building(pygame.Rect):
         self.objectsPositions = {self.floor1Y: {},
                                  self.floor2Y: {},
                                  self.floor3Y: {}}
-        print(len(self.objectsPositions))
-        print(len(self.objectsPositions[self.floor1Y]))
-        print(len(self.objectsPositions[self.floor2Y]))
-        print(len(self.objectsPositions[self.floor3Y]))
         self.currentlySpawned = []
 
     def update(self):

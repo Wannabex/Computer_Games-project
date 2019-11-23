@@ -56,6 +56,7 @@ class Game(object):
         self.checkActionWheel()
         self.randomEnemySpawn()
         self.randomEquipmentSpawn()
+        self.checkChanges()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             self.exitGame = True
@@ -83,10 +84,20 @@ class Game(object):
         if self.actionWheel != 0:
             self.actionWheel.update()
         self.hero.update()
-        if self.hero.getHealth() < 0 or self.hero.getMentality() < 0:
+        if self.hero.getHealth() <= 0 or self.hero.getMentality() <= 0:
             self.gameOver = True
         self.screen.blit(self.hero.playerImage, self.hero)
 
+    def checkChanges(self):
+        statusChange = self.hero.statusUpdate()
+        if statusChange == 1:
+            self.enemiesPresent -= 1
+            cultist = Trash.Cultist(self.screen, self.building)
+            self.enemiesToSpawn.append(cultist)
+            skeleton = Trash.Cultist(self.screen, self.building)
+            self.enemiesToSpawn.append(skeleton)
+        elif statusChange == 2:
+            pass
 
     def gameInit(self):
         self.sounds = Sound.Sound()
@@ -151,7 +162,7 @@ class Game(object):
             self.enemies.append(enemySpawning)
             enemySpawning.spawn()
             self.enemiesToSpawn.remove(enemySpawning)
-            self.enemySpawnTime = random.randint(4, 15)
+            self.enemySpawnTime = random.randint(80, 250)
             self.enemySpawnCounter = 0
             self.enemiesPresent += 1
                         
@@ -165,7 +176,7 @@ class Game(object):
             equipmentSpawning.spawn()
             self.equipment.append(equipmentSpawning)
             self.equipmentToSpawn.remove(equipmentSpawning)
-            self.equipmentSpawnTime = random.randint(2, 10)
+            self.equipmentSpawnTime = random.randint(80, 160)
             self.equipmentSpawnCounter = 0
             self.equipmentPresent += 1            
 
