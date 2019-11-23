@@ -110,14 +110,16 @@ class Game(object):
         self.enemiesToSpawn.append(self.cultist)
         self.cultist2 = Trash.Cultist(self.screen, self.building)
         self.enemiesToSpawn.append(self.cultist2)
-        self.angel = Trash.Angel(self.screen, self.building)
-        self.enemiesToSpawn.append(self.angel)
-        self.angel2 = Trash.Angel(self.screen, self.building)
-        self.enemiesToSpawn.append(self.angel2)
+
+        # self.angel = Trash.Angel(self.screen, self.building)
+        # self.enemiesToSpawn.append(self.angel)
+
+
         self.skeleton = Trash.Skeleton(self.screen, self.building)
         self.enemiesToSpawn.append(self.skeleton)
         self.skeleton2 = Trash.Skeleton(self.screen, self.building)
         self.enemiesToSpawn.append(self.skeleton2)
+
 
         self.bomb = Equipment.Bomb(self.screen, self.building)
         self.equipmentToSpawn.append(self.bomb)

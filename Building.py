@@ -81,8 +81,8 @@ class Building(pygame.Rect):
             xOccupied = []
             xWidthOccupied = []
             for spawned in self.currentlySpawned:
-                xOccupied.append(spawned.x - object.width - 5)
-                xWidthOccupied.append(spawned.x + spawned.width + object.width + 5)
+                xOccupied.append(spawned.x - object.width)
+                xWidthOccupied.append(spawned.x + spawned.width + object.width)
 
             # self.doorsPositions = {
             #     self.floor1Y: {self.stoneDoor1X: self.stoneDoorWidth, self.stoneDoor2X: self.stoneDoorWidth,
@@ -91,31 +91,35 @@ class Building(pygame.Rect):
             #     self.floor3Y: {self.oldDoor2X: self.oldDoorWidth}}
             xConditionChecked = []
             doorsChecked = []
+            spawnConditions = []
             for currentlyChecked in range(len(xOccupied)):
                 xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
-
             if object.y == self.floor1Y - object.height:
                 for doorOnFloor in self.doorsPositions[self.floor1Y]:
-                    doorsChecked.append((self.doorsPositions[self.floor1Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
+                    doorsChecked.append((doorOnFloor + self.doorsPositions[self.floor1Y][doorOnFloor] + object.width <= object.x) or (object.x <= doorOnFloor - object.width))
             elif object.y == self.floor2Y - object.height:
                 for doorOnFloor in self.doorsPositions[self.floor2Y]:
-                    doorsChecked.append((self.doorsPositions[self.floor2Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
+                    doorsChecked.append((doorOnFloor + self.doorsPositions[self.floor2Y][doorOnFloor] + object.width <= object.x) or (object.x <= doorOnFloor - object.width))
             elif object.y == self.floor3Y - object.height:
                 for doorOnFloor in self.doorsPositions[self.floor3Y]:
-                    doorsChecked.append((self.doorsPositions[self.floor3Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
-
-            while not all(xConditionChecked) and not all(doorsChecked):
+                    doorsChecked.append((doorOnFloor + self.doorsPositions[self.floor3Y][doorOnFloor] + object.width <= object.x) or (object.x <= doorOnFloor - object.width))
+            xConditionChecked.extend(doorsChecked)
+            spawnConditions.extend(xConditionChecked)
+            while not all(spawnConditions):
                 self.objectPositionSelect(object)
                 xConditionChecked = []
                 doorsChecked = []
+                spawnConditions = []     
                 for currentlyChecked in range(len(xOccupied)):
                     xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
                 if object.y == self.floor1Y - object.height:
                     for doorOnFloor in self.doorsPositions[self.floor1Y]:
-                        doorsChecked.append((self.doorsPositions[self.floor1Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
+                        doorsChecked.append((doorOnFloor + self.doorsPositions[self.floor1Y][doorOnFloor] + object.width <= object.x) or (object.x <= doorOnFloor - object.width))
                 elif object.y == self.floor2Y - object.height:
                     for doorOnFloor in self.doorsPositions[self.floor2Y]:
-                        doorsChecked.append((self.doorsPositions[self.floor2Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
+                        doorsChecked.append((doorOnFloor + self.doorsPositions[self.floor2Y][doorOnFloor] + object.width <= object.x) or (object.x <= doorOnFloor - object.width))
                 elif object.y == self.floor3Y - object.height:
                     for doorOnFloor in self.doorsPositions[self.floor3Y]:
-                        doorsChecked.append((self.doorsPositions[self.floor3Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))         
+                        doorsChecked.append((doorOnFloor + self.doorsPositions[self.floor3Y][doorOnFloor] + object.width <= object.x) or (object.x <= doorOnFloor - object.width))
+                xConditionChecked.extend(doorsChecked)
+                spawnConditions.extend(xConditionChecked)
