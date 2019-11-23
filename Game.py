@@ -42,6 +42,7 @@ class Game(object):
             self.onLoop()
             self.onRender()
         else:
+            self.sounds.stopSounds()
             mouseClick = pygame.mouse.get_pressed()
             if mouseClick[Interface.MOUSE_BUTTON_LEFT] or mouseClick[Interface.MOUSE_BUTTON_RIGHT]:
                 self.loadingMenuCounter -= 1
@@ -56,14 +57,16 @@ class Game(object):
         self.randomEnemySpawn()
         self.randomEquipmentSpawn()
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_ESCAPE]:
+            self.exitGame = True
+            self.sounds.stopSounds()
+            del self
+        elif keys[pygame.K_UP]:
             pass
         if keys[pygame.K_DOWN]:
             pass
         if keys[pygame.K_RIGHT]:
             self.gameOver = True
-            self.sounds.stopSounds()
-            del self
 
     def onRender(self):
         self.screen .blit(self.background, [0, 0])
@@ -141,12 +144,12 @@ class Game(object):
 
     def randomEnemySpawn(self):
         self.enemySpawnCounter += 1
-        if self.enemiesPresent <= 5 and self.enemySpawnCounter >= self.enemySpawnTime:
+        if self.enemiesPresent < 4 and self.enemySpawnCounter >= self.enemySpawnTime:
             enemySpawning = random.choice(self.enemiesToSpawn)
             enemySpawning.spawn()
             self.enemiesToSpawn.remove(enemySpawning)
             self.enemies.append(enemySpawning)
-            self.enemySpawnTime = random.randint(40, 150)
+            self.enemySpawnTime = random.randint(4, 15)
             self.enemySpawnCounter = 0
             self.enemiesPresent += 1
                         
@@ -156,13 +159,11 @@ class Game(object):
             equipmentSpawning = random.choice(self.equipmentToSpawn)
             if self.equipmentPresent >= 2 and (not self.weaponAlreadySpawned()):
                 while not (type(equipmentSpawning) == Equipment.Sword or type(equipmentSpawning) == Equipment.Shield or type(equipmentSpawning) == Equipment.Whip):
-                    print("pewne wepony")
                     equipmentSpawning = random.choice(self.equipmentToSpawn)
-                    print(type(equipmentSpawning))
             equipmentSpawning.spawn()
             self.equipmentToSpawn.remove(equipmentSpawning)
             self.equipment.append(equipmentSpawning)
-            self.equipmentSpawnTime = random.randint(20, 100)
+            self.equipmentSpawnTime = random.randint(2, 10)
             self.equipmentSpawnCounter = 0
             self.equipmentPresent += 1            
 

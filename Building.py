@@ -11,23 +11,43 @@ class Building(pygame.Rect):
         print(self.rightWallX - self.x)
         print(self.floorY - self.y)
         self.manor = pygame.image.load("./resources/images/gameboard/manor3.png")
-        self.floor3Y = self.ceilingY + 208
-        self.floor2Y = self.ceilingY + 461
-        self.floor1Y = self.ceilingY + 637
+        # manor2.png settings - fullHD resolution
+        # self.floor3Y = self.ceilingY + 208
+        # self.floor2Y = self.ceilingY + 461
+        # self.floor1Y = self.ceilingY + 637
+        # self.floorsYs = [self.floor3Y, self.floor2Y, self.floor1Y, self.floor1Y]
+        # self.floor1LeftColumnX = self.leftWallX + 663
+        # self.floor1RightColumnX = self.leftWallX + 1014
+        # self.stoneDoor1X = self.leftWallX + 225 #Floor1
+        # self.stoneDoor2X = self.leftWallX + 1050 #Floor1
+        # self.stoneDoorWidth = 65
+        # self.woodenDoor1X = self.leftWallX + 1166 #Floor1
+        # self.woodenDoor2X = self.leftWallX + 222 #Floor2
+        # self.woodenDoorWidth = 41
+        # self.oldDoor1X = self.leftWallX + 623 #Floor2
+        # self.oldDoor2X = self.leftWallX + 972 #Floor3
+        # self.oldDoorWidth = 36
+
+        # manor3.png settings = HD resolution
+        self.floor3Y = self.ceilingY + 192
+        self.floor2Y = self.ceilingY + 420
+        self.floor1Y = self.ceilingY + 579
         self.floorsYs = [self.floor3Y, self.floor2Y, self.floor1Y, self.floor1Y]
-        self.floor1LeftColumnX = self.leftWallX + 663
-        self.floor1RightColumnX = self.leftWallX + 1014
-        self.stoneDoor1X = self.leftWallX + 225 #Floor1
-        self.stoneDoor2X = self.leftWallX + 1050 #Floor1
+        self.floor1LeftColumnX = self.leftWallX + 582
+        self.floor1RightColumnX = self.leftWallX + 892
+        self.stoneDoor1X = self.leftWallX + 187  #Floor1
+        self.stoneDoor2X = self.leftWallX + 910 #Floor1
         self.stoneDoorWidth = 65
-        self.woodenDoor1X = self.leftWallX + 1166 #Floor1
-        self.woodenDoor2X = self.leftWallX + 222 #Floor2
-        self.woodenDoorWidth = 41
-        self.oldDoor1X = self.leftWallX + 623 #Floor2
-        self.oldDoor2X = self.leftWallX + 972 #Floor3
-        self.oldDoorWidth = 36
-        self.doorsX = [self.stoneDoor1X, self.stoneDoor2X, self.woodenDoor1X, self.woodenDoor2X, self.oldDoor1X, self.oldDoor2X]
-        self.doorsWidth = [self.stoneDoorWidth,self.stoneDoorWidth, self.woodenDoorWidth, self.woodenDoorWidth, self.oldDoorWidth, self.oldDoorWidth]
+        self.woodenDoor1X = self.leftWallX + 1024 #Floor1
+        self.woodenDoor2X = self.leftWallX + 193 #Floor2
+        self.woodenDoorWidth = 36
+        self.oldDoor1X = self.leftWallX + 547 #Floor2
+        self.oldDoor2X = self.leftWallX + 854 #Floor3
+        self.oldDoorWidth = 33
+        self.doorsPositions = {self.floor1Y: {self.stoneDoor1X: self.stoneDoorWidth, self.stoneDoor2X: self.stoneDoorWidth, self.woodenDoor1X: self.woodenDoorWidth},
+                              self.floor2Y: {self.woodenDoor2X: self.woodenDoorWidth, self.oldDoor1X: self.oldDoorWidth},
+                              self.floor3Y: {self.oldDoor2X: self.oldDoorWidth}}
+
         self.currentlySpawned = []
 
     def update(self):
@@ -63,45 +83,39 @@ class Building(pygame.Rect):
             for spawned in self.currentlySpawned:
                 xOccupied.append(spawned.x - object.width - 5)
                 xWidthOccupied.append(spawned.x + spawned.width + object.width + 5)
+
+            # self.doorsPositions = {
+            #     self.floor1Y: {self.stoneDoor1X: self.stoneDoorWidth, self.stoneDoor2X: self.stoneDoorWidth,
+            #                    self.woodenDoor1X: self.woodenDoorWidth},
+            #     self.floor2Y: {self.woodenDoor2X: self.woodenDoorWidth, self.oldDoor1X: self.oldDoorWidth},
+            #     self.floor3Y: {self.oldDoor2X: self.oldDoorWidth}}
             xConditionChecked = []
+            doorsChecked = []
             for currentlyChecked in range(len(xOccupied)):
                 xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
-            while not all(xConditionChecked):
+
+            if object.y == self.floor1Y - object.height:
+                for doorOnFloor in self.doorsPositions[self.floor1Y]:
+                    doorsChecked.append((self.doorsPositions[self.floor1Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
+            elif object.y == self.floor2Y - object.height:
+                for doorOnFloor in self.doorsPositions[self.floor2Y]:
+                    doorsChecked.append((self.doorsPositions[self.floor2Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
+            elif object.y == self.floor3Y - object.height:
+                for doorOnFloor in self.doorsPositions[self.floor3Y]:
+                    doorsChecked.append((self.doorsPositions[self.floor3Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
+
+            while not all(xConditionChecked) and not all(doorsChecked):
                 self.objectPositionSelect(object)
                 xConditionChecked = []
+                doorsChecked = []
                 for currentlyChecked in range(len(xOccupied)):
                     xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
-
-
-
-    # def checkFreePositions(self, object, items, enemies):
-    #     currentlySpawned = []
-    #     for item in items:
-    #         currentlySpawned.append(item)
-    #     for enemy in enemies:
-    #         currentlySpawned.append(enemy)
-    #     xOccupied = []
-    #     xWidthOccupied = []
-    #     yOccupied = []
-    #     yHeightOccupied = []
-    #     for spawned in currentlySpawned:
-    #         xOccupied.append(spawned.x - object.width - 10)
-    #         xWidthOccupied.append(spawned.x + spawned.width + object.width + 10)
-    #         yOccupied.append(spawned.y - object.height - 10)
-    #         yHeightOccupied.append(spawned.y + spawned.height + object.height + 10)
-    #
-    #     xConditionChecked = []
-    #     yConditionChecked = []
-    #     for currentlyChecked in range(len(xOccupied)):
-    #         xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
-    #     for currentlyChecked in range(len(yOccupied)):
-    #         yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked])
-    #     while not all(xConditionChecked) and not all(yConditionChecked):
-    #         object.x = random.randint(self.building.leftWallX, self.building.rightWallX - object.width)
-    #         object.y = random.randint(self.building.ceilingY, self.building.floorY - object.height - 3)
-    #         xConditionChecked = []
-    #         yConditionChecked = []
-    #         for currentlyChecked in range(len(xOccupied)):
-    #             xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])
-    #         for currentlyChecked in range(len(yOccupied)):
-    #             yConditionChecked.append(yHeightOccupied[currentlyChecked] <= object.y or object.y <= yOccupied[currentlyChecked]),
+                if object.y == self.floor1Y - object.height:
+                    for doorOnFloor in self.doorsPositions[self.floor1Y]:
+                        doorsChecked.append((self.doorsPositions[self.floor1Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
+                elif object.y == self.floor2Y - object.height:
+                    for doorOnFloor in self.doorsPositions[self.floor2Y]:
+                        doorsChecked.append((self.doorsPositions[self.floor2Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))
+                elif object.y == self.floor3Y - object.height:
+                    for doorOnFloor in self.doorsPositions[self.floor3Y]:
+                        doorsChecked.append((self.doorsPositions[self.floor3Y][doorOnFloor] + object.width + 5 <= object.x) or (object.x <= doorOnFloor - object.width - 5))         

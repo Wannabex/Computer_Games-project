@@ -20,6 +20,7 @@ class Trash(pygame.Rect):
         self.actionsVisible = False
         self.physicalPower = 0
         self.mentalPower = 0
+        self.experienceReward = 0
         self.dead = False
 
     def spawn(self):
@@ -70,6 +71,7 @@ class Cultist(Trash):
         self.fpsRatio = 9
         self.physicalPower = 10
         self.mentalPower = 15
+        self.experienceReward = 100
 
 class Angel(Trash):
     angelSprite = [pygame.image.load("./resources/characters/angel/S1.png"), pygame.image.load("./resources/characters/angel/S2.png"),
@@ -85,7 +87,8 @@ class Angel(Trash):
         self.description = "This is Seraph"
         self.y = random.choice(self.building.floorsYs[:1]) - self.ANGEL_HEIGHT
         self.physicalPower = 20
-        self.mentalPower = 35
+        self.mentalPower = 25
+        self.experienceReward = 400
 
 
 
@@ -103,6 +106,9 @@ class Skeleton(Trash):
         Trash.__init__(self, screen, building, self.SKELETON_WIDTH, self.SKELETON_HEIGHT, self.skeletonSprite)
         self.name = "Skeleton"
         self.description = "This is skeleton"
-        self.physicalPower = 40
+        self.physicalPower = 30
         self.mentalPower = 5
+        self.experienceReward = 350
+
+
 

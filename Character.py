@@ -264,10 +264,10 @@ class Player(pygame.Rect):
         if abs((self.x + self.width // 2) - (self.destinationEnemy.x + self.destinationEnemy.width // 2)) <= 20 and abs(self.y - self.destinationEnemy.y) < 100:
             self.setHealth(self.getHealth() - self.destinationEnemy.physicalPower)
             self.setMentality(self.getMentality() - self.destinationEnemy.mentalPower)
+            self.setExperience(self.getExperience() + self.destinationEnemy.experienceReward)
             pygame.mixer.Sound("./resources/sound/fight.wav").play()
             self.destinationEnemy.dead = True
             self.destinationEnemy = 0
-
             
     def setWeapon(self, newWeapon):
         self.weapon = newWeapon
