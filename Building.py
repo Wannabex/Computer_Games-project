@@ -10,7 +10,7 @@ class Building(pygame.Rect):
         self.screen = screen
         print(self.rightWallX - self.x)
         print(self.floorY - self.y)
-        self.manor = pygame.image.load("./resources/images/gameboard/manor2.png")
+        self.manor = pygame.image.load("./resources/images/gameboard/manor3.png")
         self.floor3Y = self.ceilingY + 208
         self.floor2Y = self.ceilingY + 461
         self.floor1Y = self.ceilingY + 637
@@ -61,8 +61,8 @@ class Building(pygame.Rect):
             xOccupied = []
             xWidthOccupied = []
             for spawned in self.currentlySpawned:
-                xOccupied.append(spawned.x - object.width - 10)
-                xWidthOccupied.append(spawned.x + spawned.width + object.width + 10)
+                xOccupied.append(spawned.x - object.width - 5)
+                xWidthOccupied.append(spawned.x + spawned.width + object.width + 5)
             xConditionChecked = []
             for currentlyChecked in range(len(xOccupied)):
                 xConditionChecked.append(xWidthOccupied[currentlyChecked] <= object.x or object.x <= xOccupied[currentlyChecked])

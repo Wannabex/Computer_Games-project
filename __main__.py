@@ -10,8 +10,8 @@ class App:
         self._running = True
         self._display_surf = None
         self.screenInfo = pygame.display.Info()
-        self.screenSize = self.screenWidth, self.screenHeight = self.screenInfo.current_w - 400, self.screenInfo.current_h - 250
-        self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF)  # | pygame.FULLSCREEN)
+        self.screenSize = self.screenWidth, self.screenHeight = self.screenInfo.current_w , self.screenInfo.current_h
+        self._display_surf = pygame.display.set_mode(self.screenSize, pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.FULLSCREEN)
         pygame.display.set_caption("Trashing and Rushing")
         self.clock = pygame.time.Clock()
         self.clock.tick(216)

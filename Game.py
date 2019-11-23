@@ -152,11 +152,13 @@ class Game(object):
                         
     def randomEquipmentSpawn(self):
         self.equipmentSpawnCounter += 1
-        if self.equipmentPresent <= 10 and self.equipmentSpawnCounter >= self.equipmentSpawnTime:
+        if self.equipmentPresent <= 9 and self.equipmentSpawnCounter >= self.equipmentSpawnTime:
             equipmentSpawning = random.choice(self.equipmentToSpawn)
-            if self.equipmentPresent >= 3 and not self.weaponAlreadySpawned():
-                while type(equipmentSpawning) != Equipment.Sword or type(equipmentSpawning) != Equipment.Shield or type(equipmentSpawning) != Equipment.Whip:
+            if self.equipmentPresent >= 2 and (not self.weaponAlreadySpawned()):
+                while not (type(equipmentSpawning) == Equipment.Sword or type(equipmentSpawning) == Equipment.Shield or type(equipmentSpawning) == Equipment.Whip):
+                    print("pewne wepony")
                     equipmentSpawning = random.choice(self.equipmentToSpawn)
+                    print(type(equipmentSpawning))
             equipmentSpawning.spawn()
             self.equipmentToSpawn.remove(equipmentSpawning)
             self.equipment.append(equipmentSpawning)
@@ -165,8 +167,8 @@ class Game(object):
             self.equipmentPresent += 1            
 
     def weaponAlreadySpawned(self):
-        for equipment in range(self.equipmentPresent):
-            if type(equipment) == Equipment.Sword or type(equipment) == Equipment.Shield or type(equipment) == Equipment.Whip:
+        for item in self.equipment:
+            if type(item) == Equipment.Sword or type(item) == Equipment.Shield or type(item) == Equipment.Whip:
                 return True
         return False
 
