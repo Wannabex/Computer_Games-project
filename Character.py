@@ -48,8 +48,8 @@ class Player(pygame.Rect):
         self.doorMoveCount = 0
         self.doorMoveTime = 20
         self.walkCount = 0
-        self.setHealth(random.randint(80, 100))
-        self.setMentality(100 + 80 - self.health)
+        self.setHealth(random.randint(30, 70))
+        self.setMentality(30 + 70 - self.health)
         self.weapon = 0
         self.consumable = 0
         self.destinationEquipment = 0
