@@ -53,6 +53,7 @@ class Player(pygame.Rect):
         self.weapon = 0
         self.consumable = 0
         self.destinationEquipment = 0
+        self.equipmentDestroyed = False
         self.destinationEnemy = 0
         self.enemyKilled = False
         self.experience = 0
@@ -137,6 +138,9 @@ class Player(pygame.Rect):
         if self.enemyKilled:
             self.enemyKilled = False
             return 1
+        elif self.equipmentDestroyed:
+            self.equipmentDestroyed = False
+            return 2
 
     def moveToDestination(self):
         if self.destinationEquipment != 0:
@@ -247,6 +251,12 @@ class Player(pygame.Rect):
                 self.onWayToFloor = self.currentFloor + 1
 
         self.moving = True
+
+    def teleport(self, x, y):
+        self.x = x
+        self.y = y
+        self.setPath(self.x, self.y)
+        self.currentFloor = self.destinationFloor
 
     def getPath(self):
         return self.destination

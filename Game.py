@@ -96,8 +96,10 @@ class Game(object):
             self.enemiesToSpawn.append(cultist)
             skeleton = Trash.Cultist(self.screen, self.building)
             self.enemiesToSpawn.append(skeleton)
+            self.enemySpawnCounter = 0
         elif statusChange == 2:
-            pass
+            self.equipmentPresent -= 1
+            self.equipmentSpawnCounter = 0
 
     def gameInit(self):
         self.sounds = Sound.Sound()
@@ -148,6 +150,8 @@ class Game(object):
         self.equipmentToSpawn.append(self.rune)
         self.rune2 = Equipment.Rune(self.screen, self.building)
         self.equipmentToSpawn.append(self.rune2)
+        self.rune3 = Equipment.Rune(self.screen, self.building)
+        self.equipmentToSpawn.append(self.rune3)
         self.sword = Equipment.Sword(self.screen, self.building)
         self.equipmentToSpawn.append(self.sword)
         self.whip = Equipment.Whip(self.screen, self.building)
