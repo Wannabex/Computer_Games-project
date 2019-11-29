@@ -57,6 +57,8 @@ class Player(pygame.Rect):
         self.destinationEnemy = 0
         self.enemyKilled = False
         self.experience = 0
+        self.experienceLossCounter = 0
+        self.experienceLossCooldown = 400
         self.victorious = False
         self.time = "22:00"
         if self.building.floor2Y <= self.y <= self.building.floorY:
@@ -88,6 +90,8 @@ class Player(pygame.Rect):
                 self.doorMoveCount = 0
                 self.newFloorReached()
         self.interface.update()
+        self.experienceLoss()
+
 
     def animation(self):
         if self.goingLeft:
@@ -309,6 +313,7 @@ class Player(pygame.Rect):
             self.destinationEnemy.dead = True
             self.enemyKilled = True
             self.destinationEnemy = 0
+            self.experienceLossCounter = 0
 
     def destroyWeapon(self):
         self.weapon.destroyed = True
@@ -323,10 +328,17 @@ class Player(pygame.Rect):
     def regeneration(self):
         if self.regenCounter > self.regenTimer:
             self.regenCooldownCounter += 1
-            if self.regenCooldownCounter == self.regenCooldown:
+            if self.regenCooldownCounter >= self.regenCooldown:
                 self.setHealth(self.getHealth() + self.healthRegen)
                 self.setMentality(self.getMentality() + self.mentalityRegen)
                 self.regenCooldownCounter = 0
+
+    def experienceLoss(self):
+        self.experienceLossCounter += 1
+        if self.experienceLossCounter >= self.experienceLossCooldown:
+            self.setExperience(self.getExperience() - 0.1 * self.getExperience())
+            self.experienceLossCounter = 0
+
 
     def setWeapon(self, newWeapon):
         self.weapon = newWeapon
