@@ -20,6 +20,7 @@ class Game(object):
         self.configFile.close()
         self.font = pygame.font.Font("./resources/other/gothic.ttf", 80)
         self.overInformation = self.font.render("    GAME   OVER      ", True, (128, 0, 0))
+        self.victoryInformation = self.font.render("  YOU SURVIVED      ", True, (0, 102, 0))
         rectWidth = 500
         rectHeight = 100
         self.overRect = pygame.Rect(( self.screenWidth // 4, self.screenHeight // 3, rectWidth, rectHeight))
@@ -34,6 +35,7 @@ class Game(object):
         self.equipmentSpawnCounter = 0
         self.enemiesPresent = 0
         self.equipmentPresent = 0
+        self.victorious = False
 
         self.gameInit()
 
@@ -50,7 +52,10 @@ class Game(object):
                     self.gameOver = False
                     self.exitGame = True
             self.screen.fill((0, 0, 0))
-            self.screen.blit(self.overInformation, self.overRect)
+            if self.victorious:
+                self.screen.blit(self.victoryInformation, self.overRect)
+            else:
+                self.screen.blit(self.overInformation, self.overRect)
 
     def onLoop(self):
         self.checkActionWheel()
@@ -100,6 +105,9 @@ class Game(object):
         elif statusChange == 2:
             self.equipmentPresent -= 1
             self.equipmentSpawnCounter = 0
+        elif statusChange == 3:
+            self.gameOver = True
+            self.victorious = True
 
     def gameInit(self):
         self.sounds = Sound.Sound()

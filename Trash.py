@@ -85,9 +85,9 @@ class Angel(Trash):
         Trash.__init__(self, screen, building, self.ANGEL_WIDTH, self.ANGEL_HEIGHT, self.angelSprite)
         self.name = "Seraph"
         self.description = "This is Seraph"
-        self.physicalPower = 20
-        self.mentalPower = 25
-        self.experienceReward = 400
+        self.physicalPower = 99
+        self.mentalPower = 99
+        self.experienceReward = 1000
 
 
 class Skeleton(Trash):

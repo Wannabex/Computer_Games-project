@@ -57,6 +57,7 @@ class Player(pygame.Rect):
         self.destinationEnemy = 0
         self.enemyKilled = False
         self.experience = 0
+        self.victorious = False
         self.time = "22:00"
         if self.building.floor2Y <= self.y <= self.building.floorY:
             if self.building.leftWallX <= self.x <= self.building.floor1LeftColumnX - self.width:
@@ -141,6 +142,9 @@ class Player(pygame.Rect):
         elif self.equipmentDestroyed:
             self.equipmentDestroyed = False
             return 2
+        elif self.victorious:
+            self.victorious = False
+            return 3
 
     def moveToDestination(self):
         if self.destinationEquipment != 0:
@@ -348,6 +352,8 @@ class Player(pygame.Rect):
 
     def setExperience(self, newExperience):
         self.experience = newExperience
+        if self.experience >= 1000:
+            self.victorious = True
         self.interface.score.setInformation(str(newExperience))
 
     def getExperience(self):

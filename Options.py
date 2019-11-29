@@ -45,16 +45,26 @@ class Options():
         self.optionsExitRectColor = self.BLACK
         self.exitOptions = False
 
+        self.mouseClicked = False
+        self.mouseCounter = 0
+        self.mouseDebounce = 15
+
     def update(self):
         self.draw()
         mouse = pygame.mouse.get_pos()
-        mouseClick = pygame.mouse.get_pressed()
+        self.mouseClicked = False
+        self.mouseCounter += 1
+        if self.mouseCounter == self.mouseDebounce:
+            mouseClick = pygame.mouse.get_pressed()
+            self.mouseClicked = True
+            self.mouseCounter = 0
+        self.mouseCounter %= self.mouseDebounce
         self.option1RectColor = self.BLACK
         self.optionsSaveRectColor = self.BLACK
         self.optionsExitRectColor = self.BLACK
         if self.option1Rect.x <= mouse[MOUSE_POS_X] <= self.option1Rect.x + self.option1Rect.width and self.option1Rect.y <= mouse[MOUSE_POS_Y] <= self.option1Rect.y + self.option1Rect.height:
             self.option1RectColor = self.BROWN
-            if mouseClick[MOUSE_BUTTON_LEFT]:
+            if self.mouseClicked and mouseClick[MOUSE_BUTTON_LEFT]:
                 self.configChanged = False
                 if self.option1Activated:
                     self.fileContent = self.fileContent.replace("True", "False")
@@ -65,7 +75,7 @@ class Options():
                 self.option1Information = self.font.render("    Activate rain effects                      " + str(self.option1Activated), True, self.WHITE)
         elif self.optionsSaveRect.x <= mouse[MOUSE_POS_X] <= self.optionsSaveRect.x + self.optionsSaveRect.width and self.optionsSaveRect.y <= mouse[MOUSE_POS_Y] <= self.optionsSaveRect.y + self.optionsSaveRect.height:
             self.optionsSaveRectColor = self.BROWN
-            if mouseClick[MOUSE_BUTTON_LEFT] and not self.configChanged:
+            if self.mouseClicked and mouseClick[MOUSE_BUTTON_LEFT] and not self.configChanged:
                 self.configChanged = True
                 self.configFile = open("./resources/config.txt", 'w')
                 self.configFile.seek(0, 0)
@@ -73,7 +83,7 @@ class Options():
                 self.configFile.close()
         elif self.optionsExitRect.x <= mouse[MOUSE_POS_X] <= self.optionsExitRect.x + self.optionsExitRect.width and self.optionsExitRect.y <= mouse[MOUSE_POS_Y] <= self.optionsExitRect.y + self.optionsExitRect.height:
             self.optionsExitRectColor = self.BROWN
-            if mouseClick[MOUSE_BUTTON_LEFT]:
+            if self.mouseClicked and mouseClick[MOUSE_BUTTON_LEFT]:
                 self.exitOptions = True
                 self.configFile.close()
 

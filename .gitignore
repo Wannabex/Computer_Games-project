@@ -3,3 +3,6 @@ venv/
 resources/
 ToDo.*
 __pycache__/
+build/
+dist/
+*.spec
